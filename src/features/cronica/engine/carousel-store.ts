@@ -10,6 +10,10 @@ import type { CarouselSnapshot } from '../carousel-model';
  */
 export class EditorialCarouselStore {
   private readonly pages: EditorialPage[];
+  // Los IDs son estables aunque saveActive reemplace el objeto de la página.
+  // No dependen del índice (que puede cambiar con inserciones/eliminaciones).
+  private readonly pageIds = [0];
+  private nextPageId = 1;
   private index = 0;
 
   constructor(firstPage: EditorialPage) {
@@ -22,6 +26,15 @@ export class EditorialCarouselStore {
 
   get pageCount(): number {
     return this.pages.length;
+  }
+
+  get activePageId(): number {
+    return this.pageIds[this.index]!;
+  }
+
+  getPageById(id: number): EditorialPage | null {
+    const index = this.pageIds.indexOf(id);
+    return index === -1 ? null : this.pages[index] ?? null;
   }
 
   get activePage(): EditorialPage {
@@ -57,6 +70,7 @@ export class EditorialCarouselStore {
     this.saveActive(editedPage);
     this.index++;
     this.pages.splice(this.index, 0, createDefaultPage('internal'));
+    this.pageIds.splice(this.index, 0, this.nextPageId++);
     return this.activePage;
   }
 
@@ -64,6 +78,7 @@ export class EditorialCarouselStore {
     // La portada no se elimina y siempre debe existir una página.
     if (this.index === 0) return null;
     this.pages.splice(this.index, 1);
+    this.pageIds.splice(this.index, 1);
     this.index = Math.min(this.index, this.pages.length - 1);
     return this.activePage;
   }

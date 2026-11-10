@@ -12,6 +12,8 @@ import { prepareCanvasSurface, drawTextPanelLayer } from './layers/surface-layer
 import { drawCoverFooterLayer } from './layers/footer-layer';
 import { EditorialCarouselStore } from './carousel-store';
 import { PngExportService, canvasToPngBlob, downloadPng } from './png-export-service';
+import { PhotoLoadCoordinator } from './photo-load-coordinator';
+import { createRenderScheduler } from './render-scheduler';
 
 
 (function(){
@@ -109,6 +111,7 @@ function render(includeHover=true){
 }
 /* Única fuente de verdad de páginas; los campos activos siguen como proyección Canvas. */
 const carouselStore=new EditorialCarouselStore(readCurrentPage());
+const photoLoads=new PhotoLoadCoordinator();
 function readCurrentPage(){
  return snapshotEditorialPage(documentContent,{
   alignment:textAlignment,forceUppercase,logo:selectedLogo,image,zoom,offsetX,offsetY,variant:pageVariant
@@ -145,8 +148,10 @@ function addPage(){
  loadPage(page);renderCarouselNavigation();
 }
 function removePage(){
+ const oldPageId=carouselStore.activePageId;
  const page=carouselStore.removeActive();
  if(!page)return;
+ photoLoads.cancel(oldPageId);
  loadPage(page);renderCarouselNavigation();
 }
 function changeVariant(next){
@@ -204,6 +209,9 @@ function updatePhotoDropzone(){
  const zone=el('photoDropzone'),stage=el('photoStage');
  if(!zone||!stage)return;
  zone.hidden=Boolean(image);
+ // El Canvas solo entra en el orden del Tab cuando la foto se puede reencuadrar.
+ canvas.tabIndex=image?0:-1;
+ if(image&&document.activeElement===zone)canvas.focus({preventScroll:true});
  stage.style.setProperty('--photo-height',(photoBottom/H*100)+'%');
  updateHoverBorderGeometry();
  canvas.style.cursor=image?'grab':'default';
@@ -212,18 +220,29 @@ function loadPhoto(file){
  if(!file)return;
  setPhotoHover(false);
  if(!file.type.startsWith('image/')){el('status').textContent='Seleccioná un archivo de imagen válido.';return}
- const pageIndex=carouselStore.activeIndex;
- // El decoder es independiente de Canvas y garantiza revokeObjectURL en éxito/error.
- decodePhotoFile(file).then(img=>{
-  if(pageIndex===carouselStore.activeIndex){image=img;zoom=1;offsetX=0;offsetY=0;render()}
-  else{
-   const target=carouselStore.getPage(pageIndex);
-   if(target){target.image=img;target.zoom=1;target.offsetX=0;target.offsetY=0}
+ const pageId=carouselStore.activePageId;
+ const signal=photoLoads.begin(pageId);
+ // No aplicar el resultado de cargas anteriores, ni asignarlo por índice:
+ // los índices cambian al insertar/eliminar páginas durante la decodificación.
+ decodePhotoFile(file,signal).then(img=>{
+  if(!photoLoads.isCurrent(pageId,signal))return;
+  const target=carouselStore.getPageById(pageId);
+  if(!target)return;
+  if(pageId===carouselStore.activePageId){
+   image=img;zoom=1;offsetX=0;offsetY=0;render();
+  }else{
+   target.image=img;target.zoom=1;target.offsetX=0;target.offsetY=0;
   }
  }).catch(error=>{
-  el('status').textContent='No se pudo abrir esta fotografía';
+  // AbortError y errores de una página ya descartada no deben reemplazar el
+  // estado informativo de la página que se está editando.
+  if(!photoLoads.isCurrent(pageId,signal))return;
+  if(error?.name==='AbortError')return;
+  if(pageId===carouselStore.activePageId){
+   el('status').textContent='No se pudo abrir esta fotografía';
+  }
   console.error('Error al decodificar fotografía:',error);
- });
+ }).finally(()=>photoLoads.finish(pageId,signal));
 }
 const photoZone=el('photoDropzone'),photoStage=el('photoStage');
 function setPhotoHover(active){
@@ -249,18 +268,43 @@ photoStage.addEventListener('dragenter',event=>{if(isImageDrag(event)&&isOverPho
 photoStage.addEventListener('dragover',event=>{if(isImageDrag(event)&&isOverPhoto(event)){event.preventDefault();event.dataTransfer.dropEffect='copy';photoStage.classList.add('is-drag-over');setPhotoHover(true)}else{photoStage.classList.remove('is-drag-over');setPhotoHover(false)}});
 photoStage.addEventListener('dragleave',event=>{if(!photoStage.contains(event.relatedTarget)){photoStage.classList.remove('is-drag-over');setPhotoHover(false)}});
 photoStage.addEventListener('drop',event=>{photoStage.classList.remove('is-drag-over');setPhotoHover(false);if(!isOverPhoto(event))return;event.preventDefault();loadPhoto([...event.dataTransfer.files].find(file=>file.type.startsWith('image/'))||event.dataTransfer.files[0])});
-canvas.addEventListener('pointerdown',event=>{if(!image)return;const r=canvas.getBoundingClientRect();if((event.clientY-r.top)*H/r.height>photoBottom)return;dragging=true;lastX=event.clientX;lastY=event.clientY;canvas.setPointerCapture(event.pointerId)});
+const dragRenderer=createRenderScheduler(()=>render());
+canvas.addEventListener('pointerdown',event=>{if(!image||exportBusy)return;const r=canvas.getBoundingClientRect();if((event.clientY-r.top)*H/r.height>photoBottom)return;dragging=true;lastX=event.clientX;lastY=event.clientY;canvas.setPointerCapture(event.pointerId)});
 canvas.addEventListener('pointermove',event=>{
- if(!dragging)return;
+ if(!dragging||exportBusy)return;
  const next=panByPointerDelta({
   offsetX,offsetY,deltaX:event.clientX-lastX,deltaY:event.clientY-lastY,
   canvasWidth:W,viewportWidth:canvas.getBoundingClientRect().width
  });
  offsetX=next.offsetX;offsetY=next.offsetY;
- lastX=event.clientX;lastY=event.clientY;render();
+ lastX=event.clientX;lastY=event.clientY;
+ dragRenderer.schedule();
 });
-canvas.addEventListener('pointerup',()=>dragging=false);canvas.addEventListener('pointercancel',()=>dragging=false);
+function finishPointerDrag(){
+ if(!dragging)return;
+ dragging=false;
+ // El último movimiento se pinta sin esperar al siguiente frame.
+ dragRenderer.flush();
+}
+canvas.addEventListener('pointerup',finishPointerDrag);
+canvas.addEventListener('pointercancel',finishPointerDrag);
+canvas.addEventListener('keydown',event=>{
+ if(!image||exportBusy)return;
+ const step=event.shiftKey?40:10;
+ switch(event.key){
+  case 'ArrowLeft':offsetX-=step;break;
+  case 'ArrowRight':offsetX+=step;break;
+  case 'ArrowUp':offsetY-=step;break;
+  case 'ArrowDown':offsetY+=step;break;
+  default:return;
+ }
+ event.preventDefault();
+ dragRenderer.cancel();
+ render();
+});
 el('clearAll').addEventListener('click',()=>{
+ photoLoads.cancel(carouselStore.activePageId);
+ dragRenderer.cancel();
  const initial=createClearedPage(carouselStore.activeIndex,pageVariant);
  loadPage(initial);saveActivePage();
 });
@@ -322,6 +366,8 @@ const pngExporter=new PngExportService({
 });
 async function runExport(all){
  if(exportBusy)return;
+ dragRenderer.cancel();
+ dragging=false;
  exportBusy=true;
  const feedback=el('exportFeedback');
  feedback.hidden=false;feedback.textContent=all?'Preparando las imágenes...':'Preparando PNG...';

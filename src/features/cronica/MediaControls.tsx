@@ -52,6 +52,7 @@ export function MediaControls() {
         <input
           id="file"
           type="file"
+          aria-describedby="cronica-photo-help"
           accept="image/*"
           onChange={(event) => {
             const file = event.currentTarget.files?.[0];
@@ -60,7 +61,7 @@ export function MediaControls() {
             event.currentTarget.value = '';
           }}
         />
-        <p className="hint compact-hint">
+        <p className="hint compact-hint" id="cronica-photo-help">
           Arrastrá la foto en la vista previa para ajustar su encuadre.
         </p>
       </div>

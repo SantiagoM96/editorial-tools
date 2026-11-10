@@ -47,3 +47,38 @@ describe('decodificador aislado de fotografías', () => {
     expect(revoke).not.toHaveBeenCalled();
   });
 });
+
+describe('cancelación y liberación de decodificaciones antiguas', () => {
+  it('no crea un object URL cuando la solicitud ya fue cancelada', async () => {
+    const { create, revoke } = mockBrowserDecode(true);
+    const controller = new AbortController();
+    controller.abort();
+    await expect(decodePhotoFile(
+      new File(['data'], 'foto.png', { type: 'image/png' }), controller.signal,
+    )).rejects.toMatchObject({ name: 'AbortError' });
+    expect(create).not.toHaveBeenCalled();
+    expect(revoke).not.toHaveBeenCalled();
+  });
+
+  it('aborta una decodificación pendiente y revoca la URL una sola vez', async () => {
+    const create = vi.fn(() => 'blob:photo-waiting');
+    const revoke = vi.fn();
+    vi.stubGlobal('URL', { createObjectURL: create, revokeObjectURL: revoke });
+    class WaitingImage {
+      onload: (() => void) | null = null;
+      onerror: (() => void) | null = null;
+      src = '';
+    }
+    vi.stubGlobal('Image', WaitingImage);
+    const controller = new AbortController();
+    const promise = decodePhotoFile(
+      new File(['data'], 'foto.png', { type: 'image/png' }), controller.signal,
+    );
+    controller.abort();
+    await expect(promise).rejects.toMatchObject({ name: 'AbortError' });
+    expect(create).toHaveBeenCalledOnce();
+    expect(revoke).toHaveBeenCalledExactlyOnceWith('blob:photo-waiting');
+    controller.abort();
+    expect(revoke).toHaveBeenCalledTimes(1);
+  });
+});

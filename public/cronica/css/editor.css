@@ -194,3 +194,6 @@
 }
 .editor-panel .cronica-variant-option:hover .cronica-variant-thumbnail{filter:brightness(.95)}
 .editor-panel .cronica-variant-option:focus-visible{outline:2px solid #a5a8b0;outline-offset:4px;border-radius:5px}
+
+/* Accesibilidad: el Canvas es navegable por teclado solo con una foto cargada. */
+.preview .canvas-stage canvas:focus-visible{outline:3px solid #ed0000!important;outline-offset:4px}
