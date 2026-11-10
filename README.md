@@ -18,9 +18,11 @@ Abrir [http://localhost:4173/](http://localhost:4173/).
 
 ```sh
 npm test
+npm install
+npm run test:e2e
 ```
 
-Verifica rutas, recursos locales y sintaxis JavaScript. **No equivale a pruebas de navegador, visuales ni de exportación**.
+La primera prueba verifica rutas, recursos locales y sintaxis JavaScript. Playwright ejecuta pruebas reales de navegador (carga de imágenes, edición básica, exportación PNG y vistas móviles). No sustituye una revisión visual manual de todas las variantes ni de los importadores externos.
 
 ## Organización
 
@@ -35,7 +37,7 @@ Las carpetas de los tres productos son **implementaciones heredadas funcionales*
 
 ## Referencia de origen
 
-Último `main` inspeccionado de `SantiagoM96/mlz`: `148e39cd709635eccadab61dd02191d8d5f9c6c4` (9 de noviembre de 2026, Argentina).
+Último `main` inspeccionado de `SantiagoM96/mlz`: `13032f9ab2ea8b81f3d46c81ca36f4e0b4e211b7` (9 de noviembre de 2026, Argentina).
 
 Se tomó **solo el estado `-dev` de ese commit** como referencia para cada herramienta; se incorporaron exclusivamente recursos gráficos compartidos necesarios para su funcionamiento. Se corrigieron rutas para independizarlo de `mlz`. Véase [la trazabilidad de migración](docs/MIGRATION.md).
 

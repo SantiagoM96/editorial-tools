@@ -1,6 +1,6 @@
 # Migración selectiva — registro técnico
 
-**Origen:** `SantiagoM96/mlz` @ `148e39cd709635eccadab61dd02191d8d5f9c6c4` (main, 2026-11-09, Argentina).
+**Origen:** `SantiagoM96/mlz` @ `13032f9ab2ea8b81f3d46c81ca36f4e0b4e211b7` (main, 2026-11-09, Argentina).
 
 **Destino:** `SantiagoM96/editorial-tools`, rama `feat/migrate-editorial-tools`.
 
@@ -37,8 +37,8 @@ El código operativo NO se tomó de carpetas estables: no hay dos versiones del 
 
 ## Verificaciones y límites
 
-- CI y `npm test`: comprueban sintaxis JS, páginas principales y enlaces a archivos locales.
-- Pendiente: comparación visual automatizada, interacción completa, carga de imágenes, manipulación de preview, PNG, carruseles, comportamiento móvil.
+- CI y `npm test`: comprueban sintaxis JS, páginas principales y enlaces a archivos locales. Se agregó QA de navegador con Playwright: dashboard, variantes, fotografías generadas localmente, archivos PNG de 1080 × 1440 y capturas móviles. Los resultados de CI determinan si estas pruebas pasaron.
+- Pendiente: comparación visual formal contra el origen, pruebas exhaustivas de todos los controles, drag-and-drop y evaluación visual manual. La carga de imágenes, PNG, carrusel y apertura móvil se cubren mediante nuevas pruebas automáticas.
 - La importación de URLs en BAE y Diario Show utiliza proxies externos públicos en el código original: **requiere revisión de seguridad, privacidad, disponibilidad y CORS** antes de declararla apta para producción.
 - No se ejecutó un despliegue de producción ni se hizo merge.
 
