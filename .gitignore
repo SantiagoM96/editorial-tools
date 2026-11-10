@@ -1,4 +1,8 @@
 node_modules/
+dist/
+dist-pages/
+reference/
+tests/artifacts/
 .DS_Store
 playwright-report/
 test-results/

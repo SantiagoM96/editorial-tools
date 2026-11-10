@@ -4,13 +4,14 @@ on:
     branches: [main]
     paths:
       - 'index.html'
-      - 'og-image.png'
-      - 'cronica/**'
-      - 'bae/**'
-      - 'diarioshow/**'
+      - 'src/**'
+      - 'public/**'
+      - 'vite.config.ts'
+      - 'tsconfig.json'
+      - 'package.json'
+      - 'package-lock.json'
       - 'scripts/prepare-pages.mjs'
       - 'scripts/validate-pages.mjs'
-      - 'package.json'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
 permissions:
@@ -31,6 +32,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - run: npm ci --no-audit --no-fund
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run test:unit
       - run: npm test
       - run: npm run build:pages
       - uses: actions/configure-pages@v5

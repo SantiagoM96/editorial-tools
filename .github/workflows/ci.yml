@@ -6,13 +6,17 @@ on:
 permissions:
   contents: read
 jobs:
-  static-integrity:
+  quality:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - run: npm ci --no-audit --no-fund
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run test:unit
       - run: npm test
       - run: npm run build:pages
   browser-qa:
@@ -29,13 +33,13 @@ jobs:
           ref: 13032f9ab2ea8b81f3d46c81ca36f4e0b4e211b7
           path: reference
           persist-credentials: false
-      - run: npm install --no-package-lock --no-audit --no-fund
+      - run: npm ci --no-audit --no-fund
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: editorial-browser-qa
+          name: editorial-foundations-browser-qa
           path: |
             playwright-report/
             test-results/

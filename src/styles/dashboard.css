@@ -1,0 +1,52 @@
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+/* Tokens para los NUEVOS componentes compartidos. La UI heredada del dashboard
+   conserva sus valores exactos para evitar regresiones visuales en este PR. */
+@theme {
+  --color-editorial-bg: #101114;
+  --color-editorial-surface: #1e2025;
+  --color-editorial-text: #f4f4f4;
+  --color-editorial-muted: #b5bac3;
+  --color-editorial-accent: #ed0000;
+}
+
+/* Hoja visual original del dashboard, trasladada sin cambio de reglas. */
+
+:root{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:#101114;color:#f4f4f4}
+.wrap{width:min(1100px,calc(100% - 40px));margin:0 auto}
+header{border-bottom:1px solid #34383e}
+header .wrap{min-height:80px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{font-size:17px;font-weight:700;letter-spacing:-.02em}
+.env{border:1px solid #454952;border-radius:50px;color:#c3c7d0;font-size:12px;padding:6px 12px}
+main{padding:64px 0 80px}
+.eyebrow{color:#b5bac3;font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;margin:0 0 12px}
+h1{font-size:clamp(29px,4vw,43px);letter-spacing:-.035em;line-height:1.15;margin:0 0 14px}
+.intro{font-size:15px;line-height:1.6;color:#b6bbc5;max-width:620px;margin:0 0 36px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:20px}
+.product{min-width:0;display:flex;flex-direction:column;align-items:stretch;text-decoration:none;color:inherit;background:#1e2025;border:1px solid #373b43;border-radius:16px;padding:28px;transition:border-color .15s,background .15s,transform .15s}
+.product:hover{background:#25282e;border-color:#858b96;transform:translateY(-2px)}
+.product:focus-visible{outline:2px solid #ed0000;outline-offset:4px}
+.logo-area{height:112px;display:flex;align-items:center;justify-content:flex-start;margin-bottom:22px}
+.logo-area img{object-fit:contain;object-position:left center;max-width:min(250px,100%);max-height:96px;width:auto;height:auto}
+/* Compensación óptica: Crónica es más alto, BAE más horizontal. Equilibrar superficie visible, no dimensiones. */
+.logo-area img.logo-cronica{width:155px;max-width:100%;height:auto}
+
+.product h2{margin:0 0 8px;font-size:23px;letter-spacing:-.02em}
+.product p{font-size:14px;color:#b5bac3;line-height:1.55;margin:0 0 25px;flex:1}
+.open{display:inline-flex;align-items:center;justify-content:space-between;gap:12px;font-weight:650;font-size:14px;color:#fff}
+.arrow{font-size:23px;line-height:1}
+footer{font-size:12px;color:#888e9a;padding:0 0 35px}
+@media(max-width:650px){header .wrap{min-height:68px}main{padding:42px 0 55px}.grid{grid-template-columns:1fr}.product{padding:24px}.logo-area{height:85px;margin-bottom:16px}.logo-area img{max-height:74px}}
+@media(prefers-reduced-motion:reduce){.product{transition:none}}
+
+
+/* Equilibrio óptico de la marca Diario Show; idéntico al original. */
+
+/* La marca horizontal oficial necesita contraste sobre la tarjeta oscura. */
+.logo-area img.logo-diarioshow{
+ width:250px;max-width:100%;height:auto;
+}
+
