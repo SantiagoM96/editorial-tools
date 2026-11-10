@@ -21,7 +21,6 @@ function drawBrandLogo(){
 }
 // El campo refleja el modo mayúsculas sin alterar el texto que escribió el usuario.
 function syncUppercaseUI(){
- el('formatUppercase').setAttribute('aria-pressed',String(forceUppercase));
  el('headline').classList.toggle('uppercase-preview',forceUppercase);
 }
 function syncLogoChoices(){
@@ -188,8 +187,7 @@ function loadPage(page){
  selectedLogo=page.logo||'primary';syncLogoChoices();
  textAlignment=page.alignment;image=page.image;zoom=page.zoom;offsetX=page.offsetX;offsetY=page.offsetY;
  el('file').value='';dragging=false;
- el('alignLeft').setAttribute('aria-pressed',String(page.alignment==='left'));
- el('alignCenter').setAttribute('aria-pressed',String(page.alignment==='center'));
+ emitTypographyState();
  render();
 }
 function renderCarouselNavigation(){
@@ -251,25 +249,25 @@ el('strapText').addEventListener('input',()=>{
  }
  render();
 });
-el('formatUppercase').addEventListener('click',()=>{forceUppercase=!forceUppercase;syncUppercaseUI();render()});
-for(const [id,value] of [['alignLeft','left'],['alignCenter','center']])el(id).addEventListener('click',()=>{
- textAlignment=value;el('alignLeft').setAttribute('aria-pressed',String(value==='left'));
- el('alignCenter').setAttribute('aria-pressed',String(value==='center'));render();
-});
-for(const [id,marker] of [['formatAccent','*'],['formatItalic','_'],['formatStrike','~']]){const button=el(id);button.addEventListener('mousedown',e=>e.preventDefault());button.addEventListener('click',()=>{const field=el('headline'),a=field.selectionStart,b=field.selectionEnd;if(a===b){field.focus();return}const selected=field.value.slice(a,b);field.setRangeText(marker+selected+marker,a,b,'select');field.setSelectionRange(a+1,b+1);field.focus();render()})}
-
-const clearFormatButton=el('formatClear');
-clearFormatButton.addEventListener('mousedown',event=>event.preventDefault());
-clearFormatButton.addEventListener('click',()=>{
- const field=el('headline'),value=field.value,start=field.selectionStart,end=field.selectionEnd;
- if(start===end){field.focus();return}
- const marks=new Set(['*','_','~']);
- let left=start,right=end;
- while(left>0&&right<value.length&&marks.has(value[left-1])&&value[left-1]===value[right]){left--;right++}
- const cleaned=value.slice(left,right).replace(/[*_~]/g,'');
- field.setRangeText(cleaned,left,right,'select');
- field.setSelectionRange(left,left+cleaned.length);
- field.focus();render();
+// Los botones de tipografía ya no los manipula el script heredado.
+// Su estado de edición continúa siendo el único origen de verdad.
+function emitTypographyState(){
+ window.dispatchEvent(new CustomEvent('editorial:cronica:typography-state',{
+  detail:{uppercase:forceUppercase,alignment:textAlignment}
+ }));
+}
+window.addEventListener('editorial:cronica:typography-request',emitTypographyState);
+window.addEventListener('editorial:cronica:typography-command',event=>{
+ const action=event.detail;
+ if(!action||typeof action.type!=='string')return;
+ if(action.type==='toggle-uppercase'){
+  forceUppercase=!forceUppercase;
+  syncUppercaseUI();
+ }else if(action.type==='set-alignment'&&(action.alignment==='left'||action.alignment==='center')){
+  textAlignment=action.alignment;
+ }else return;
+ emitTypographyState();
+ render();
 });
 function updateHoverBorderGeometry(){
  const stage=el('photoStage');
@@ -485,5 +483,5 @@ document.addEventListener('click',event=>{
 document.addEventListener('keydown',event=>{
  if(event.key==='Escape')closeHelpTooltips();
 });
-initializeCarousel();syncUppercaseUI();render();document.fonts.ready.then(render);
+initializeCarousel();syncUppercaseUI();emitTypographyState();render();document.fonts.ready.then(render);
 })();
