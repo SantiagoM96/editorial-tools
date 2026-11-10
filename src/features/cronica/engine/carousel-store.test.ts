@@ -65,3 +65,26 @@ describe('Estado canónico del carrusel Crónica', () => {
     expect(store.activeIndex).toBe(1);
   });
 });
+
+describe('identidad estable de páginas durante cargas asíncronas', () => {
+  it('mantiene la identidad aunque se guarde un nuevo objeto y cambie el índice', () => {
+    const carousel = new EditorialCarouselStore(createDefaultPage('cover'));
+    const coverId = carousel.activePageId;
+    carousel.insertAfterActive(carousel.activePage);
+    const secondId = carousel.activePageId;
+    const photo = document.createElement('img');
+    carousel.saveActive({ ...carousel.activePage, headline: 'Edición', image: photo });
+    expect(carousel.activePageId).toBe(secondId);
+    expect(carousel.getPageById(secondId)?.image).toBe(photo);
+    carousel.insertAfterActive(carousel.activePage);
+    const thirdId = carousel.activePageId;
+    expect(new Set([coverId, secondId, thirdId]).size).toBe(3);
+    carousel.select(1, carousel.activePage);
+    expect(carousel.activePageId).toBe(secondId);
+    expect(carousel.getPageById(thirdId)).not.toBeNull();
+    carousel.removeActive();
+    expect(carousel.getPageById(secondId)).toBeNull();
+    expect(carousel.activePageId).toBe(thirdId);
+    expect(carousel.getPageById(coverId)?.variant).toBe('cover');
+  });
+});
