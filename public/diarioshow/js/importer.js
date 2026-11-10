@@ -75,6 +75,8 @@ let url;try{
  const legacy=['www.diarioshow.com','diarioshow.com'].includes(host);
  const cronica=['www.cronica.com.ar','cronica.com.ar'].includes(host)&&/^\/diarioshow(?:\/|$)/i.test(url.pathname);
  if(url.protocol!=='https:'||(!legacy&&!cronica))throw Error('Ingresá una noticia HTTPS de cronica.com.ar/diarioshow/ o diarioshow.com');
+ // Una portada o sección no tiene un titular y una fotografía únicos para importar.
+ if(/^\/(?:diarioshow)?\/?$/i.test(url.pathname)||/^\/diarioshow\/(?:por-la-red|famosos|television|musica|cine|teatro)\/?$/i.test(url.pathname))throw Error('Pegá el enlace de una noticia individual, no la portada de Diario Show.');
 }catch(e){status.textContent=e.message;return}
 button.disabled=true;$('importOverlay').hidden=false;window.DiarioShowEditor.setImporting(true);status.textContent='Buscando el título y la fotografía…';
 try{
