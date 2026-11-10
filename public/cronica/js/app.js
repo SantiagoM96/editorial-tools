@@ -44,9 +44,34 @@ function drawBrandLogo(){
 }
 // El campo refleja el modo mayúsculas sin alterar el texto que escribió el usuario.
 function syncUppercaseUI(){emitTypographyState();}
-function syncLogoChoices(){
- document.querySelectorAll('.logo-choice').forEach(btn=>btn.setAttribute('aria-pressed',String(btn.dataset.logo===selectedLogo)));
+// El código heredado conserva imagen/zoom/logos como estado canónico y los expone
+// mediante snapshots; React es propietario de los botones e inputs.
+let previousMediaKey='';
+function emitMediaState(force=false){
+ const detail={logo:selectedLogo,zoomPercent:Math.round(zoom*100),hasImage:Boolean(image)};
+ const key=JSON.stringify(detail);
+ // El arrastre del Canvas no cambia controles: evitar renders React por pointermove.
+ if(!force&&key===previousMediaKey)return;
+ previousMediaKey=key;
+ window.dispatchEvent(new CustomEvent('editorial:cronica:media-state',{detail}));
 }
+window.addEventListener('editorial:cronica:media-request',()=>emitMediaState(true));
+window.addEventListener('editorial:cronica:media-command',event=>{
+ const action=event.detail;
+ if(!action||typeof action.type!=='string')return;
+ if(action.type==='set-logo'){
+  if(!['none','primary','secondary','white'].includes(action.logo))return;
+  selectedLogo=action.logo;
+ }else if(action.type==='set-zoom'){
+  if(!Number.isInteger(action.percent)||action.percent<100||action.percent>300||action.percent%5!==0)return;
+  zoom=action.percent/100;
+ }else if(action.type==='upload-photo'){
+  if(!(action.file instanceof File))return;
+  loadPhoto(action.file);
+  return;
+ }else return;
+ render();
+});
 function parseRich(text){
  const out=[];let state={accent:false,italic:false,strike:false},buffer='';
  const flush=()=>{if(buffer){out.push({text:buffer,...state});buffer=''}};
@@ -178,7 +203,7 @@ function render(includeHover=true){
    ctx.restore();
   }
   updatePhotoDropzone();
-  el('zoomLabel').textContent=Math.round(zoom*100)+' %';el('photoZoom').value=Math.round(zoom*100);
+  emitMediaState();
   el('status').textContent=size<requestedSize?'Texto largo: tamaño ajustado para respetar los márgenes.':'Vista previa activa · Arrastrá la foto para reencuadrarla.';
  }catch(error){el('status').textContent='Error de vista previa: '+error.message;console.error(error)}
 }
@@ -206,9 +231,9 @@ function loadPage(page){
  documentContent.size=String(page.size);
  emitContentState();
  forceUppercase=Boolean(page.forceUppercase);syncUppercaseUI();
- selectedLogo=page.logo||'primary';syncLogoChoices();
+ selectedLogo=page.logo||'primary';
  textAlignment=page.alignment;image=page.image;zoom=page.zoom;offsetX=page.offsetX;offsetY=page.offsetY;
- el('file').value='';dragging=false;
+ dragging=false;
  emitTypographyState();
  render();
 }
@@ -258,7 +283,6 @@ function initializeCarousel(){
  renderCarouselNavigation();
 }
 
-document.querySelectorAll('.logo-choice').forEach(button=>button.addEventListener('click',()=>{selectedLogo=button.dataset.logo;syncLogoChoices();render()}));
 // Los botones de tipografía ya no los manipula el script heredado.
 // Su estado de edición continúa siendo el único origen de verdad.
 function emitTypographyState(){
@@ -310,7 +334,6 @@ function loadPhoto(file){
  img.onerror=()=>{el('status').textContent='No se pudo abrir esta fotografía';URL.revokeObjectURL(url)};
  img.src=url;
 }
-el('file').addEventListener('change',event=>{loadPhoto(event.target.files[0]);event.target.value=''});
 const photoZone=el('photoDropzone'),photoStage=el('photoStage');
 function setPhotoHover(active){
  if(photoHover===active)return;
@@ -335,7 +358,6 @@ photoStage.addEventListener('dragenter',event=>{if(isImageDrag(event)&&isOverPho
 photoStage.addEventListener('dragover',event=>{if(isImageDrag(event)&&isOverPhoto(event)){event.preventDefault();event.dataTransfer.dropEffect='copy';photoStage.classList.add('is-drag-over');setPhotoHover(true)}else{photoStage.classList.remove('is-drag-over');setPhotoHover(false)}});
 photoStage.addEventListener('dragleave',event=>{if(!photoStage.contains(event.relatedTarget)){photoStage.classList.remove('is-drag-over');setPhotoHover(false)}});
 photoStage.addEventListener('drop',event=>{photoStage.classList.remove('is-drag-over');setPhotoHover(false);if(!isOverPhoto(event))return;event.preventDefault();loadPhoto([...event.dataTransfer.files].find(file=>file.type.startsWith('image/'))||event.dataTransfer.files[0])});
-el('photoZoom').addEventListener('input',event=>{zoom=Number(event.target.value)/100;render()});
 canvas.addEventListener('pointerdown',event=>{if(!image)return;const r=canvas.getBoundingClientRect();if((event.clientY-r.top)*H/r.height>photoBottom)return;dragging=true;lastX=event.clientX;lastY=event.clientY;canvas.setPointerCapture(event.pointerId)});
 canvas.addEventListener('pointermove',event=>{if(!dragging)return;const ratio=W/canvas.getBoundingClientRect().width;offsetX+=(event.clientX-lastX)*ratio;offsetY+=(event.clientY-lastY)*ratio;lastX=event.clientX;lastY=event.clientY;render()});
 canvas.addEventListener('pointerup',()=>dragging=false);canvas.addEventListener('pointercancel',()=>dragging=false);

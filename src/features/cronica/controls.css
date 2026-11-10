@@ -19,3 +19,6 @@
 #cronica-content-root > .control-field:first-child {
   margin-top: 12px;
 }
+
+/* Raíces de transición React: no deben agregar cajas al layout editorial. */
+#cronica-media-root, #cronica-photo-zoom-root { display: contents; }
