@@ -40,8 +40,8 @@ async function uploadSyntheticImage(page) {
     mimeType: 'image/png',
     buffer: Buffer.from(base64, 'base64'),
   });
-  expect(await page.locator('#file').evaluate(el => el.files?.[0]?.name)).toBe('qa-imagen.png');
-  await page.waitForTimeout(300);
+  // Los tres editores limpian input.value tras consumir la foto: verificar el efecto real.
+  await expect.poll(() => page.locator('#photoDropzone').evaluate(el => el.hidden)).toBe(true);
 }
 
 async function verifyPng(download) {
