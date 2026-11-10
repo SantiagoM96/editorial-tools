@@ -10,6 +10,10 @@ for (const width of [1440, 390]) {
       const response = await page.goto(url, { waitUntil: 'load' });
       expect(response?.status()).toBe(200);
       await page.evaluate(async () => { await document.fonts.ready; });
+      // El HTML original marcaba izquierda, aunque el Canvas comenzaba centrado.
+      // Comparar estados SEMÁNTICAMENTE equivalentes y no el aria-pressed heredado.
+      await page.locator('#alignCenter').click();
+      await expect(page.locator('#alignCenter')).toHaveAttribute('aria-pressed', 'true');
       return page.locator('.cronica-format-row').screenshot({ animations: 'disabled' });
     }
 
