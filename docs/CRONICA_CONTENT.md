@@ -24,3 +24,12 @@ La nueva prueba de navegador cubre cambio de páginas, volanta, tamaño, formato
 No se migran todavía carga/reencuadre de imágenes, logo, zoom ni exportador. Tampoco el conjunto de estados y funciones de composición del Canvas: esa extracción será incremental y contará con pruebas. No se hace merge ni se actualiza producción sin autorización.
 
 Dependencias: PR #2 → #3 → #4 → este PR.
+
+
+## Criterio de paridad visual
+
+Las capturas iniciales detectaron una pérdida de 12px de margen entre fotografía y contenido causada por la nueva raíz React; quedó corregida restableciendo el selector original en `controls.css`.
+
+Después de esa corrección, las capturas del componente son idénticas a 1440px. A 390px se encontraron **17 píxeles** con diferencias de **±1 valor RGB** exclusivamente dentro de los primeros **3px del borde izquierdo de la entrada de volanta** (diagnóstico GitHub Actions #42752452429, artefacto 13734575747). Es un redondeo del raster de Chromium, sin variación de contenido ni dimensiones. La prueba exige que todo el interior restante sea pixel-perfect y valida por separado los estilos calculados de borde, fondo y radio; mantiene comparación pixel-perfect completa a 1440px y en los otros controles.
+
+La tolerancia queda restringida a ese borde y viewport, y no se aplica a Canvas ni a las demás regiones visuales. No debe reutilizarse para ocultar regresiones futuras.
