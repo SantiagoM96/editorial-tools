@@ -22,6 +22,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - uses: actions/checkout@v4
+        with:
+          repository: SantiagoM96/mlz
+          ref: 13032f9ab2ea8b81f3d46c81ca36f4e0b4e211b7
+          path: reference
+          persist-credentials: false
       - run: npm install --no-package-lock --no-audit --no-fund
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e
