@@ -29,7 +29,7 @@ Se conserva el patrón de layout con raíces `display: contents` y los mismos se
 - Restauración del estado al cambiar páginas y al limpiar.
 - PNG 1080 × 1440 y carrusel con fotos.
 - Paridad exacta del Canvas (SHA-256 de píxeles) contra el original con fotos, logos y zoom.
-- Paridad visual escritorio/móvil: capturas exactas de logos, etiquetas, texto auxiliar y slider; el input nativo `type=file` se contrasta por dimensiones, posición y CSS calculado, además de probar su comportamiento de carga. El cromado interno del selector de archivos depende del navegador y no se compara por bytes.
+- Paridad visual escritorio/móvil: capturas exactas de logos, etiquetas, texto auxiliar y slider; el input nativo `type=file` se contrasta por dimensiones, posición y CSS calculado, además de probar su comportamiento de carga. También se comparan sus píxeles decodificados con tolerancia restringida exclusivamente al borde: máximo 10 píxeles con diferencia de 1 valor RGB, en las primeras 11 columnas y filas 60–75. GitHub Actions #42754803280 midió 7 píxeles a 1440 y 6 a 390, sin otros cambios. Los logos, labels, hint y zoom exigen igualdad exacta.
 
 ## Dependencias y limitaciones
 
