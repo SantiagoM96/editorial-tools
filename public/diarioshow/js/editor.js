@@ -2,7 +2,7 @@
 (function(){
 'use strict';
 const el=id=>document.getElementById(id),canvas=el('art'),ctx=canvas.getContext('2d'),W=1080,H=1440;
-let halftone=null;const halftoneLayer=document.createElement('canvas');halftoneLayer.width=1080;halftoneLayer.height=1236;const halftoneCtx=halftoneLayer.getContext('2d');let importingArticle=false;let selectedTexture='1';const halftoneAssets={};function loadTexture(id,path){const asset=new Image();asset.onload=()=>{halftoneAssets[id]=asset;if(selectedTexture===id){halftone=asset;render()}};asset.onerror=()=>console.error('No se pudo cargar '+path);asset.src=path}loadTexture('1','../bae/halftone-editable.svg?v=2');loadTexture('2','../bae/halftone-2.svg?v=1');let textAlignment='center',forceUppercase=false;let image=null,zoom=1,offsetX=0,offsetY=0,dragging=false,lastX=0,lastY=0,photoBottom=820,photoHover=false;
+let halftone=null;const halftoneLayer=document.createElement('canvas');halftoneLayer.width=1080;halftoneLayer.height=1236;const halftoneCtx=halftoneLayer.getContext('2d');let importingArticle=false;let photoRevision=0;let selectedTexture='1';const halftoneAssets={};function loadTexture(id,path){const asset=new Image();asset.onload=()=>{halftoneAssets[id]=asset;if(selectedTexture===id){halftone=asset;render()}};asset.onerror=()=>console.error('No se pudo cargar '+path);asset.src=path}loadTexture('1','../bae/halftone-editable.svg?v=2');loadTexture('2','../bae/halftone-2.svg?v=1');let textAlignment='center',forceUppercase=false;let image=null,zoom=1,offsetX=0,offsetY=0,dragging=false,lastX=0,lastY=0,photoBottom=820,photoHover=false;
 const GRADIENT_BAR_HEIGHT=24;
 const LOGO_MARGIN=80,LOGO_WIDTH=75*1.25*1.15,LOGO_HEIGHT=LOGO_WIDTH*275/253;
 let selectedLogo='primary';
@@ -259,9 +259,17 @@ window.addEventListener('resize',updatePhotoStage);
 function loadPhoto(file){
  if(!file)return;
  if(!file.type.startsWith('image/')){el('status').textContent='Seleccioná un archivo de imagen válido.';return}
+ // La selección más reciente tiene prioridad, incluso frente a otras cargas pendientes.
+ const revision=++photoRevision;
  const url=URL.createObjectURL(file),img=new Image();
- img.onload=()=>{image=img;zoom=1;offsetX=0;offsetY=0;render();URL.revokeObjectURL(url)};
- img.onerror=()=>{el('status').textContent='No se pudo abrir esta fotografía';URL.revokeObjectURL(url)};
+ img.onload=()=>{
+  if(revision===photoRevision){image=img;zoom=1;offsetX=0;offsetY=0;render()}
+  URL.revokeObjectURL(url);
+ };
+ img.onerror=()=>{
+  if(revision===photoRevision)el('status').textContent='No se pudo abrir esta fotografía';
+  URL.revokeObjectURL(url);
+ };
  img.src=url;
 }
 el('file').addEventListener('change',event=>{loadPhoto(event.target.files[0]);event.target.value=''});
@@ -315,7 +323,7 @@ el('clearAll').addEventListener('click',()=>{
  forceUppercase=false;syncUppercaseUI();
  el('size').value='70';el('dots').value='5';textAlignment='center';
  el('alignLeft').setAttribute('aria-pressed','false');el('alignCenter').setAttribute('aria-pressed','true');
- image=null;zoom=1;offsetX=0;offsetY=0;dragging=false;photoHover=false;selectedLogo='primary';syncLogoChoices();photoStage.classList.remove('is-drag-over');
+ photoRevision++;image=null;zoom=1;offsetX=0;offsetY=0;dragging=false;photoHover=false;selectedLogo='primary';syncLogoChoices();photoStage.classList.remove('is-drag-over');
  el('importStatus').textContent='Pegá una URL de Diario Show.';
  render();
 });
@@ -373,5 +381,5 @@ function closeHelpTooltips(){
 document.addEventListener('click',event=>{if(!event.target.closest('.help-trigger'))closeHelpTooltips()});
 document.addEventListener('keydown',event=>{if(event.key==='Escape')closeHelpTooltips()});
 sizeHelpTooltips();
-window.DiarioShowEditor={setImporting(active){importingArticle=active;render()},setImage(img){image=img;zoom=1;offsetX=0;offsetY=0;render()},refresh:render};render();document.fonts.ready.then(render);
+window.DiarioShowEditor={setImporting(active){importingArticle=active;render()},getPhotoRevision(){return photoRevision},setImage(img){photoRevision++;image=img;zoom=1;offsetX=0;offsetY=0;render()},refresh:render};render();document.fonts.ready.then(render);
 })();
