@@ -1,12 +1,9 @@
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { TypographyControls } from './TypographyControls';
-import { editFormattedSelection, isTypographyState } from './typography-model';
+import { editFormattedSelection, initialTypography, isTypographyState } from './typography-model';
 
-afterEach(() => {
-  cleanup();
-  document.body.innerHTML = '';
-});
+afterEach(cleanup);
 
 describe('operaciones puras del editor', () => {
   it('inserta marcas preservando la selección y los fragmentos vecinos', () => {
@@ -41,37 +38,27 @@ describe('operaciones puras del editor', () => {
 });
 
 describe('controles de tipografía React', () => {
-  it('aplica marcas al texto real y emite input para redibujar Canvas', () => {
-    const area = document.createElement('textarea');
-    area.id = 'headline';
-    area.value = 'Texto editable';
-    document.body.append(area);
-    let inputs = 0;
-    area.addEventListener('input', () => inputs++);
-    render(<TypographyControls />);
-    area.setSelectionRange(6, 14);
+  it('delega el formato a ContentEditor en lugar de modificar el DOM por sí mismo', () => {
+    const onFormat = vi.fn();
+    render(<TypographyControls typography={initialTypography} onFormat={onFormat} />);
     fireEvent.click(screen.getByRole('button', { name: 'Destacar selección' }));
-    expect(area.value).toBe('Texto *editable*');
-    expect([area.selectionStart, area.selectionEnd]).toEqual([7, 15]);
-    expect(inputs).toBe(1);
+    fireEvent.click(screen.getByRole('button', { name: 'Quitar formato de la selección' }));
+    expect(onFormat.mock.calls).toEqual([['accent'], ['clear']]);
   });
 
-  it('recibe actualizaciones y despacha comandos de alineación y mayúsculas', () => {
-    const events: unknown[] = [];
+  it('representa el estado recibido y despacha comandos de alineación y mayúsculas', () => {
+    const commands: unknown[] = [];
     const onCommand = (event: Event) => {
-      if (event instanceof CustomEvent) events.push(event.detail);
+      if (event instanceof CustomEvent) commands.push(event.detail);
     };
     window.addEventListener('editorial:cronica:typography-command', onCommand);
     try {
-      render(<TypographyControls />);
-      fireEvent(window, new CustomEvent('editorial:cronica:typography-state', {
-        detail: { uppercase: true, alignment: 'left' },
-      }));
+      render(<TypographyControls typography={{ uppercase: true, alignment: 'left' }} onFormat={() => {}} />);
       expect(screen.getByRole('button', { name: 'Mostrar todo el texto en mayúsculas' }).getAttribute('aria-pressed')).toBe('true');
       expect(screen.getByRole('button', { name: 'Alinear a la izquierda' }).getAttribute('aria-pressed')).toBe('true');
       fireEvent.click(screen.getByRole('button', { name: 'Alinear al centro' }));
       fireEvent.click(screen.getByRole('button', { name: 'Mostrar todo el texto en mayúsculas' }));
-      expect(events).toEqual([
+      expect(commands).toEqual([
         { type: 'set-alignment', alignment: 'center' },
         { type: 'toggle-uppercase' },
       ]);

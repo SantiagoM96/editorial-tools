@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { editFormattedSelection, initialTypography, type TypographyFormat } from './typography-model';
-import { setAlignment, subscribeToTypography, toggleUppercase } from './typography-bridge';
+import type { TypographyFormat, TypographyState } from './typography-model';
+import { setAlignment, toggleUppercase } from './typography-bridge';
 
 const formats = [
   { format: 'accent', id: 'formatAccent', title: 'Destacar selección (*texto*)', label: 'Destacar selección', icon: 'format_color_text' },
@@ -8,28 +8,15 @@ const formats = [
   { format: 'strike', id: 'formatStrike', title: 'Tachado (~texto~)', label: 'Aplicar tachado', icon: 'strikethrough_s' },
 ] as const;
 
-function applyFormat(format: TypographyFormat): void {
-  const field = document.getElementById('headline');
-  if (!(field instanceof HTMLTextAreaElement)) return;
-  const result = editFormattedSelection(field.value, field.selectionStart, field.selectionEnd, format);
-  if (!result) {
-    field.focus();
-    return;
-  }
-  // Conserva posición y longitud de selección; dispara la entrada normal del
-  // editor legado para volver a dibujar el Canvas, sin manipular su renderer.
-  field.value = result.text;
-  field.setSelectionRange(result.start, result.end);
-  field.focus();
-  field.dispatchEvent(new Event('input', { bubbles: true }));
+interface TypographyControlsProps {
+  readonly typography: TypographyState;
+  readonly onFormat: (format: TypographyFormat) => void;
 }
 
-export function TypographyControls() {
-  const [typography, setTypography] = useState(initialTypography);
+export function TypographyControls({ typography, onFormat }: TypographyControlsProps) {
   const [helpOpen, setHelpOpen] = useState(false);
   const helpRef = useRef<HTMLSpanElement>(null);
 
-  useEffect(() => subscribeToTypography(setTypography), []);
   useEffect(() => {
     const closeOutside = (event: MouseEvent) => {
       if (event.target instanceof Node && !helpRef.current?.contains(event.target)) {
@@ -83,7 +70,7 @@ export function TypographyControls() {
               title={title}
               aria-label={label}
               onMouseDown={(event) => event.preventDefault()}
-              onClick={() => applyFormat(format)}
+              onClick={() => onFormat(format)}
             >
               <span className="material-icons" aria-hidden="true">{icon}</span>
             </button>
@@ -91,7 +78,7 @@ export function TypographyControls() {
           <button type="button" id="formatUppercase" title="Mostrar todo el texto en mayúsculas" aria-label="Mostrar todo el texto en mayúsculas" aria-pressed={typography.uppercase} onClick={toggleUppercase}>
             <span className="material-symbols-outlined" aria-hidden="true">match_case</span>
           </button>
-          <button type="button" id="formatClear" title="Quitar formato de la selección" aria-label="Quitar formato de la selección" onMouseDown={(event) => event.preventDefault()} onClick={() => applyFormat('clear')}>
+          <button type="button" id="formatClear" title="Quitar formato de la selección" aria-label="Quitar formato de la selección" onMouseDown={(event) => event.preventDefault()} onClick={() => onFormat('clear')}>
             <span className="material-icons" aria-hidden="true">delete_outline</span>
           </button>
         </div>

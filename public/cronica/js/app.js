@@ -4,6 +4,29 @@
 
 const el=id=>document.getElementById(id),canvas=el('art'),ctx=canvas.getContext('2d'),W=1080,H=1440;
 let image=null,zoom=1,offsetX=0,offsetY=0,dragging=false,lastX=0,lastY=0,photoBottom=820,textAlignment='center',forceUppercase=false,selectedLogo='primary',photoHover=false,pageVariant='cover';
+const documentContent={
+ headline:'Escribí un título claro y directo. *Destacá el dato principal* y dejá los detalles para las siguientes placas.',
+ strapText:'LA CLAVE DE ESTA NOTICIA',showStrap:true,size:'64'
+};
+function emitContentState(){
+ window.dispatchEvent(new CustomEvent('editorial:cronica:content-state',{detail:{...documentContent}}));
+}
+window.addEventListener('editorial:cronica:content-request',emitContentState);
+window.addEventListener('editorial:cronica:content-command',event=>{
+ const action=event.detail;
+ if(!action||typeof action.field!=='string')return;
+ if(action.field==='headline'&&typeof action.value==='string'){
+  documentContent.headline=action.value;
+ }else if(action.field==='strapText'&&typeof action.value==='string'){
+  documentContent.strapText=action.value.slice(0,140).toLocaleUpperCase('es-AR');
+ }else if(action.field==='showStrap'&&typeof action.value==='boolean'){
+  documentContent.showStrap=action.value;
+ }else if(action.field==='size'&&Number.isInteger(action.value)&&action.value>=32&&action.value<=95){
+  documentContent.size=String(action.value);
+ }else return;
+ emitContentState();
+ render();
+});
 const RED='#ed0000',BLACK='#080808',EDGE=80;
 const LOGO_WIDTH=75*1.25*1.15,LOGO_HEIGHT=LOGO_WIDTH*191/175;
 const logoImages={},logoSources={primary:'../cronica/logos/primario.svg',secondary:'../cronica/logos/secundario.svg',white:'../cronica/logos/blanco.svg'};
@@ -20,9 +43,7 @@ function drawBrandLogo(){
  ctx.drawImage(img,W-EDGE-LOGO_WIDTH,EDGE,LOGO_WIDTH,LOGO_HEIGHT);
 }
 // El campo refleja el modo mayúsculas sin alterar el texto que escribió el usuario.
-function syncUppercaseUI(){
- el('headline').classList.toggle('uppercase-preview',forceUppercase);
-}
+function syncUppercaseUI(){emitTypographyState();}
 function syncLogoChoices(){
  document.querySelectorAll('.logo-choice').forEach(btn=>btn.setAttribute('aria-pressed',String(btn.dataset.logo===selectedLogo)));
 }
@@ -62,8 +83,8 @@ function wrappedLines(text,size){
  return result;
 }
 function drawStrap(y,isCover){
- if(!el('showStrap').checked)return;
- const content=el('strapText').value.replace(/\s+/g,' ').trim().toLocaleUpperCase('es-AR'),maxWidth=W-EDGE*2;
+ if(!documentContent.showStrap)return;
+ const content=documentContent.strapText.replace(/\s+/g,' ').trim().toLocaleUpperCase('es-AR'),maxWidth=W-EDGE*2;
  let size=isCover?34:32;
  ctx.textBaseline='middle';
  while(size>16){ctx.font='800 '+size+'px Inter,Arial,sans-serif';if(ctx.measureText(content).width<=maxWidth-44)break;size--}
@@ -109,14 +130,14 @@ function drawPhoto(height,includeHover=true){
 }
 function render(includeHover=true){
  try{
-  const cover=pageVariant==='cover',requestedSize=Number(el('size').value);
+  const cover=pageVariant==='cover',requestedSize=Number(documentContent.size);
   const footerBaseline=H-EDGE,footerTop=footerBaseline-28;
   const availableBottom=cover?footerTop-50:H-EDGE;
-  const desired=forceUppercase?el('headline').value.toLocaleUpperCase('es-AR'):el('headline').value;
+  const desired=forceUppercase?documentContent.headline.toLocaleUpperCase('es-AR'):documentContent.headline;
   let size=requestedSize,lines=wrappedLines(desired,size);
   const lineHeight=()=>Math.round(size*1.09);
   function textTop(){return availableBottom-(lines.length?size*0.85+(lines.length-1)*lineHeight():0)}
-  const showBar=el('showStrap').checked;
+  const showBar=documentContent.showStrap;
   const barHeight=showBar?(cover?52:50):0;
   const requiredGap=cover?80:80;
   while(size>32&&textTop()-(showBar?barHeight+requiredGap:80)<230){
@@ -157,7 +178,6 @@ function render(includeHover=true){
    ctx.restore();
   }
   updatePhotoDropzone();
-  el('sizeLabel').textContent=el('size').value;
   el('zoomLabel').textContent=Math.round(zoom*100)+' %';el('photoZoom').value=Math.round(zoom*100);
   el('status').textContent=size<requestedSize?'Texto largo: tamaño ajustado para respetar los márgenes.':'Vista previa activa · Arrastrá la foto para reencuadrarla.';
  }catch(error){el('status').textContent='Error de vista previa: '+error.message;console.error(error)}
@@ -165,8 +185,7 @@ function render(includeHover=true){
 /* Cada placa conserva sus propios controles, foto, zoom y encuadre durante la edición. */
 let carouselPages=[],activePage=0;
 function readCurrentPage(){
- return {headline:el('headline').value,strapText:el('strapText').value.toLocaleUpperCase('es-AR'),showStrap:el('showStrap').checked,
-  size:el('size').value,alignment:textAlignment,forceUppercase,logo:selectedLogo,image,zoom,offsetX,offsetY,variant:pageVariant};
+ return {...documentContent,alignment:textAlignment,forceUppercase,logo:selectedLogo,image,zoom,offsetX,offsetY,variant:pageVariant};
 }
 // Textos de orientación que muestran cómo aprovechar portada, volanta y placas internas.
 const COVER_STRAP="LA CLAVE DE ESTA NOTICIA";
@@ -181,8 +200,11 @@ function saveActivePage(){if(carouselPages[activePage])carouselPages[activePage]
 // Un solo origen de verdad: carouselPages / activePage / pageVariant.
 function loadPage(page){
  pageVariant=page.variant==='cover'?'cover':'internal';
- el('headline').value=page.headline;el('strapText').value=String(page.strapText||'').toLocaleUpperCase('es-AR');
- el('showStrap').checked=page.showStrap;el('strapField').hidden=!page.showStrap;el('size').value=page.size;
+ documentContent.headline=String(page.headline||'');
+ documentContent.strapText=String(page.strapText||'').toLocaleUpperCase('es-AR');
+ documentContent.showStrap=Boolean(page.showStrap);
+ documentContent.size=String(page.size);
+ emitContentState();
  forceUppercase=Boolean(page.forceUppercase);syncUppercaseUI();
  selectedLogo=page.logo||'primary';syncLogoChoices();
  textAlignment=page.alignment;image=page.image;zoom=page.zoom;offsetX=page.offsetX;offsetY=page.offsetY;
@@ -237,18 +259,6 @@ function initializeCarousel(){
 }
 
 document.querySelectorAll('.logo-choice').forEach(button=>button.addEventListener('click',()=>{selectedLogo=button.dataset.logo;syncLogoChoices();render()}));
-el('showStrap').addEventListener('change',()=>{el('strapField').hidden=!el('showStrap').checked;render()});
-for(const id of ['headline','size'])el(id).addEventListener('input',render);
-el('strapText').addEventListener('input',()=>{
- const field=el('strapText'),start=field.selectionStart,end=field.selectionEnd;
- const value=field.value.toLocaleUpperCase('es-AR');
- if(field.value!==value){
-  field.value=value;
-  // Conservar cursor y selección al normalizar las letras.
-  if(start!==null&&end!==null)field.setSelectionRange(start,end);
- }
- render();
-});
 // Los botones de tipografía ya no los manipula el script heredado.
 // Su estado de edición continúa siendo el único origen de verdad.
 function emitTypographyState(){

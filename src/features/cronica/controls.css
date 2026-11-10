@@ -12,4 +12,4 @@
 }
 
 /* Ambos roots React mantienen intacta la composición CSS original. */
-#cronica-typography-root { display: contents; }
+#cronica-content-root { display: contents; }
