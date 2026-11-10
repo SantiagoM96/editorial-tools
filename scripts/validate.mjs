@@ -8,7 +8,7 @@ const publicRoot = resolve(root, 'public');
 const pages = ['index.html', 'cronica/index.html', 'bae/index.html', 'diarioshow/index.html'];
 const expected = [
   'src/main.tsx',
-  'public/cronica/js/app.js',
+  'src/features/cronica/engine/legacy-engine.js',
   'public/bae/js/editor.js',
   'public/bae/js/importer.js',
   'public/diarioshow/js/editor.js',
@@ -72,7 +72,7 @@ async function validateLegacyJs(dir) {
     }
   }
 }
-for (const slug of ['cronica', 'bae', 'diarioshow']) {
+for (const slug of ['bae', 'diarioshow']) {
   await validateLegacyJs(resolve(publicRoot, slug));
 }
 

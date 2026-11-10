@@ -4,7 +4,7 @@ import { resolve, dirname, sep } from 'node:path';
 const base = '/editorial-tools/';
 const root = resolve(process.cwd(), 'dist-pages');
 const entries = [
-  'index.html', 'og-image.png', 'cronica/index.html', 'cronica/js/app.js',
+  'index.html', 'og-image.png', 'cronica/index.html',
   'cronica/cronica-header-logo.svg', 'bae/index.html', 'bae/js/editor.js',
   'bae/js/importer.js', 'bae/halftone-2.svg', 'bae/halftone-editable.svg',
   'diarioshow/index.html', 'diarioshow/js/editor.js', 'diarioshow/js/importer.js',

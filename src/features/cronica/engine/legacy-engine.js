@@ -1,3 +1,6 @@
+import { calculatePhotoPlacement, panByPointerDelta } from './photo-geometry';
+import { decodePhotoFile } from './photo-decoder';
+
 
 (function(){
 'use strict';
@@ -139,11 +142,13 @@ function drawPhoto(height,includeHover=true){
  photoBottom=Math.max(130,height);
  ctx.fillStyle='#aeb4bc';ctx.fillRect(0,0,W,photoBottom);
  if(image){
-  const scale=Math.max(W/image.width,photoBottom/image.height)*zoom,iw=image.width*scale,ih=image.height*scale;
-  const maxX=Math.max(0,(iw-W)/2),maxY=Math.max(0,(ih-photoBottom)/2);
-  offsetX=Math.max(-maxX,Math.min(maxX,offsetX));offsetY=Math.max(-maxY,Math.min(maxY,offsetY));
+  const placement=calculatePhotoPlacement({
+   imageWidth:image.width,imageHeight:image.height,canvasWidth:W,
+   photoBottom,zoom,offsetX,offsetY
+  });
+  offsetX=placement.offsetX;offsetY=placement.offsetY;
   ctx.save();ctx.beginPath();ctx.rect(0,0,W,photoBottom);ctx.clip();
-  ctx.drawImage(image,(W-iw)/2+offsetX,(photoBottom-ih)/2+offsetY,iw,ih);ctx.restore();
+  ctx.drawImage(image,placement.x,placement.y,placement.width,placement.height);ctx.restore();
  }else{
   // El aviso de carga se presenta como capa HTML interactiva, fuera del PNG.
   // La capa de hover queda bajo la línea roja y la volanta dibujadas después.
@@ -325,14 +330,18 @@ function loadPhoto(file){
  if(!file)return;
  setPhotoHover(false);
  if(!file.type.startsWith('image/')){el('status').textContent='Seleccioná un archivo de imagen válido.';return}
- const pageIndex=activePage,url=URL.createObjectURL(file),img=new Image();
- img.onload=()=>{
+ const pageIndex=activePage;
+ // El decoder es independiente de Canvas y garantiza revokeObjectURL en éxito/error.
+ decodePhotoFile(file).then(img=>{
   if(pageIndex===activePage){image=img;zoom=1;offsetX=0;offsetY=0;render()}
-  else if(carouselPages[pageIndex]){carouselPages[pageIndex].image=img;carouselPages[pageIndex].zoom=1;carouselPages[pageIndex].offsetX=0;carouselPages[pageIndex].offsetY=0}
-  URL.revokeObjectURL(url);
- };
- img.onerror=()=>{el('status').textContent='No se pudo abrir esta fotografía';URL.revokeObjectURL(url)};
- img.src=url;
+  else if(carouselPages[pageIndex]){
+   carouselPages[pageIndex].image=img;carouselPages[pageIndex].zoom=1;
+   carouselPages[pageIndex].offsetX=0;carouselPages[pageIndex].offsetY=0;
+  }
+ }).catch(error=>{
+  el('status').textContent='No se pudo abrir esta fotografía';
+  console.error('Error al decodificar fotografía:',error);
+ });
 }
 const photoZone=el('photoDropzone'),photoStage=el('photoStage');
 function setPhotoHover(active){
@@ -359,7 +368,15 @@ photoStage.addEventListener('dragover',event=>{if(isImageDrag(event)&&isOverPhot
 photoStage.addEventListener('dragleave',event=>{if(!photoStage.contains(event.relatedTarget)){photoStage.classList.remove('is-drag-over');setPhotoHover(false)}});
 photoStage.addEventListener('drop',event=>{photoStage.classList.remove('is-drag-over');setPhotoHover(false);if(!isOverPhoto(event))return;event.preventDefault();loadPhoto([...event.dataTransfer.files].find(file=>file.type.startsWith('image/'))||event.dataTransfer.files[0])});
 canvas.addEventListener('pointerdown',event=>{if(!image)return;const r=canvas.getBoundingClientRect();if((event.clientY-r.top)*H/r.height>photoBottom)return;dragging=true;lastX=event.clientX;lastY=event.clientY;canvas.setPointerCapture(event.pointerId)});
-canvas.addEventListener('pointermove',event=>{if(!dragging)return;const ratio=W/canvas.getBoundingClientRect().width;offsetX+=(event.clientX-lastX)*ratio;offsetY+=(event.clientY-lastY)*ratio;lastX=event.clientX;lastY=event.clientY;render()});
+canvas.addEventListener('pointermove',event=>{
+ if(!dragging)return;
+ const next=panByPointerDelta({
+  offsetX,offsetY,deltaX:event.clientX-lastX,deltaY:event.clientY-lastY,
+  canvasWidth:W,viewportWidth:canvas.getBoundingClientRect().width
+ });
+ offsetX=next.offsetX;offsetY=next.offsetY;
+ lastX=event.clientX;lastY=event.clientY;render();
+});
 canvas.addEventListener('pointerup',()=>dragging=false);canvas.addEventListener('pointercancel',()=>dragging=false);
 el('clearAll').addEventListener('click',()=>{
  const initial=newBlankPage();initial.variant=pageVariant;if(activePage===0){initial.headline=COVER_HEADLINE;initial.strapText=COVER_STRAP;initial.showStrap=true;initial.size='64';initial.alignment='center'}
