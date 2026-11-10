@@ -44,7 +44,7 @@ describe('composición editorial pura', () => {
 
   it('reduce la fuente solo cuando el texto excede la zona disponible', () => {
     const layout = calculateEditorialLayout({
-      headline: 'a '.repeat(400), requestedSize: 94,
+      headline: 'a '.repeat(800), requestedSize: 94,
       forceUppercase: true, showStrap: true, variant: 'cover',
     }, fixedWidth);
     expect(layout.size).toBeLessThan(94);
