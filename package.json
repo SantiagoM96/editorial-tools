@@ -1,0 +1,13 @@
+{
+  "name": "editorial-tools",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "test": "node scripts/validate.mjs"
+  }
+}

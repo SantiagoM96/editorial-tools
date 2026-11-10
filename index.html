@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Editorial Tools · Vista previa</title>
+<style>
+:root{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:#101114;color:#f4f4f4}
+.wrap{width:min(1100px,calc(100% - 40px));margin:0 auto}
+header{border-bottom:1px solid #34383e}
+header .wrap{min-height:80px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{font-size:17px;font-weight:700;letter-spacing:-.02em}
+.env{border:1px solid #454952;border-radius:50px;color:#c3c7d0;font-size:12px;padding:6px 12px}
+main{padding:64px 0 80px}
+.eyebrow{color:#b5bac3;font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;margin:0 0 12px}
+h1{font-size:clamp(29px,4vw,43px);letter-spacing:-.035em;line-height:1.15;margin:0 0 14px}
+.intro{font-size:15px;line-height:1.6;color:#b6bbc5;max-width:620px;margin:0 0 36px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:20px}
+.product{min-width:0;display:flex;flex-direction:column;align-items:stretch;text-decoration:none;color:inherit;background:#1e2025;border:1px solid #373b43;border-radius:16px;padding:28px;transition:border-color .15s,background .15s,transform .15s}
+.product:hover{background:#25282e;border-color:#858b96;transform:translateY(-2px)}
+.product:focus-visible{outline:2px solid #ed0000;outline-offset:4px}
+.logo-area{height:112px;display:flex;align-items:center;justify-content:flex-start;margin-bottom:22px}
+.logo-area img{object-fit:contain;object-position:left center;max-width:min(250px,100%);max-height:96px;width:auto;height:auto}
+/* Compensación óptica: Crónica es más alto, BAE más horizontal. Equilibrar superficie visible, no dimensiones. */
+.logo-area img.logo-cronica{width:155px;max-width:100%;height:auto}
+
+.product h2{margin:0 0 8px;font-size:23px;letter-spacing:-.02em}
+.product p{font-size:14px;color:#b5bac3;line-height:1.55;margin:0 0 25px;flex:1}
+.open{display:inline-flex;align-items:center;justify-content:space-between;gap:12px;font-weight:650;font-size:14px;color:#fff}
+.arrow{font-size:23px;line-height:1}
+footer{font-size:12px;color:#888e9a;padding:0 0 35px}
+@media(max-width:650px){header .wrap{min-height:68px}main{padding:42px 0 55px}.grid{grid-template-columns:1fr}.product{padding:24px}.logo-area{height:85px;margin-bottom:16px}.logo-area img{max-height:74px}}
+@media(prefers-reduced-motion:reduce){.product{transition:none}}
+</style>
+<meta name="description" content="Accedé a los generadores de contenido editorial de Crónica, BAE Negocios y Diario Show.">
+<link rel="canonical" href="https://santiagom96.github.io/editorial-tools/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_AR">
+<meta property="og:site_name" content="Herramientas editoriales">
+<meta property="og:title" content="Herramientas editoriales | Dashboard de desarrollo">
+<meta property="og:description" content="Accedé a los generadores de contenido editorial de Crónica, BAE Negocios y Diario Show.">
+<meta property="og:url" content="https://santiagom96.github.io/editorial-tools/">
+<meta property="og:image" content="https://santiagom96.github.io/editorial-tools/og-image.png">
+<meta property="og:image:secure_url" content="https://santiagom96.github.io/editorial-tools/og-image.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Herramientas editoriales, dashboard de desarrollo con identidad Crónica.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Herramientas editoriales | Dashboard de desarrollo">
+<meta name="twitter:description" content="Accedé a los generadores de contenido editorial de Crónica, BAE Negocios y Diario Show.">
+<meta name="twitter:image" content="https://santiagom96.github.io/editorial-tools/og-image.png">
+
+<style id="diarioshow-dashboard-logo">
+/* La marca horizontal oficial necesita contraste sobre la tarjeta oscura. */
+.logo-area img.logo-diarioshow{
+ width:250px;max-width:100%;height:auto;
+}
+</style>
+</head>
+<body>
+<header><div class="wrap"><span class="brand">Herramientas editoriales</span><span class="env">Entorno de desarrollo</span></div></header>
+<main class="wrap">
+<p class="eyebrow">Generadores de contenido</p>
+<h1>Elegí el producto que vas a editar</h1>
+<p class="intro">Accedé a los generadores para preparar placas y posteos. Este espacio reúne las versiones de prueba; los proyectos publicados se mantienen separados.</p>
+<div class="grid">
+<a class="product" href="./cronica/" aria-label="Abrir generador de Crónica, versión de desarrollo">
+<div class="logo-area"><img class="logo-cronica" src="./cronica/cronica-header-logo.svg" alt="Crónica"></div>
+<h2>Crónica</h2><p>Generador de posteos y carruseles para Instagram.</p>
+<span class="open">Abrir generador <span class="arrow" aria-hidden="true">→</span></span>
+</a>
+<a class="product" href="./bae/" aria-label="Abrir generador de BAE Negocios, versión de desarrollo">
+<div class="logo-area"><img src="./bae/bae-negocios-logo-color.svg" alt="BAE Negocios"></div>
+<h2>BAE Negocios</h2><p>Generador de placas para Instagram con plantillas editoriales.</p>
+<span class="open">Abrir generador <span class="arrow" aria-hidden="true">→</span></span>
+</a>
+<a class="product" href="./diarioshow/" aria-label="Abrir generador de Diario Show, versión de desarrollo">
+<div class="logo-area"><img class="logo-diarioshow" src="./diarioshow/logos/dashboard.svg" alt="Diario Show"></div>
+<h2>Diario Show</h2><p>Generador de placas para Instagram. Versión inicial en preparación.</p>
+<span class="open">Abrir generador <span class="arrow" aria-hidden="true">→</span></span>
+</a>
+</div>
+</main>
+<footer class="wrap">Área de pruebas · Los cambios aquí no modifican automáticamente producción.</footer>
+</body></html>
