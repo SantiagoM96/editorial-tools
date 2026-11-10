@@ -29,7 +29,7 @@ Se conserva el patrón de layout con raíces `display: contents` y los mismos se
 - Restauración del estado al cambiar páginas y al limpiar.
 - PNG 1080 × 1440 y carrusel con fotos.
 - Paridad exacta del Canvas (SHA-256 de píxeles) contra el original con fotos, logos y zoom.
-- Paridad visual en escritorio y móvil de los tres controles migrados.
+- Paridad visual escritorio/móvil: capturas exactas de logos, etiquetas, texto auxiliar y slider; el input nativo `type=file` se contrasta por dimensiones, posición y CSS calculado, además de probar su comportamiento de carga. El cromado interno del selector de archivos depende del navegador y no se compara por bytes.
 
 ## Dependencias y limitaciones
 
