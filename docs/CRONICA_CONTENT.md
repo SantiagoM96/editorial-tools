@@ -28,8 +28,15 @@ Dependencias: PR #2 → #3 → #4 → este PR.
 
 ## Criterio de paridad visual
 
-Las capturas iniciales detectaron una pérdida de 12px de margen entre fotografía y contenido causada por la nueva raíz React; quedó corregida restableciendo el selector original en `controls.css`.
+Al introducir el contenedor React se perdió un margen de 12 px entre fotografía y contenido por el selector `.control-field + .control-field`; la separación se restauró explícitamente en `controls.css`.
 
-Después de esa corrección, las capturas del componente son idénticas a 1440px. A 390px se encontraron **17 píxeles** con diferencias de **±1 valor RGB** exclusivamente dentro de los primeros **3px del borde izquierdo de la entrada de volanta** (diagnóstico GitHub Actions #42752452429, artefacto 13734575747). Es un redondeo del raster de Chromium, sin variación de contenido ni dimensiones. La prueba exige que todo el interior restante sea pixel-perfect y valida por separado los estilos calculados de borde, fondo y radio; mantiene comparación pixel-perfect completa a 1440px y en los otros controles.
+La comparación de PNG **decodificados píxel por píxel**, en Chromium y los viewports 1440/390, detectó exclusivamente diferencias mínimas de antialiasing de bordes redondeados:
 
-La tolerancia queda restringida a ese borde y viewport, y no se aplica a Canvas ni a las demás regiones visuales. No debe reutilizarse para ocultar regresiones futuras.
+- **Input de volanta:** 17 píxeles con variación máxima de 1 nivel RGB, todos dentro de las 3 primeras columnas del borde izquierdo, tanto en escritorio como en móvil.
+- **Textarea del título:** 28 píxeles (diferencia máxima de 2 RGB) a 1440 px y 35 píxeles (máximo 1 RGB) a 390 px, correspondientes a bordes redondeados. Se exige cero cambios fuera de los primeros/últimos 8 px horizontales.
+
+Se consideran equivalentes solo bajo límites **explícitos y estrechos**: 20 píxeles y 1 RGB para volanta; 40 píxeles y 2 RGB para textarea. Además se comparan exactamente el tamaño de los controles, el CSS calculado de borde/fondo/texto y el espaciado con el campo de fotografía.
+
+Todos los demás controles y el **Canvas editorial** continúan con comparación exacta, sin tolerancias. Esta excepción no autoriza diferencias de contenido, texto, composición, fotografías ni exportación.
+
+Diagnósticos: GitHub Actions #42752452429 y #42753020486.
