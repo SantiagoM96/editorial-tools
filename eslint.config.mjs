@@ -6,6 +6,8 @@ export default tseslint.config(
       'node_modules/**', 'dist/**', 'dist-pages/**', 'public/**',
       'reference/**', 'playwright-report/**', 'test-results/**',
       'tests/artifacts/**',
+      // Código heredado transitorio; motor de imágenes y modelos TS sí se validan.
+      'src/features/cronica/engine/legacy-engine.js',
     ],
   },
   ...tseslint.configs.recommended,

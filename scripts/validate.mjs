@@ -72,7 +72,7 @@ async function validateLegacyJs(dir) {
     }
   }
 }
-for (const slug of ['cronica', 'bae', 'diarioshow']) {
+for (const slug of ['bae', 'diarioshow']) {
   await validateLegacyJs(resolve(publicRoot, slug));
 }
 

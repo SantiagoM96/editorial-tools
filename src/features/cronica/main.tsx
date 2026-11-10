@@ -1,3 +1,7 @@
+// El motor heredado es un módulo de Vite; las APIs de fotografía son imports
+// verificables, sin exponer servicios globales ni duplicar fórmulas.
+import './engine/legacy-engine.js';
+
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { CarouselControls } from './CarouselControls';
