@@ -29,9 +29,8 @@ for (const path of expected) {
   if (!(await exists(resolve(root, path)))) errors.push('Falta archivo: ' + path);
 }
 for (const page of pages) {
-  const isDashboard = page === 'index.html';
-  const webRoot = isDashboard ? root : publicRoot;
-  const file = resolve(webRoot, page);
+  const modernEntry = page === 'index.html' || page === 'cronica/index.html';
+  const file = resolve(modernEntry ? root : publicRoot, page);
   const html = await readFile(file, 'utf8');
   if (html.includes('santiagom96.github.io/mlz/')) errors.push('Ruta heredada: ' + page);
   for (const [, ref] of html.matchAll(/\b(?:href|src)\s*=\s*["']([^"']+)["']/gi)) {
@@ -40,18 +39,25 @@ for (const page of pages) {
     try { url = new URL(ref, 'https://editorial.local/' + page); }
     catch { errors.push('URL inválida: ' + page + ' → ' + ref); continue; }
     if (url.origin !== 'https://editorial.local') continue;
-    const destination = resolve(webRoot, '.' + decodeURIComponent(url.pathname));
-    if (destination !== webRoot && !destination.startsWith(webRoot + sep)) {
+    const pathname = decodeURIComponent(url.pathname);
+    // Se valida la URL pública contra las dos raíces físicas de Vite.
+    // index y Crónica son entradas HTML; scripts/recursos están en public/.
+    const destination = pathname === '/'
+      ? resolve(root, 'index.html')
+      : pathname === '/cronica/'
+        ? resolve(root, 'cronica/index.html')
+        : pathname.startsWith('/src/')
+          ? resolve(root, '.' + pathname)
+          : resolve(publicRoot, '.' + pathname);
+    const approved = destination === root || destination.startsWith(root + sep);
+    if (!approved) {
       errors.push('Ruta fuera del sitio: ' + page + ' → ' + ref);
       continue;
     }
     const info = await exists(destination);
     if (!info) errors.push('Enlace roto: ' + page + ' → ' + ref);
     else if (info.isDirectory() && !(await exists(resolve(destination, 'index.html')))) {
-      // En desarrollo, Vite sirve la portada React desde la raíz del proyecto,
-      // aunque los generadores físicos estén dentro de public/.
-      const isViteRoot = destination === publicRoot && (await exists(resolve(root, 'index.html')));
-      if (!isViteRoot) errors.push('Directorio sin index: ' + page + ' → ' + ref);
+      errors.push('Directorio sin index: ' + page + ' → ' + ref);
     }
     checkedLinks++;
   }

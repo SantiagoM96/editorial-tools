@@ -2,6 +2,7 @@ import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import type { Plugin } from 'vite';
+import { fileURLToPath } from 'node:url';
 
 // En Vite, public/cronica/index.html no se resuelve automáticamente desde /cronica/.
 // Esta reescritura es solo para el servidor de desarrollo; Pages maneja el index por carpeta.
@@ -13,7 +14,7 @@ function legacyEditorRoutes(): Plugin {
       server.middlewares.use((req, _res, next) => {
         const current = req.url ?? '/';
         const pathname = current.split('?')[0];
-        if (pathname && ['/cronica/', '/bae/', '/diarioshow/'].includes(pathname)) {
+        if (pathname && ['/bae/', '/diarioshow/'].includes(pathname)) {
           req.url = current.replace(pathname, pathname + 'index.html');
         }
         next();
@@ -27,6 +28,14 @@ export default defineConfig(({ command }) => ({
   // Las páginas públicas viven en /editorial-tools/; en desarrollo se sirven desde /.
   base: command === 'build' ? '/editorial-tools/' : '/',
   publicDir: 'public',
+  build: {
+    rollupOptions: {
+      input: {
+        dashboard: fileURLToPath(new URL('./index.html', import.meta.url)),
+        cronica: fileURLToPath(new URL('./cronica/index.html', import.meta.url)),
+      },
+    },
+  },
   plugins: [legacyEditorRoutes(), react(), tailwindcss()],
   server: {
     host: '127.0.0.1',

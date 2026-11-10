@@ -1,0 +1,12 @@
+/* Evita modificar la composición del panel original durante la migración parcial. */
+#cronica-controls-root {
+  display: contents;
+}
+
+/* La sección Variantes era un elemento intermedio del aside. Dentro de React
+   ahora es :last-child; se restaura explícitamente el divisor original. */
+#cronica-controls-root > .cronica-variant-panel:last-child {
+  border-bottom: 1px solid #373b43;
+  margin-bottom: 17px;
+  padding-bottom: 17px;
+}

@@ -178,11 +178,10 @@ function newBlankPage(){
   image:null,zoom:1,offsetX:0,offsetY:0,variant:'internal'};
 }
 function saveActivePage(){if(carouselPages[activePage])carouselPages[activePage]=readCurrentPage()}
-function syncVariantUI(){
- document.querySelectorAll('.cronica-variant-option').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.pageVariant===pageVariant)));
-}
+// Contrato de comunicación con los controles React (los datos e imágenes siguen aquí).
+// Un solo origen de verdad: carouselPages / activePage / pageVariant.
 function loadPage(page){
- pageVariant=page.variant==='cover'?'cover':'internal';syncVariantUI();
+ pageVariant=page.variant==='cover'?'cover':'internal';
  el('headline').value=page.headline;el('strapText').value=String(page.strapText||'').toLocaleUpperCase('es-AR');
  el('showStrap').checked=page.showStrap;el('strapField').hidden=!page.showStrap;el('size').value=page.size;
  forceUppercase=Boolean(page.forceUppercase);syncUppercaseUI();
@@ -194,40 +193,51 @@ function loadPage(page){
  render();
 }
 function renderCarouselNavigation(){
- const list=el('carouselPages');list.replaceChildren();
- carouselPages.forEach((page,index)=>{
-  const button=document.createElement('button');button.type='button';
-  button.setAttribute('aria-current',index===activePage?'page':'false');
-  button.setAttribute('aria-label','Página '+(index+1)+', '+(page.variant==='cover'?'portada':'interior'));
-  button.textContent=String(index+1);
-  button.addEventListener('click',()=>selectPage(index));list.appendChild(button);
- });
- el('pageIndicator').textContent=(activePage+1)+' de '+carouselPages.length+' · '+(pageVariant==='cover'?'Portada':'Interior');
- el('removePage').disabled=activePage===0;
+ window.dispatchEvent(new CustomEvent('editorial:cronica:state',{
+  detail:{
+   pages:carouselPages.map(page=>page.variant==='cover'?'cover':'internal'),
+   activePage,
+   variant:pageVariant
+  }
+ }));
 }
 function selectPage(index){
  if(index===activePage||index<0||index>=carouselPages.length)return;
  saveActivePage();activePage=index;loadPage(carouselPages[index]);renderCarouselNavigation();
 }
+function addPage(){
+ saveActivePage();
+ const index=activePage+1;
+ carouselPages.splice(index,0,newBlankPage());
+ activePage=index;loadPage(carouselPages[index]);renderCarouselNavigation();
+}
+function removePage(){
+ if(activePage===0)return;
+ carouselPages.splice(activePage,1);
+ activePage=Math.min(activePage,carouselPages.length-1);
+ loadPage(carouselPages[activePage]);renderCarouselNavigation();
+}
+function changeVariant(next){
+ if((next!=='cover'&&next!=='internal')||next===pageVariant)return;
+ pageVariant=next;
+ saveActivePage();renderCarouselNavigation();render();
+}
 function initializeCarousel(){
- carouselPages=[readCurrentPage()];activePage=0;renderCarouselNavigation();
- el('addPage').addEventListener('click',()=>{
-  saveActivePage();const index=activePage+1;carouselPages.splice(index,0,newBlankPage());
-  activePage=index;loadPage(carouselPages[index]);renderCarouselNavigation();
+ carouselPages=[readCurrentPage()];activePage=0;
+ window.addEventListener('editorial:cronica:request-state',renderCarouselNavigation);
+ window.addEventListener('editorial:cronica:command',event=>{
+  const action=event.detail;
+  if(!action||typeof action.type!=='string')return;
+  switch(action.type){
+   case 'add-page':addPage();break;
+   case 'remove-page':removePage();break;
+   case 'select-page':if(Number.isInteger(action.index))selectPage(action.index);break;
+   case 'set-variant':changeVariant(action.variant);break;
+  }
  });
- el('removePage').addEventListener('click',()=>{
-  if(activePage===0)return;
-  carouselPages.splice(activePage,1);activePage=Math.min(activePage,carouselPages.length-1);
-  loadPage(carouselPages[activePage]);renderCarouselNavigation();
- });
+ renderCarouselNavigation();
 }
 
-document.querySelectorAll('.cronica-variant-option').forEach(button=>button.addEventListener('click',()=>{
- const next=button.dataset.pageVariant;
- if(next===pageVariant)return;
- pageVariant=next;
- syncVariantUI();saveActivePage();renderCarouselNavigation();render();
-}));
 document.querySelectorAll('.logo-choice').forEach(button=>button.addEventListener('click',()=>{selectedLogo=button.dataset.logo;syncLogoChoices();render()}));
 el('showStrap').addEventListener('change',()=>{el('strapField').hidden=!el('showStrap').checked;render()});
 for(const id of ['headline','size'])el(id).addEventListener('input',render);

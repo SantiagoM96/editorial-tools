@@ -1,7 +1,7 @@
 name: Verificar Editorial Tools
 on:
   pull_request:
-    branches: [main]
+    branches: [main, 'feat/**']
   workflow_dispatch:
 permissions:
   contents: read
