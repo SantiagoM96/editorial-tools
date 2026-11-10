@@ -46,3 +46,11 @@ Se tomó **solo el estado `-dev` de ese commit** como referencia para cada herra
 Esta rama es una **base de migración para revisión**. No se ha publicado producción ni se afirma paridad de navegador. El workflow de GitHub Actions valida el código: no tiene permisos de despliegue.
 
 La modernización arquitectónica es una fase posterior, documentada en [REFACTOR_PLAN.md](docs/REFACTOR_PLAN.md).
+
+## GitHub Pages
+
+URL prevista tras el merge y el primer despliegue: https://santiagom96.github.io/editorial-tools/
+
+El workflow `.github/workflows/pages.yml` publica **solo desde `main`**, usando un artefacto mínimo generado con `npm run build:pages`, sin copiar código municipal ni carpetas históricas. Para habilitar el despliegue, GitHub Pages debe tener **Settings → Pages → Build and deployment → Source: GitHub Actions**. Si el sitio usa “Deploy from a branch”, cambiar esa opción antes de integrar.
+
+**Esta rama/PR no está publicada y no se ha hecho merge.** La URL anterior es la ruta prevista, no un sitio verificado como accesible.
