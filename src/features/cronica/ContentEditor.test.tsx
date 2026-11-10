@@ -39,7 +39,7 @@ describe('campos React de Crónica', () => {
       fireEvent.change(headline, { target: { value: 'Texto de prueba' } });
       expect(commands.at(-1)).toEqual({ field: 'headline', value: 'Texto de prueba' });
 
-      fireEvent.change(screen.getByLabelText(/Tamaño de tipografía/), { target: { value: '72' } });
+      fireEvent.change(screen.getByRole('slider'), { target: { value: '72' } });
       expect(commands.at(-1)).toEqual({ field: 'size', value: 72 });
       expect(screen.getByText('72').textContent).toBe('72');
 
@@ -93,7 +93,7 @@ describe('campos React de Crónica', () => {
     const headline = screen.getByLabelText('Texto principal') as HTMLTextAreaElement;
     expect(headline.value).toBe('Otra página');
     expect(headline.classList.contains('uppercase-preview')).toBe(true);
-    expect(screen.getByLabelText(/Tamaño de tipografía/).getAttribute('value')).toBe('52');
+    expect(screen.getByRole('slider').getAttribute('value')).toBe('52');
     expect(screen.getByRole('button', { name: 'Alinear a la izquierda' }).getAttribute('aria-pressed')).toBe('true');
   });
 });
