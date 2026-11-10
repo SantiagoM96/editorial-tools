@@ -13,18 +13,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: npm install --no-audit --no-fund
+      - run: npm ci --no-audit --no-fund
       - run: npm run typecheck
       - run: npm run lint
       - run: npm run test:unit
       - run: npm test
       - run: npm run build:pages
-      - name: Emit updated lockfile for version upgrade (temporary)
-        run: |
-          echo LOCKFILE_START
-          base64 -w0 package-lock.json
-          echo
-          echo LOCKFILE_END
   browser-qa:
     runs-on: ubuntu-24.04
     timeout-minutes: 18
@@ -39,7 +33,7 @@ jobs:
           ref: 13032f9ab2ea8b81f3d46c81ca36f4e0b4e211b7
           path: reference
           persist-credentials: false
-      - run: npm install --no-audit --no-fund
+      - run: npm ci --no-audit --no-fund
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e
       - uses: actions/upload-artifact@v4
