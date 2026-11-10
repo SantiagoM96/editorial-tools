@@ -1,7 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { CarouselControls } from './CarouselControls';
-import { TypographyControls } from './TypographyControls';
+import { ContentEditor } from './ContentEditor';
 import './controls.css';
 
 const mount = document.getElementById('cronica-controls-root');
@@ -13,11 +13,11 @@ createRoot(mount).render(
   </StrictMode>,
 );
 
-const typographyMount = document.getElementById('cronica-typography-root');
-if (!typographyMount) throw new Error('No se encontró el contenedor de tipografía de Crónica.');
+const contentMount = document.getElementById('cronica-content-root');
+if (!contentMount) throw new Error('No se encontró el contenedor de contenido de Crónica.');
 
-createRoot(typographyMount).render(
+createRoot(contentMount).render(
   <StrictMode>
-    <TypographyControls />
+    <ContentEditor />
   </StrictMode>,
 );
