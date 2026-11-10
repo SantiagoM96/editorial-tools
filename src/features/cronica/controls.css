@@ -10,3 +10,6 @@
   margin-bottom: 17px;
   padding-bottom: 17px;
 }
+
+/* Ambos roots React mantienen intacta la composición CSS original. */
+#cronica-typography-root { display: contents; }
