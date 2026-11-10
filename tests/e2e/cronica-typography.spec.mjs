@@ -43,9 +43,8 @@ test('Crónica: formato y alineación React conservan selección, mayúsculas y 
   await expect(page.getByRole('button', { name: 'Ayuda sobre el formato de texto' })).toHaveAttribute('aria-expanded', 'false');
 });
 
-test.skip(!process.env.CI, 'Requiere el checkout del origen para comparar Canvas después de aplicar formatos');
-
 test('Crónica: el Canvas mantiene paridad después de editar formato y alineación', async ({ page }) => {
+  test.skip(!process.env.CI, 'Requiere el checkout del origen para comparar Canvas después de aplicar formatos');
   async function renderEditedState(url) {
     const response = await page.goto(url, { waitUntil: 'load' });
     expect(response?.status()).toBe(200);
@@ -61,12 +60,14 @@ test('Crónica: el Canvas mantiene paridad después de editar formato y alineaci
     await page.getByRole('button', { name: 'Página 1, portada' }).click();
     await expect(page.locator('#headline')).toHaveValue('El *fútbol* argentino');
     await page.evaluate(async () => { await document.fonts.ready; });
-    const original = await page.locator('#art').evaluate((canvas) => {
+    const fingerprint = await page.locator('#art').evaluate(async (canvas) => {
       const context = canvas.getContext('2d');
       if (!context) throw new Error('Canvas 2D no disponible');
-      return Array.from(context.getImageData(0, 0, canvas.width, canvas.height).data);
+      const { data } = context.getImageData(0, 0, canvas.width, canvas.height);
+      const hash = await crypto.subtle.digest('SHA-256', data);
+      return Array.from(new Uint8Array(hash), (byte) => byte.toString(16).padStart(2, '0')).join('');
     });
-    return original;
+    return fingerprint;
   }
 
   const baseline = await renderEditedState('http://127.0.0.1:4174/cronica-dev/');
