@@ -37,11 +37,11 @@ async function fetchText(url,ms=8500){
  }finally{clearTimeout(timer)}
 }
 function cleanTitle(value){
- return fixEncoding(String(value||'').replace(/\\s*[|\\-–]\\s*(?:Diario\\s*Show|Cr[oó]nica(?:\\.com\\.ar)?)(?:\\s*-\\s*Firme junto al pueblo)?\\s*$/i,'').trim());
+ return fixEncoding(String(value||'').replace(/\s*[|\-–]\s*(?:Diario\s*Show|Cr[oó]nica(?:\.com\.ar)?)(?:\s*-\s*Firme junto al pueblo)?\s*$/i,'').trim());
 }
 function parseJina(markdown){
- const title=cleanTitle(markdown.match(/^Title:\\s*(.+)$/mi)?.[1]||markdown.match(/^#\\s+(.+)$/m)?.[1]||'');
- const images=[...markdown.matchAll(/!\\[[^\\]]*\\]\\((https?:\\/\\/[^)\\s]+)\\)/g)].map(m=>m[1]);
+ const title=cleanTitle(markdown.match(/^Title:\s*(.+)$/mi)?.[1]||markdown.match(/^#\s+(.+)$/m)?.[1]||'');
+ const images=[...markdown.matchAll(/!\[[^\]]*\]\((https?:\/\/[^)\s]+)\)/g)].map(m=>m[1]);
  return {title,image:images.find(u=>!/(logo|icon|avatar|favicon|pixel|tracking)/i.test(u))||images[0]||''};
 }
 async function extract(url){
