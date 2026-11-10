@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { editFormattedSelection, initialTypography, type TypographyFormat } from './typography-model';
 import { setAlignment, subscribeToTypography, toggleUppercase } from './typography-bridge';
 
@@ -26,15 +26,47 @@ function applyFormat(format: TypographyFormat): void {
 
 export function TypographyControls() {
   const [typography, setTypography] = useState(initialTypography);
+  const [helpOpen, setHelpOpen] = useState(false);
+  const helpRef = useRef<HTMLSpanElement>(null);
+
   useEffect(() => subscribeToTypography(setTypography), []);
+  useEffect(() => {
+    const closeOutside = (event: MouseEvent) => {
+      if (event.target instanceof Node && !helpRef.current?.contains(event.target)) {
+        setHelpOpen(false);
+      }
+    };
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setHelpOpen(false);
+    };
+    document.addEventListener('click', closeOutside);
+    document.addEventListener('keydown', closeOnEscape);
+    return () => {
+      document.removeEventListener('click', closeOutside);
+      document.removeEventListener('keydown', closeOnEscape);
+    };
+  }, []);
+
+  const measureHelp = () => {
+    const panel = helpRef.current?.closest('.editor-panel');
+    const button = helpRef.current?.querySelector('.help-button');
+    if (!panel || !button) return;
+    const space = panel.getBoundingClientRect().right - button.getBoundingClientRect().right - 24;
+    helpRef.current?.style.setProperty('--help-available-width', Math.max(96, Math.floor(space)) + 'px');
+  };
 
   return (
     <div className="typography-row cronica-format-row">
       <div className="control-field format-field">
         <div className="help-label-row">
           <label>Formato de texto</label>
-          <span className="help-trigger">
-            <button type="button" className="help-button" aria-label="Ayuda sobre el formato de texto" aria-controls="formatTextHelp" aria-expanded="false">
+          <span
+            ref={helpRef}
+            className={helpOpen ? 'help-trigger is-open' : 'help-trigger'}
+            onPointerEnter={measureHelp}
+            onFocusCapture={measureHelp}
+          >
+            <button type="button" className="help-button" aria-label="Ayuda sobre el formato de texto" aria-controls="formatTextHelp" aria-expanded={helpOpen} onClick={() => setHelpOpen((open) => !open)}>
               <span className="material-icons" aria-hidden="true">info_outline</span>
             </button>
             <span className="help-tooltip" id="formatTextHelp" role="tooltip">

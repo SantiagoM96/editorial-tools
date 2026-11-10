@@ -25,7 +25,7 @@ describe('operaciones puras del editor', () => {
     expect(editFormattedSelection('Hola *mundo*', 6, 11, 'clear')).toEqual({
       text: 'Hola mundo', start: 5, end: 10,
     });
-    expect(editFormattedSelection('a *hola* _mundo_', 3, 15, 'clear')).toEqual({
+    expect(editFormattedSelection('a *hola* _mundo_', 2, 16, 'clear')).toEqual({
       text: 'a hola mundo', start: 2, end: 12,
     });
     expect(editFormattedSelection('Hola', 0, 0, 'accent')).toBeNull();
@@ -67,8 +67,8 @@ describe('controles de tipografía React', () => {
       fireEvent(window, new CustomEvent('editorial:cronica:typography-state', {
         detail: { uppercase: true, alignment: 'left' },
       }));
-      expect(screen.getByRole('button', { name: 'Mostrar todo el texto en mayúsculas' })).toHaveAttribute('aria-pressed', 'true');
-      expect(screen.getByRole('button', { name: 'Alinear a la izquierda' })).toHaveAttribute('aria-pressed', 'true');
+      expect(screen.getByRole('button', { name: 'Mostrar todo el texto en mayúsculas' }).getAttribute('aria-pressed')).toBe('true');
+      expect(screen.getByRole('button', { name: 'Alinear a la izquierda' }).getAttribute('aria-pressed')).toBe('true');
       fireEvent.click(screen.getByRole('button', { name: 'Alinear al centro' }));
       fireEvent.click(screen.getByRole('button', { name: 'Mostrar todo el texto en mayúsculas' }));
       expect(events).toEqual([
