@@ -3,13 +3,19 @@ import { decodePhotoFile } from './photo-decoder';
 import {
  createCoverContent, createDefaultPage, createClearedPage, snapshotEditorialPage
 } from './document-model';
-import { calculateEditorialLayout, fontFor } from './editorial-layout';
+import { calculateEditorialLayout, CANVAS_WIDTH, CANVAS_HEIGHT, CONTENT_EDGE } from './editorial-layout';
+import { drawPhotoLayer } from './layers/photo-layer';
+import { drawLogoLayer } from './layers/logo-layer';
+import { drawStrapLayer } from './layers/strap-layer';
+import { drawHeadlineLayer } from './layers/headline-layer';
+import { prepareCanvasSurface, drawTextPanelLayer } from './layers/surface-layer';
+import { drawCoverFooterLayer } from './layers/footer-layer';
 
 
 (function(){
 'use strict';
 
-const el=id=>document.getElementById(id),canvas=el('art'),ctx=canvas.getContext('2d'),W=1080,H=1440;
+const el=id=>document.getElementById(id),canvas=el('art'),ctx=canvas.getContext('2d'),W=CANVAS_WIDTH,H=CANVAS_HEIGHT;
 let image=null,zoom=1,offsetX=0,offsetY=0,dragging=false,lastX=0,lastY=0,photoBottom=820,textAlignment='center',forceUppercase=false,selectedLogo='primary',photoHover=false,pageVariant='cover';
 const documentContent=createCoverContent();
 function emitContentState(){
@@ -31,8 +37,7 @@ window.addEventListener('editorial:cronica:content-command',event=>{
  emitContentState();
  render();
 });
-const RED='#ed0000',BLACK='#080808',EDGE=80;
-const LOGO_WIDTH=75*1.25*1.15,LOGO_HEIGHT=LOGO_WIDTH*191/175;
+const EDGE=CONTENT_EDGE;
 const logoImages={},logoSources={primary:'../cronica/logos/primario.svg',secondary:'../cronica/logos/secundario.svg',white:'../cronica/logos/blanco.svg'};
 const logosReady=Promise.all(Object.entries(logoSources).map(([key,src])=>new Promise(resolve=>{
  const img=new Image();logoImages[key]=img;
@@ -40,12 +45,6 @@ const logosReady=Promise.all(Object.entries(logoSources).map(([key,src])=>new Pr
  img.onerror=()=>{console.error('No se pudo cargar logo:',src);resolve()};
  img.src=src;
 })));
-function drawBrandLogo(){
- if(selectedLogo==='none')return;
- const img=logoImages[selectedLogo];
- if(!img||!img.complete||!img.naturalWidth)return;
- ctx.drawImage(img,W-EDGE-LOGO_WIDTH,EDGE,LOGO_WIDTH,LOGO_HEIGHT);
-}
 // El campo refleja el modo mayúsculas sin alterar el texto que escribió el usuario.
 function syncUppercaseUI(){emitTypographyState();}
 // El código heredado conserva imagen/zoom/logos como estado canónico y los expone
@@ -76,54 +75,6 @@ window.addEventListener('editorial:cronica:media-command',event=>{
  }else return;
  render();
 });
-function drawStrap(y,isCover){
- if(!documentContent.showStrap)return;
- const content=documentContent.strapText.replace(/\s+/g,' ').trim().toLocaleUpperCase('es-AR'),maxWidth=W-EDGE*2;
- let size=isCover?34:32;
- ctx.textBaseline='middle';
- while(size>16){ctx.font='800 '+size+'px Inter,Arial,sans-serif';if(ctx.measureText(content).width<=maxWidth-44)break;size--}
- const textWidth=ctx.measureText(content).width,barHeight=isCover?52:50;
- const width=isCover?Math.min(maxWidth,Math.ceil(textWidth+44)):W;
- const left=isCover?(W-width)/2:0;
- ctx.fillStyle=RED;ctx.fillRect(left,y,width,barHeight);
- if(content){ctx.font='800 '+size+'px Inter,Arial,sans-serif';ctx.fillStyle='#fff';ctx.textAlign='center';
- ctx.fillText(content,W/2,y+barHeight/2,maxWidth-24)}
- ctx.textAlign='left';ctx.textBaseline='alphabetic';
-}
-function drawText(lines,size,baselines){
- const centered=textAlignment==='center';
- ctx.textBaseline='alphabetic';
- lines.forEach((line,i)=>{
-  const total=line.reduce((sum,p)=>sum+p.width,0);
-  let x=centered?(W-total)/2:EDGE;
-  for(const part of line){
-   ctx.font=fontFor(size,part);ctx.fillStyle=part.accent?RED:BLACK;
-   ctx.fillText(part.text,x,baselines[i]);
-   if(part.strike){const y=baselines[i]-size*.32;ctx.strokeStyle=ctx.fillStyle;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+part.width,y);ctx.stroke()}
-   x+=part.width;
-  }
- });
-}
-function drawPhoto(height,includeHover=true){
- photoBottom=Math.max(130,height);
- ctx.fillStyle='#aeb4bc';ctx.fillRect(0,0,W,photoBottom);
- if(image){
-  const placement=calculatePhotoPlacement({
-   imageWidth:image.width,imageHeight:image.height,canvasWidth:W,
-   photoBottom,zoom,offsetX,offsetY
-  });
-  offsetX=placement.offsetX;offsetY=placement.offsetY;
-  ctx.save();ctx.beginPath();ctx.rect(0,0,W,photoBottom);ctx.clip();
-  ctx.drawImage(image,placement.x,placement.y,placement.width,placement.height);ctx.restore();
- }else{
-  // El aviso de carga se presenta como capa HTML interactiva, fuera del PNG.
-  // La capa de hover queda bajo la línea roja y la volanta dibujadas después.
-  if(includeHover&&photoHover){
-   ctx.fillStyle='rgba(0,0,0,.11)';
-   ctx.fillRect(0,0,W,photoBottom);
-  }
- }
-}
 function render(includeHover=true){
  try{
   const {cover,requestedSize,size,lines,baselines,panelTop,barY,imageBottom,showBar}=
@@ -134,27 +85,21 @@ function render(includeHover=true){
     showStrap:documentContent.showStrap,
     variant:pageVariant
    },(font,text)=>{ctx.font=font;return ctx.measureText(text).width},W,H,EDGE);
-  ctx.clearRect(0,0,W,H);
-  ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);
-  drawPhoto(imageBottom,includeHover);
-  drawBrandLogo();
-  ctx.fillStyle='#fff';ctx.fillRect(0,panelTop,W,H-panelTop);
-  // Línea roja permanente en el límite entre fotografía y caja blanca.
-  // En portada atraviesa horizontalmente el centro de la volanta.
-  ctx.fillStyle=RED;ctx.fillRect(0,panelTop-6.5,W,13);
-  if(showBar)drawStrap(barY,cover);
-  drawText(lines,size,baselines);
-  if(cover){
-   // Pie: texto en caja baja y flecha alineados por su centro vertical.
-   const footerCenterY=H-EDGE-16;
-   ctx.save();
-   ctx.fillStyle=RED;ctx.textBaseline='middle';
-   ctx.font='500 30px Inter,Arial,sans-serif';
-   ctx.textAlign='left';ctx.fillText('cronica.com.ar',EDGE,footerCenterY);
-   ctx.font='54px "Material Icons"';ctx.textAlign='right';
-   ctx.fillText('arrow_forward',W-EDGE,footerCenterY);
-   ctx.restore();
-  }
+  // Orden de capas idéntico al original: fondo > fotografía > logo >
+  // panel > línea roja > volanta > titular > pie de portada.
+  prepareCanvasSurface(ctx,W,H);
+  photoBottom=Math.max(130,imageBottom);
+  const placement=drawPhotoLayer(ctx,{
+   image,photoBottom,zoom,offsetX,offsetY,photoHover,includeHover,canvasWidth:W
+  });
+  offsetX=placement.offsetX;offsetY=placement.offsetY;
+  drawLogoLayer(ctx,selectedLogo,logoImages,W,EDGE);
+  drawTextPanelLayer(ctx,panelTop,W,H);
+  if(showBar)drawStrapLayer(ctx,{
+   strapText:documentContent.strapText,isCover:cover,y:barY,canvasWidth:W,edge:EDGE
+  });
+  drawHeadlineLayer(ctx,lines,size,baselines,textAlignment,W,EDGE);
+  if(cover)drawCoverFooterLayer(ctx,W,H,EDGE);
   updatePhotoDropzone();
   emitMediaState();
   el('status').textContent=size<requestedSize?'Texto largo: tamaño ajustado para respetar los márgenes.':'Vista previa activa · Arrastrá la foto para reencuadrarla.';
