@@ -10,6 +10,8 @@ import { drawStrapLayer } from './layers/strap-layer';
 import { drawHeadlineLayer } from './layers/headline-layer';
 import { prepareCanvasSurface, drawTextPanelLayer } from './layers/surface-layer';
 import { drawCoverFooterLayer } from './layers/footer-layer';
+import { EditorialCarouselStore } from './carousel-store';
+import { PngExportService, canvasToPngBlob, downloadPng } from './png-export-service';
 
 
 (function(){
@@ -105,17 +107,15 @@ function render(includeHover=true){
   el('status').textContent=size<requestedSize?'Texto largo: tamaño ajustado para respetar los márgenes.':'Vista previa activa · Arrastrá la foto para reencuadrarla.';
  }catch(error){el('status').textContent='Error de vista previa: '+error.message;console.error(error)}
 }
-/* Cada placa conserva sus propios controles, foto, zoom y encuadre durante la edición. */
-let carouselPages=[],activePage=0;
+/* Única fuente de verdad de páginas; los campos activos siguen como proyección Canvas. */
+const carouselStore=new EditorialCarouselStore(readCurrentPage());
 function readCurrentPage(){
  return snapshotEditorialPage(documentContent,{
   alignment:textAlignment,forceUppercase,logo:selectedLogo,image,zoom,offsetX,offsetY,variant:pageVariant
  });
 }
-function newBlankPage(){return createDefaultPage('internal')}
-function saveActivePage(){if(carouselPages[activePage])carouselPages[activePage]=readCurrentPage()}
-// Contrato de comunicación con los controles React (los datos e imágenes siguen aquí).
-// Un solo origen de verdad: carouselPages / activePage / pageVariant.
+function saveActivePage(){carouselStore.saveActive(readCurrentPage())}
+// Los controles React consumen snapshots del store, no guardan fotografías.
 function loadPage(page){
  pageVariant=page.variant==='cover'?'cover':'internal';
  documentContent.headline=String(page.headline||'');
@@ -132,36 +132,30 @@ function loadPage(page){
 }
 function renderCarouselNavigation(){
  window.dispatchEvent(new CustomEvent('editorial:cronica:state',{
-  detail:{
-   pages:carouselPages.map(page=>page.variant==='cover'?'cover':'internal'),
-   activePage,
-   variant:pageVariant
-  }
+  detail:carouselStore.snapshot
  }));
 }
 function selectPage(index){
- if(index===activePage||index<0||index>=carouselPages.length)return;
- saveActivePage();activePage=index;loadPage(carouselPages[index]);renderCarouselNavigation();
+ const page=carouselStore.select(index,readCurrentPage());
+ if(!page)return;
+ loadPage(page);renderCarouselNavigation();
 }
 function addPage(){
- saveActivePage();
- const index=activePage+1;
- carouselPages.splice(index,0,newBlankPage());
- activePage=index;loadPage(carouselPages[index]);renderCarouselNavigation();
+ const page=carouselStore.insertAfterActive(readCurrentPage());
+ loadPage(page);renderCarouselNavigation();
 }
 function removePage(){
- if(activePage===0)return;
- carouselPages.splice(activePage,1);
- activePage=Math.min(activePage,carouselPages.length-1);
- loadPage(carouselPages[activePage]);renderCarouselNavigation();
+ const page=carouselStore.removeActive();
+ if(!page)return;
+ loadPage(page);renderCarouselNavigation();
 }
 function changeVariant(next){
  if((next!=='cover'&&next!=='internal')||next===pageVariant)return;
  pageVariant=next;
- saveActivePage();renderCarouselNavigation();render();
+ carouselStore.setActiveVariant(next,readCurrentPage());
+ renderCarouselNavigation();render();
 }
 function initializeCarousel(){
- carouselPages=[readCurrentPage()];activePage=0;
  window.addEventListener('editorial:cronica:request-state',renderCarouselNavigation);
  window.addEventListener('editorial:cronica:command',event=>{
   const action=event.detail;
@@ -218,13 +212,13 @@ function loadPhoto(file){
  if(!file)return;
  setPhotoHover(false);
  if(!file.type.startsWith('image/')){el('status').textContent='Seleccioná un archivo de imagen válido.';return}
- const pageIndex=activePage;
+ const pageIndex=carouselStore.activeIndex;
  // El decoder es independiente de Canvas y garantiza revokeObjectURL en éxito/error.
  decodePhotoFile(file).then(img=>{
-  if(pageIndex===activePage){image=img;zoom=1;offsetX=0;offsetY=0;render()}
-  else if(carouselPages[pageIndex]){
-   carouselPages[pageIndex].image=img;carouselPages[pageIndex].zoom=1;
-   carouselPages[pageIndex].offsetX=0;carouselPages[pageIndex].offsetY=0;
+  if(pageIndex===carouselStore.activeIndex){image=img;zoom=1;offsetX=0;offsetY=0;render()}
+  else{
+   const target=carouselStore.getPage(pageIndex);
+   if(target){target.image=img;target.zoom=1;target.offsetX=0;target.offsetY=0}
   }
  }).catch(error=>{
   el('status').textContent='No se pudo abrir esta fotografía';
@@ -267,7 +261,7 @@ canvas.addEventListener('pointermove',event=>{
 });
 canvas.addEventListener('pointerup',()=>dragging=false);canvas.addEventListener('pointercancel',()=>dragging=false);
 el('clearAll').addEventListener('click',()=>{
- const initial=createClearedPage(activePage,pageVariant);
+ const initial=createClearedPage(carouselStore.activeIndex,pageVariant);
  loadPage(initial);saveActivePage();
 });
 // Exportar una placa o todo el carrusel sin perder el estado de edición.
@@ -275,8 +269,8 @@ const exportDialog=el('exportDialog'),exportTrigger=el('download');
 let exportBusy=false,exportLastFocus=null;
 function showExportDialog(){
  saveActivePage();
- el('exportCurrentDetail').textContent='Página '+(activePage+1)+' · PNG 1080 × 1440';
- el('exportAllDetail').textContent=carouselPages.length+' archivos PNG por separado';
+ el('exportCurrentDetail').textContent='Página '+(carouselStore.activeIndex+1)+' · PNG 1080 × 1440';
+ el('exportAllDetail').textContent=carouselStore.pageCount+' archivos PNG por separado';
  el('exportFeedback').hidden=true;
  exportLastFocus=document.activeElement;
  exportDialog.hidden=false;
@@ -291,7 +285,7 @@ function closeExportDialog(){
 }
 exportTrigger.addEventListener('click',()=>{
  // Si el carrusel tiene una sola página, descargar el PNG sin abrir el diálogo.
- if(carouselPages.length===1){runExport(false);return}
+ if(carouselStore.pageCount===1){runExport(false);return}
  showExportDialog();
 });
 el('exportClose').addEventListener('click',closeExportDialog);
@@ -305,27 +299,27 @@ exportDialog.addEventListener('keydown',event=>{
   if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus()}
  }
 });
-// Marcas de tiempo locales, con segundos diferentes por imagen y exportación.
-let lastExportTimestampSecond=0;
-function exportTimestamp(index=0){
- const now=Math.floor(Date.now()/1000);
- if(index===0)lastExportTimestampSecond=Math.max(now,lastExportTimestampSecond+1);
- const d=new Date((lastExportTimestampSecond+index)*1000);
- const pad=n=>String(n).padStart(2,'0');
- return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+
-  '_'+pad(d.getHours())+'-'+pad(d.getMinutes())+'-'+pad(d.getSeconds());
-}
-function saveDownloadedBlob(blob,filename){
- const url=URL.createObjectURL(blob),a=document.createElement('a');
- a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();
- setTimeout(()=>URL.revokeObjectURL(url),30000);
-}
-function pngBlob(){
- return new Promise((resolve,reject)=>{
-  try{canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('No se pudo generar el PNG.')),'image/png')}
-  catch(error){reject(error)}
- });
-}
+// Servicio desacoplado: prepara los PNG sin conocer el modal, y siempre
+// restaura la selección original, incluso si fallan fuentes o canvas.toBlob.
+const pngExporter=new PngExportService({
+ activeIndex:()=>carouselStore.activeIndex,
+ pageCount:()=>carouselStore.pageCount,
+ saveActivePage,
+ waitForAssets:()=>Promise.all([logosReady,document.fonts.ready]),
+ visitPage:index=>{
+  const page=carouselStore.visitForExport(index);
+  loadPage(page);
+ },
+ renderWithoutHover:()=>render(false),
+ encodePng:()=>canvasToPngBlob(canvas),
+ download:downloadPng,
+ progress:message=>{el('exportFeedback').textContent=message},
+ restorePage:index=>{
+  const page=carouselStore.visitForExport(index);
+  loadPage(page);
+  renderCarouselNavigation();
+ }
+});
 async function runExport(all){
  if(exportBusy)return;
  exportBusy=true;
@@ -333,32 +327,11 @@ async function runExport(all){
  feedback.hidden=false;feedback.textContent=all?'Preparando las imágenes...':'Preparando PNG...';
  el('exportCurrent').disabled=true;el('exportAll').disabled=true;el('exportClose').disabled=true;
  exportTrigger.disabled=true;
- const originalIndex=activePage;
  try{
-  saveActivePage();
-  await Promise.all([logosReady,document.fonts.ready]);
-  const timestamp=exportTimestamp(0);
+  const {count,originalIndex}=await pngExporter.export(all);
   if(all){
-   const count=carouselPages.length,files=[];
-   for(let i=0;i<count;i++){
-    feedback.textContent='Preparando imagen '+(i+1)+' de '+count+'...';
-    activePage=i;loadPage(carouselPages[i]);render(false);
-    const blob=await pngBlob();
-    files.push({
-     name:'Cronica-pagina-'+String(i+1).padStart(2,'0')+'_'+(i===0?timestamp:exportTimestamp(i))+'.png',
-     blob
-    });
-   }
-   lastExportTimestampSecond+=Math.max(0,count-1);
-   // Descargas individuales: iniciar todas juntas para evitar múltiples ZIP.
-   // El navegador puede pedir autorización para descargar varios archivos.
-   feedback.textContent='Iniciando '+count+' descargas PNG...';
-   for(const file of files)saveDownloadedBlob(file.blob,file.name);
    el('status').textContent='Se iniciaron '+count+' descargas PNG individuales · 1080 × 1440 px. Si faltan archivos, permití las descargas múltiples en el navegador.';
   }else{
-   render(false);
-   const blob=await pngBlob();
-   saveDownloadedBlob(blob,'Cronica-pagina-'+String(originalIndex+1).padStart(2,'0')+'_'+timestamp+'.png');
    el('status').textContent='PNG de página '+(originalIndex+1)+' listo para descargar · 1080 × 1440 px';
   }
   feedback.textContent='Descarga iniciada.';
@@ -368,7 +341,6 @@ async function runExport(all){
   el('status').textContent=feedback.textContent;
   return;
  }finally{
-  if(all){activePage=originalIndex;loadPage(carouselPages[originalIndex]);renderCarouselNavigation()}
   exportBusy=false;
   el('exportCurrent').disabled=false;el('exportAll').disabled=false;el('exportClose').disabled=false;
   exportTrigger.disabled=false;
