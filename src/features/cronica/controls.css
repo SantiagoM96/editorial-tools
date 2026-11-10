@@ -13,3 +13,9 @@
 
 /* Ambos roots React mantienen intacta la composición CSS original. */
 #cronica-content-root { display: contents; }
+
+/* Antes del root React, el primer control seguía inmediatamente al campo Foto.
+   Ese sibling selector (.control-field + .control-field) le daba 12px arriba. */
+#cronica-content-root > .control-field:first-child {
+  margin-top: 12px;
+}
