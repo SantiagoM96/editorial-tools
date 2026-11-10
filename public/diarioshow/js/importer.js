@@ -79,7 +79,10 @@ let url;try{
 button.disabled=true;$('importOverlay').hidden=false;window.DiarioShowEditor.setImporting(true);status.textContent='Buscando el título y la fotografía…';
 try{
 const data=await extract(url.href);
-$('headline').value=data.title;$('enableQuote').checked=false;$('quote').hidden=true;window.DiarioShowEditor.refresh();
+$('headline').value=data.title;
+// Los controles enableQuote y quote ya no existen en el editor actual.
+// Limpiar la foto anterior para que no se mezcle con la nueva noticia.
+window.DiarioShowEditor.setImage(null);
 if(data.image){status.textContent='Título importado. Descargando fotografía…';try{const img=await fetchImage(data.image);window.DiarioShowEditor.setImage(img);status.textContent='Título y fotografía importados correctamente.'}catch(e){status.textContent='Título importado, pero no se pudo descargar la foto ('+e.message+'). Podés cargarla manualmente.'}}
 else status.textContent='Título importado. No se encontró una foto principal.';
 }catch(e){status.textContent='No se pudo importar la noticia. '+e.message}
