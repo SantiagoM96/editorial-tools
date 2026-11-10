@@ -27,18 +27,41 @@ let image=meta('og:image:secure_url')||meta('og:image')||meta('twitter:image')||
 try{image=image?new URL(image,base).href:''}catch{image=''}
 return {title,image};
 }
-async function fetchText(url){const res=await fetch(url,{signal:timeout(10000)});if(!res.ok)throw Error('HTTP '+res.status);return res.text()}
+async function fetchText(url,ms=8500){
+ const controller=new AbortController();
+ const timer=setTimeout(()=>controller.abort(),ms);
+ try{
+  const res=await fetch(url,{signal:controller.signal,cache:'no-store'});
+  if(!res.ok)throw Error('HTTP '+res.status);
+  return await res.text();
+ }finally{clearTimeout(timer)}
+}
+function cleanTitle(value){
+ return fixEncoding(String(value||'').replace(/\\s*[|\\-–]\\s*(?:Diario\\s*Show|Cr[oó]nica(?:\\.com\\.ar)?)(?:\\s*-\\s*Firme junto al pueblo)?\\s*$/i,'').trim());
+}
+function parseJina(markdown){
+ const title=cleanTitle(markdown.match(/^Title:\\s*(.+)$/mi)?.[1]||markdown.match(/^#\\s+(.+)$/m)?.[1]||'');
+ const images=[...markdown.matchAll(/!\\[[^\\]]*\\]\\((https?:\\/\\/[^)\\s]+)\\)/g)].map(m=>m[1]);
+ return {title,image:images.find(u=>!/(logo|icon|avatar|favicon|pixel|tracking)/i.test(u))||images[0]||''};
+}
 async function extract(url){
-const services=[
-async()=>{const response=JSON.parse(await fetchText('https://api.microlink.io?url='+encodeURIComponent(url)));if(response.status!=='success')throw Error(response.message||'Microlink sin datos');return {title:fixEncoding(response.data?.title||''),image:response.data?.image?.url||''}},
-async()=>getMeta(await fetchText('https://api.allorigins.win/raw?url='+encodeURIComponent(url)),url),
-async()=>getMeta(await fetchText('https://corsproxy.io/?url='+encodeURIComponent(url)),url),
-async()=>{const txt=await fetchText('https://r.jina.ai/'+url);const title=fixEncoding(txt.match(/^Title:\s*(.+)$/mi)?.[1]||txt.match(/^#\s+(.+)$/m)?.[1]||'');const images=[...txt.matchAll(/!\[[^\]]*\]\((https?:\/\/[^)\s]+)\)/g)].map(m=>m[1]);return {title,image:images.find(u=>!/(logo|icon|avatar|favicon|pixel|tracking)/i.test(u))||images[0]||''}}
-];
-const errors=[],result={title:'',image:''};
-for(const service of services){try{const data=await service();if(data.title&&!result.title)result.title=fixEncoding(data.title).replace(/\s*[|\-–]\s*(?:Diario\s*Show|Cr[oó]nica(?:\.com\.ar)?)\s*$/i,'').trim();if(data.image&&!result.image)result.image=data.image;if(result.title&&result.image)break}catch(e){errors.push(e.message)}}
-if(result.title)return result;
-throw Error('No fue posible obtener el título. '+errors.join('; '));
+ // Ejecutar en paralelo: los proveedores públicos pueden bloquear dominios o no responder.
+ const sources=[
+  async()=>{const response=JSON.parse(await fetchText('https://api.microlink.io?url='+encodeURIComponent(url)));if(response.status!=='success')throw Error('Microlink: '+(response.message||'sin datos'));return {title:cleanTitle(response.data?.title),image:response.data?.image?.url||''}},
+  async()=>getMeta(await fetchText('https://api.allorigins.win/raw?url='+encodeURIComponent(url)),url),
+  async()=>getMeta(await fetchText('https://corsproxy.io/?url='+encodeURIComponent(url)),url),
+  async()=>getMeta(await fetchText('https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(url)),url),
+  async()=>parseJina(await fetchText('https://r.jina.ai/'+url,11000))
+ ];
+ const errors=[],pending=sources.map((fn,i)=>fn().then(data=>({data,index:i})).catch(e=>{errors[i]=e.name==='AbortError'?'sin respuesta':e.message;return {data:{},index:i}}));
+ const results=await Promise.all(pending);
+ const candidates=results.map(x=>x.data).filter(x=>x.title);
+ const complete=candidates.find(x=>x.image);
+ if(complete)return {title:cleanTitle(complete.title),image:complete.image};
+ if(candidates.length){
+  return {title:cleanTitle(candidates[0].title),image:results.map(x=>x.data.image).find(Boolean)||''};
+ }
+ throw Error('No fue posible acceder a los datos de esta noticia (servicios externos bloqueados o sin respuesta). '+errors.filter(Boolean).join('; '));
 }
 function validateExportableImage(img){
  const test=document.createElement('canvas');test.width=2;test.height=2;
