@@ -48,7 +48,10 @@ for (const page of pages) {
     const info = await exists(destination);
     if (!info) errors.push('Enlace roto: ' + page + ' → ' + ref);
     else if (info.isDirectory() && !(await exists(resolve(destination, 'index.html')))) {
-      errors.push('Directorio sin index: ' + page + ' → ' + ref);
+      // En desarrollo, Vite sirve la portada React desde la raíz del proyecto,
+      // aunque los generadores físicos estén dentro de public/.
+      const isViteRoot = destination === publicRoot && (await exists(resolve(root, 'index.html')));
+      if (!isViteRoot) errors.push('Directorio sin index: ' + page + ' → ' + ref);
     }
     checkedLinks++;
   }
