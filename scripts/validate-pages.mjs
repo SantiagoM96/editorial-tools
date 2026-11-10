@@ -26,7 +26,7 @@ for (const page of ['index.html', 'cronica/index.html', 'bae/index.html', 'diari
     const url = new URL(ref, 'https://editorial.local' + base + page);
     if (url.origin !== 'https://editorial.local') continue;
     if (!url.pathname.startsWith(base)) throw Error('Ruta fuera del sitio: ' + page + ' → ' + ref);
-    const destination = resolve(root, '.' + url.pathname.slice(base.length));
+    const destination = resolve(root, url.pathname.slice(base.length));
     if (destination !== root && !destination.startsWith(root + sep)) {
       throw Error('Ruta fuera del artefacto: ' + ref);
     }
