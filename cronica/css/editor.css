@@ -1,0 +1,196 @@
+/* Navegador de carrusel: exclusivo del editor Crónica */
+.carousel-panel{border:1px solid #464b54;border-radius:10px;padding:15px 16px;margin-bottom:18px;background:#24262b}
+.carousel-panel h2{margin:0 0 5px}
+.carousel-intro{margin:0 0 13px;color:#aeb4bf;font-size:12px;line-height:1.5}
+.carousel-pages{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.carousel-pages button{display:inline-flex;align-items:center;gap:6px;padding:9px 12px;min-height:40px;background:#34383e;border:1px solid #50535c;color:#f4f4f5;border-radius:7px;font-weight:500}
+.carousel-pages button[aria-current="page"]{background:#ed0000;border-color:#ed0000;color:white}
+.carousel-pages .page-name{white-space:nowrap}
+.carousel-actions{display:flex;gap:8px;flex-wrap:wrap}
+.carousel-actions button{flex:1 1 130px;min-height:40px}
+.carousel-actions .remove-page{background:#363a43}
+.carousel-actions .remove-page:disabled{opacity:.4;cursor:not-allowed}
+.carousel-current{font-size:12px;color:#aeb4bf;margin:0 0 9px}
+@media(max-width:600px){.carousel-panel{padding:14px}.carousel-pages button{min-height:44px}}
+
+/* Layouts Crónica: controles auxiliares y campos editoriales. */
+.editor-panel input[type=text]{width:100%;background:#292c32;color:#fff;border:1px solid #4a4e56;border-radius:7px;padding:11px}
+.editor-panel #strapText:focus-visible{outline:2px solid #ed0000;outline-offset:2px}
+.carousel-panel{margin-bottom:20px}
+.format-instructions{margin-bottom:16px}
+.canvas-stage{background:#fff}
+.editor-panel #strapField[hidden]{display:none!important}
+.editor-panel #formatUppercase{position:relative;min-width:49px}
+.editor-panel #formatUppercase .material-icons{font-size:20px}
+.editor-panel #formatUppercase .uppercase-label{font-size:10px;font-weight:800;letter-spacing:-.6px;position:absolute;right:3px;bottom:2px}
+.editor-panel #formatUppercase[aria-pressed=true]{background:#ed0000;border-color:#ed0000;color:#fff}
+
+/* Navegación compacta del carrusel */
+.editor-panel .carousel-panel{padding:12px 13px!important;margin:0 0 18px!important;border-radius:9px}
+.carousel-heading{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:10px}
+.carousel-heading h2{margin:0!important;font-size:12px}
+.carousel-heading .carousel-current{margin:0;font-size:11px;white-space:nowrap}
+.carousel-compact-row{display:flex;align-items:flex-start;gap:9px;min-width:0}
+.editor-panel .carousel-pages{display:flex;flex:1;flex-wrap:wrap;align-items:center;gap:5px;min-width:0;margin:0}
+.editor-panel .carousel-pages button{flex:0 0 auto;display:inline-flex;justify-content:center;align-items:center;min-height:32px!important;height:32px;width:32px;padding:0!important;border-radius:7px;font-size:13px;line-height:1}
+.editor-panel .carousel-pages button[aria-current=page]{background:#ed0000;border-color:#ed0000}
+.editor-panel .carousel-actions{display:flex;flex:0 0 auto;gap:5px;align-items:center;align-self:flex-start}
+.editor-panel .carousel-actions button{display:inline-flex;align-items:center;justify-content:center;flex:0 0 32px;width:32px;height:32px;min-height:32px;padding:0;border-radius:7px}
+.editor-panel .carousel-actions button .material-icons{font-size:19px;line-height:1}
+.editor-panel .carousel-actions .remove-page{background:#363a43}
+.editor-panel .carousel-actions .remove-page:disabled{opacity:.35}
+@media(max-width:600px){.editor-panel .carousel-pages button,.editor-panel .carousel-actions button{height:36px;min-height:36px!important;width:36px;flex-basis:36px}}
+/* Formato y alineación en la misma fila */
+.editor-panel .cronica-format-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:start;margin-top:16px!important}
+.editor-panel .cronica-format-row .format-field{min-width:0;margin:0!important}
+.editor-panel .cronica-format-row .align-field{margin:0!important}
+/* Los labels usan la misma fila de 20 px en ambas columnas; no se aplican márgenes globales a los labels. */
+.editor-panel .cronica-format-row .format-buttons{display:flex;flex-wrap:nowrap;gap:0}
+.editor-panel .cronica-format-row .format-buttons button{display:flex;flex:0 0 35px;width:35px;height:38px;align-items:center;justify-content:center;padding:0;min-width:0}
+.editor-panel .cronica-format-row .format-buttons #formatUppercase,
+.editor-panel .cronica-format-row .format-buttons #formatClear{margin-left:7px;border:1px solid #4a4e56!important;border-radius:7px!important}
+.editor-panel .cronica-format-row .format-buttons #formatUppercase{position:static;min-width:35px}
+.editor-panel .cronica-format-row .format-buttons #formatUppercase[aria-pressed=true]{background:#ed0000;border-color:#ed0000!important}
+.editor-panel .cronica-format-row .align-buttons{display:flex}
+.editor-panel .cronica-format-row .align-buttons button{width:36px;height:38px}
+@media(max-width:440px){.editor-panel .cronica-format-row{grid-template-columns:1fr auto;gap:8px}.editor-panel .cronica-format-row .format-buttons button{flex-basis:31px;width:31px}.editor-panel .cronica-format-row .format-buttons #formatUppercase,.editor-panel .cronica-format-row .format-buttons #formatClear{min-width:31px;margin-left:5px}.editor-panel .cronica-format-row .align-buttons button{width:31px}}
+.editor-panel .cronica-format-row #formatUppercase .material-symbols-outlined{font-family:'Material Symbols Outlined';font-weight:normal;font-style:normal;font-size:22px;line-height:1;letter-spacing:normal;text-transform:none;white-space:nowrap;direction:ltr;font-feature-settings:'liga';font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;display:inline-block}
+
+/* Los botones de exportación y limpieza se apilan sobre la sombra del canvas. */
+.preview .canvas-stage{position:relative;z-index:0}
+.preview .preview-actions{position:relative;z-index:2;isolation:isolate}
+.preview .preview-actions button{position:relative;z-index:1}
+
+/* Las acciones deben permanecer en la primera fila, independientemente del alto de la grilla. */
+.editor-panel .carousel-compact-row{align-items:flex-start}
+.editor-panel .carousel-actions{align-self:flex-start;position:relative;top:0}
+/* No proyectar sombra del canvas hacia los botones: borde tenue sin sombra exterior. */
+/* Mantener la sombra original del canvas y situar los botones encima. */
+.preview .canvas-stage canvas{box-shadow:0 12px 45px #0007!important;outline:0}
+.preview .canvas-stage{z-index:0}
+.preview .preview-actions{z-index:3;position:relative;isolation:isolate}
+.preview .preview-actions button{position:relative;z-index:1}
+
+/* Scrollbar discreta para el campo de texto principal. */
+.editor-panel #headline{scrollbar-width:thin;scrollbar-color:#686d76 #292c32}
+.editor-panel #headline::-webkit-scrollbar{width:6px}
+.editor-panel #headline::-webkit-scrollbar-track{background:transparent}
+.editor-panel #headline::-webkit-scrollbar-thumb{background:#686d76;border-radius:999px}
+.editor-panel #headline::-webkit-scrollbar-thumb:hover{background:#8e939d}
+
+
+/* Mostrar mayúsculas en el textarea sin convertir su valor, para restaurar el caso original al desactivar. */
+.editor-panel #headline.uppercase-preview{text-transform:uppercase}
+
+/* La volanta nunca depende del botón de mayúsculas del texto principal. */
+.editor-panel #strapText{text-transform:uppercase}
+
+/* Ayudas contextuales del editor: burbuja con flecha en hover, foco y toque. */
+.editor-panel .help-label-row{display:flex;align-items:center;gap:5px;height:20px;min-height:20px;margin:0 0 7px}
+.editor-panel .help-label-row>label{display:flex;align-items:center;min-height:20px;margin:0!important;line-height:20px;font-weight:600}
+.editor-panel .help-trigger{position:relative;display:inline-flex;align-items:center;flex:none;z-index:10}
+.editor-panel .help-trigger:has(.help-button[aria-expanded="true"]){z-index:20}
+.editor-panel .help-button{
+ display:inline-flex;align-items:center;justify-content:center;
+ width:18px;height:18px;min-width:18px;padding:0;border:0;border-radius:50%;
+ background:transparent;color:#aeb4bf;cursor:help;
+}
+.editor-panel .help-button:hover,.editor-panel .help-button:focus-visible,
+.editor-panel .help-button[aria-expanded="true"]{color:#f4f4f4;background:#34383e}
+.editor-panel .help-button:focus-visible{outline:2px solid #ed0000;outline-offset:2px}
+.editor-panel .help-button .material-icons{font-size:14px;line-height:1}
+.editor-panel .help-tooltip{
+ position:absolute;left:calc(100% + 12px);top:50%;
+ width:min(260px,var(--help-available-width,260px));max-width:calc(100vw - 48px);padding:11px 13px;
+ overflow-wrap:break-word;
+ transform:translateY(-50%);border:1px solid #525762;border-radius:8px;
+ background:#34383e;color:#f4f4f4;font-size:12px;line-height:1.5;
+ font-weight:400;text-align:left;box-shadow:0 8px 24px #0007;
+ opacity:0;visibility:hidden;pointer-events:none;
+ transition:opacity .12s ease,visibility .12s ease;
+}
+.editor-panel .help-tooltip::before{
+ content:"";position:absolute;left:-6px;top:50%;width:10px;height:10px;
+ transform:translateY(-50%) rotate(45deg);
+ background:#34383e;border-left:1px solid #525762;border-bottom:1px solid #525762;
+}
+.editor-panel .help-trigger:hover .help-tooltip,
+.editor-panel .help-trigger:focus-within .help-tooltip,
+.editor-panel .help-trigger.is-open .help-tooltip{opacity:1;visibility:visible;pointer-events:auto}
+
+/* Fila única de encabezados: Formato y Alineación comparten estructura y baseline. */
+.editor-panel .cronica-format-row{align-items:start}
+.editor-panel .cronica-format-row .format-field,
+.editor-panel .cronica-format-row .align-field{margin:0!important;padding:0;align-self:start}
+.editor-panel .cronica-format-row .help-label-row{
+ display:flex;align-items:center;gap:5px;
+ height:20px;min-height:20px;max-height:20px;
+ margin:0 0 9px!important;padding:0;
+}
+.editor-panel .cronica-format-row .help-label-row>label{
+ display:flex;align-items:center;justify-content:flex-start;
+ height:20px;min-height:20px;margin:0!important;padding:0!important;
+ font:600 14px/20px system-ui,sans-serif;white-space:nowrap;
+}
+.editor-panel .cronica-format-row .help-trigger{height:20px;display:inline-flex;align-items:center;align-self:center}
+.editor-panel .cronica-format-row .format-buttons,
+.editor-panel .cronica-format-row .align-buttons{margin-top:0}
+
+/* Navegación del entorno de pruebas: regreso al dashboard de productos. */
+.header-inner .dashboard-back-link{
+ margin-left:auto;display:inline-flex;align-items:center;justify-content:center;gap:7px;
+ flex:0 0 auto;min-height:38px;padding:8px 12px;border:1px solid #4a4e56;
+ border-radius:7px;background:#292c32;color:#f4f4f4;text-decoration:none;
+ font:600 12px/1.3 system-ui,sans-serif;white-space:nowrap;
+ transition:border-color .15s ease,background-color .15s ease;
+}
+.header-inner .dashboard-back-link:hover{background:#363a43;border-color:#858991}
+.header-inner .dashboard-back-link:focus-visible{outline:2px solid #ed0000;outline-offset:2px}
+.header-inner .dashboard-back-link .material-icons{font-size:18px;line-height:1}
+@media(max-width:700px){
+ .header-inner .dashboard-back-link{margin-left:auto;min-height:36px;padding:7px 10px}
+}
+@media(max-width:440px){
+ .header-inner .dashboard-back-link{width:100%;justify-content:center;margin-left:0}
+}
+
+/* Variantes por página: dos miniaturas del módulo editorial inferior,
+   sin fotografía y con el selector en la misma escala que Diario Show. */
+.editor-panel .cronica-variant-panel{margin-top:0}
+.editor-panel .cronica-variant-panel h2{margin:0 0 12px}
+.editor-panel .cronica-variant-options{display:flex;align-items:flex-start;gap:12px}
+.editor-panel .cronica-variant-option{
+ display:flex;flex-direction:column;align-items:center;gap:8px;
+ padding:0;background:transparent;border:0;color:#d8dce4;
+ font:500 11px/16px Inter,Arial,sans-serif;cursor:pointer;
+}
+.editor-panel .cronica-variant-thumbnail{
+ position:relative;display:block;box-sizing:border-box;overflow:hidden;
+ width:56px;height:43px;border:2px solid #565a63;border-radius:8px;background:#fff;
+}
+.editor-panel .cronica-variant-thumbnail::before{
+ content:'';position:absolute;inset:0 0 auto;height:5px;background:#ed0000;
+}
+.editor-panel .cronica-variant-thumbnail::after{
+ content:'';position:absolute;left:50%;top:12px;width:35px;height:23px;
+ transform:translateX(-50%);
+ background:
+  linear-gradient(#171717,#171717) center top / 35px 3px no-repeat,
+  linear-gradient(#171717,#171717) center 8px / 27px 3px no-repeat,
+  linear-gradient(#171717,#171717) center 16px / 20px 3px no-repeat;
+}
+/* En portada hay además firma roja en la parte inferior. */
+.editor-panel .cronica-variant-thumbnail-cover{
+ background:linear-gradient(#fff,#fff) top / 100% 100% no-repeat;
+}
+.editor-panel .cronica-variant-thumbnail-cover::after{
+ background:
+  linear-gradient(#171717,#171717) center top / 35px 3px no-repeat,
+  linear-gradient(#171717,#171717) center 8px / 27px 3px no-repeat,
+  linear-gradient(#ed0000,#ed0000) center 22px / 28px 2px no-repeat;
+}
+.editor-panel .cronica-variant-option[aria-pressed="true"] .cronica-variant-thumbnail{
+ outline:2px solid #ed0000;outline-offset:2px;border-color:#565a63;
+}
+.editor-panel .cronica-variant-option:hover .cronica-variant-thumbnail{filter:brightness(.95)}
+.editor-panel .cronica-variant-option:focus-visible{outline:2px solid #a5a8b0;outline-offset:4px;border-radius:5px}
