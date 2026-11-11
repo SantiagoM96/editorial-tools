@@ -23,10 +23,9 @@ function legacyEditorRoutes(): Plugin {
   };
 }
 
-
 export default defineConfig(({ command }) => ({
-  // Las páginas públicas viven en /editorial-tools/; en desarrollo se sirven desde /.
-  base: command === 'build' ? '/editorial-tools/' : '/',
+  // Cada build de GitHub Pages recibe su propia base. En local se usa la raíz.
+  base: command === 'build' ? (process.env.EDITORIAL_BASE || '/editorial-tools/') : '/',
   publicDir: 'public',
   build: {
     rollupOptions: {

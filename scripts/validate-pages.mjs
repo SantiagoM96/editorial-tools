@@ -1,8 +1,20 @@
 import { readFile, stat } from 'node:fs/promises';
-import { resolve, dirname, sep } from 'node:path';
+import { resolve, sep } from 'node:path';
 
-const base = '/editorial-tools/';
-const root = resolve(process.cwd(), 'dist-pages');
+const environment = process.env.VITE_EDITORIAL_ENV || 'production';
+const base = process.env.EDITORIAL_BASE || '/editorial-tools/';
+const root = resolve(process.cwd(), process.env.PAGES_ROOT || 'dist-pages');
+const expectedBase = environment === 'development' ? '/editorial-tools/dev/' : '/editorial-tools/';
+if (base !== expectedBase) throw new Error('Base de Pages incorrecta: ' + base);
+
+const metadata = JSON.parse(await readFile(resolve(root, 'editorial-deployment.json'), 'utf8'));
+if (metadata.environment !== environment || metadata.base !== base) {
+  throw new Error('Metadatos de despliegue incompatibles: ' + root);
+}
+if (process.env.VITE_EDITORIAL_SHA && metadata.sha !== process.env.VITE_EDITORIAL_SHA) {
+  throw new Error('El SHA del artefacto no coincide con el checkout.');
+}
+
 const entries = [
   'index.html', 'og-image.png', 'cronica/index.html',
   'cronica/cronica-header-logo.svg', 'bae/index.html', 'bae/js/editor.js',
@@ -18,14 +30,25 @@ let assetCount = 0;
 for (const page of ['index.html', 'cronica/index.html', 'bae/index.html', 'diarioshow/index.html']) {
   const html = await readFile(resolve(root, page), 'utf8');
   if (html.includes('santiagom96.github.io/mlz/')) throw Error('Ruta heredada: ' + page);
-  if (page === 'index.html' && !html.includes('src="/editorial-tools/assets/')) {
-    throw Error('La aplicación React no apunta al base path /editorial-tools/.');
+  if (!html.includes('<meta name="editorial-environment" content="' + environment + '">') ||
+      !html.includes('<meta name="editorial-commit" content="' + metadata.sha + '">')) {
+    throw Error('Faltan metadatos de entorno o versión: ' + page);
+  }
+  if (environment === 'development' && (!html.includes('id="editorial-dev-badge"') ||
+    !html.includes('<meta name="robots" content="noindex, nofollow">'))) {
+    throw Error('Falta marca DEV: ' + page);
+  }
+  if (environment === 'production' && html.includes('id="editorial-dev-badge"')) {
+    throw Error('Insignia DEV filtrada a PROD: ' + page);
+  }
+  if (page === 'index.html' && !html.includes('src="' + base + 'assets/')) {
+    throw Error('La aplicación React no apunta al base path ' + base);
   }
   for (const [, ref] of html.matchAll(/\b(?:href|src)\s*=\s*["']([^"']+)["']/gi)) {
-    if (!ref || /^(?:mailto:|data:|#)/.test(ref)) continue;
+    if (!ref || /^(?:mailto:|tel:|data:|blob:|#)/.test(ref)) continue;
     const url = new URL(ref, 'https://editorial.local' + base + page);
     if (url.origin !== 'https://editorial.local') continue;
-    if (!url.pathname.startsWith(base)) throw Error('Ruta fuera del sitio: ' + page + ' → ' + ref);
+    if (!url.pathname.startsWith(base)) throw Error('Ruta fuera del ambiente: ' + page + ' → ' + ref);
     const destination = resolve(root, url.pathname.slice(base.length));
     if (destination !== root && !destination.startsWith(root + sep)) {
       throw Error('Ruta fuera del artefacto: ' + ref);
@@ -35,4 +58,4 @@ for (const page of ['index.html', 'cronica/index.html', 'bae/index.html', 'diari
     assetCount++;
   }
 }
-console.log('OK: Pages Vite, 4 páginas y ' + assetCount + ' rutas locales válidas bajo ' + base);
+console.log('OK: ' + environment + ', 4 páginas y ' + assetCount + ' recursos locales bajo ' + base);
