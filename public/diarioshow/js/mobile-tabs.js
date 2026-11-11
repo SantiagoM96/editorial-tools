@@ -14,10 +14,10 @@
   buttons.forEach(b=>b.addEventListener('click',()=>setTab(b.dataset.tab)));
   const logo=document.querySelector('.header-logo-link');
   logo?.addEventListener('click',(event)=>{
-    if(!window.matchMedia('(max-width: 767px)').matches || document.body.dataset.dsMobileTab!=='preview') return;
+    if(!window.matchMedia('(max-width: 700px)').matches || document.body.dataset.dsMobileTab!=='preview') return;
     event.preventDefault();
     setTab('format');
-    const content=document.querySelector('.editor-panel .panel-group');
+    const content=document.querySelector('.editor-panel .panel-group:nth-of-type(2)');
     if(content) requestAnimationFrame(()=>content.scrollIntoView({behavior:'smooth',block:'start'}));
   });
   // Zona táctil del logo sobre la placa: 54 px extra por cada lado,
@@ -33,7 +33,7 @@
     Object.assign(hit.style,{position:'absolute',zIndex:'9999',background:'transparent',border:'0',padding:'0',cursor:'pointer',display:'none',touchAction:'manipulation'});
     stage.append(hit);
     const place=()=>{
-      const mobile=window.matchMedia('(max-width: 767px)').matches;
+      const mobile=window.matchMedia('(max-width: 700px)').matches;
       const visible=mobile && document.body.dataset.dsMobileTab==='preview';
       hit.style.display=visible?'block':'none';
       if(!visible)return;
@@ -53,7 +53,7 @@
       event?.stopImmediatePropagation();
       event?.stopPropagation();
       setTab('format');
-      document.querySelector('.editor-panel .panel-group')?.scrollIntoView({behavior:'smooth',block:'start'});
+      requestAnimationFrame(()=>document.querySelector('.editor-panel .panel-group:nth-of-type(2)')?.scrollIntoView({behavior:'smooth',block:'start'}));
     };
     // Interceptar antes del dropzone, incluso si otro elemento recibe el toque.
     const insideLogo=(event)=>{
