@@ -38,3 +38,36 @@ test('BAE: plegar un panel de escritorio no descarta su texto', async ({ page })
   await toggle.click();
   await expect(page.locator('#headline')).toHaveValue('Texto persistente');
 });
+
+test('BAE: edición mobile completa, iOS sin zoom y scroll no abre textos', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto('/bae/', { waitUntil: 'load' });
+  const headline = page.locator('#baeHeadlineMobile');
+  const uppercase = page.getByRole('button', { name: 'Mostrar texto en mayúsculas desde la vista previa' });
+  await headline.fill('Un texto con formato');
+  await uppercase.click();
+  await expect(uppercase).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('#baeUppercase')).toHaveAttribute('aria-pressed', 'true');
+  await page.getByRole('tab', { name: 'Formato' }).click();
+  await expect(page.locator('#headline')).toHaveValue('Un texto con formato');
+  await page.getByRole('tab', { name: 'Vista previa' }).click();
+  const size = await headline.evaluate(el => getComputedStyle(el).fontSize);
+  expect(Number.parseFloat(size)).toBeGreaterThanOrEqual(16);
+  await headline.fill('*Marcado* sin formato');
+  await headline.selectText();
+  await page.getByRole('button', { name: 'Quitar formato de la selección desde la vista previa' }).click();
+  await expect(headline).toHaveValue('Marcado sin formato');
+  await expect(page.locator('#headline')).toHaveValue('Marcado sin formato');
+  const hit = page.locator('.bae-text-hit');
+  const box = await hit.boundingBox();
+  expect(box).not.toBeNull();
+  await headline.evaluate(el => el.blur());
+  const x = box.x + box.width / 2, y = box.y + box.height / 2;
+  await page.mouse.move(x, y);
+  await page.mouse.down();
+  await page.mouse.move(x, y - 35, { steps: 4 });
+  await page.mouse.up();
+  await expect(headline).not.toBeFocused();
+  await hit.click();
+  await expect(headline).toBeFocused();
+});
