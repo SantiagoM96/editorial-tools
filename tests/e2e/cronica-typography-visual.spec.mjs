@@ -9,6 +9,7 @@ for (const width of [1440, 390]) {
     async function screenshot(url) {
       const response = await page.goto(url, { waitUntil: 'load' });
       expect(response?.status()).toBe(200);
+      if (width === 390 && url.includes('4173')) await page.getByRole('tab', { name: 'Formato' }).click();
       await page.evaluate(async () => { await document.fonts.ready; });
       // El HTML original marcaba izquierda, aunque el Canvas comenzaba centrado.
       // Comparar estados SEMÁNTICAMENTE equivalentes y no el aria-pressed heredado.

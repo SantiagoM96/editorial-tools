@@ -11,6 +11,7 @@ for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 
     async function capture(url) {
       const response = await page.goto(url, { waitUntil: 'load' });
       expect(response?.status()).toBe(200);
+      if (viewport.width === 390 && url.includes('4173')) await page.getByRole('tab', { name: 'Formato' }).click();
       await page.evaluate(async () => {
         await document.fonts.ready;
         await Promise.all([...document.images].map(image => image.decode().catch(() => {})));

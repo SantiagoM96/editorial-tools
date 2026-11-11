@@ -60,6 +60,7 @@ for (const width of [1440, 390]) {
     async function capture(url) {
       const response = await page.goto(url, { waitUntil: 'load' });
       expect(response?.status()).toBe(200);
+      if (width === 390 && url.includes('4173')) await page.getByRole('tab', { name: 'Formato' }).click();
       await page.evaluate(async () => { await document.fonts.ready; });
       const strap = page.locator('#strapField');
       const rect = await strap.boundingBox();

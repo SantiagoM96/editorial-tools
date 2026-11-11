@@ -6,6 +6,8 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { CarouselControls } from './CarouselControls';
 import { CollapsiblePanel } from './CollapsiblePanel';
+import { MobileEditorTabs } from './MobileEditorTabs';
+import { MobilePreviewTextEditor } from './MobilePreviewTextEditor';
 import { ContentEditor } from './ContentEditor';
 import { MediaControls, PhotoZoomControls } from './MediaControls';
 import './controls.css';
@@ -49,3 +51,11 @@ createRoot(zoomMount).render(
     <PhotoZoomControls />
   </StrictMode>,
 );
+
+const tabsRoot = document.getElementById('cronica-mobile-tabs-root');
+if (!tabsRoot) throw new Error('Falta navegación móvil de Crónica.');
+createRoot(tabsRoot).render(<StrictMode><MobileEditorTabs /></StrictMode>);
+
+const previewTextRoot = document.getElementById('cronica-preview-text-root');
+if (!previewTextRoot) throw new Error('Falta editor rápido móvil de Crónica.');
+createRoot(previewTextRoot).render(<StrictMode><MobilePreviewTextEditor /></StrictMode>);
