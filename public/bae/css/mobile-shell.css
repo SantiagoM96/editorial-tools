@@ -53,10 +53,7 @@ main[data-bae-mobile-tab=preview]>.preview{display:grid!important;grid-template-
 .editor-panel .bae-card-toggle:hover { background:#33363e; }
 .editor-panel .bae-card-body { background:#202228;border-radius:0 0 9px 9px; }
 @media(max-width:700px) {
-  .bae-preview-text-editor textarea,
-  .editor-panel textarea,
-  .editor-panel input[type="text"],
-  .editor-panel input[type="url"] { font-size:16px; }
+  .bae-preview-text-editor textarea { font-size:16px; }
   .bae-preview-text-editor .bae-mobile-format button:focus-visible {
     outline:2px solid #d82626;outline-offset:2px;
   }
