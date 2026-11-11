@@ -77,6 +77,30 @@
     new ResizeObserver(place).observe(canvas);
     requestAnimationFrame(place);
   }
+  // Captura global: la zona del logo gana incluso frente a controles de adjuntar.
+  const isLogoTouch=(event)=>{
+    if(!window.matchMedia('(max-width: 700px)').matches ||
+       document.body.dataset.dsMobileTab!=='preview')return false;
+    const canvas=document.getElementById('art');
+    if(!canvas)return false;
+    const rect=canvas.getBoundingClientRect();
+    const scale=rect.width/1080;
+    const width=75*1.25*1.15, height=width*275/253, extra=54;
+    const x=event.clientX-rect.left,y=event.clientY-rect.top;
+    return x>=(1080-80-width-extra)*scale &&
+      x<=(1080-80+extra)*scale &&
+      y>=(80-extra)*scale && y<=(80+height+extra)*scale;
+  };
+  const activateLogo=(event)=>{
+    if(!isLogoTouch(event))return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    event.stopPropagation();
+    setTab('format');
+    requestAnimationFrame(()=>document.querySelector('.editor-panel .panel-group:nth-of-type(2)')?.scrollIntoView({behavior:'smooth',block:'start'}));
+  };
+  document.addEventListener('pointerdown',activateLogo,true);
+  document.addEventListener('click',activateLogo,true);
   setTab('format');
   document.body.classList.add('ds-mobile-ready');
 })();
