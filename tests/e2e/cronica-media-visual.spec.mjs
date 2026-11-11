@@ -24,10 +24,20 @@ for (const width of [1440, 390]) {
         multiple: input.multiple,
       }));
       const snapshots = await Promise.all([
-        page.locator('.logo-control-field').screenshot({ animations: 'disabled' }),
         page.locator('.control-field:has(#file) > .hint').screenshot({ animations: 'disabled' }),
         page.locator('.preview-zoom').screenshot({ animations: 'disabled' }),
       ]);
+      // La tarjeta exterior es distinta, pero sus cuatro opciones preservan
+      // dimensión, estados y apariencia interna de sus miniaturas.
+      const logo = await page.locator('.logo-choice').evaluateAll((buttons) => buttons.map((button) => {
+        const surface = button.querySelector('.logo-choice-preview');
+        const s = getComputedStyle(surface), b = surface.getBoundingClientRect();
+        return {
+          pressed: button.getAttribute('aria-pressed'), title: button.title,
+          borderColor: s.borderTopColor, borderWidth: s.borderTopWidth,
+          borderRadius: s.borderTopLeftRadius, width: b.width, height: b.height,
+        };
+      }));
       const photoCard = await page.locator('.cronica-photo-surface').count()
         ? await page.locator('.cronica-photo-surface').evaluate((surface) => {
           const style = getComputedStyle(surface);
@@ -38,13 +48,14 @@ for (const width of [1440, 390]) {
           };
         })
         : null;
-      return { nativeInput, snapshots, photoCard };
+      return { nativeInput, snapshots, photoCard, logo };
     }
 
     const baseline = await capture('http://127.0.0.1:4174/cronica-dev/');
     const migrated = await capture('http://127.0.0.1:4173/cronica/');
 
     expect(migrated.nativeInput).toEqual(baseline.nativeInput);
+    expect(migrated.logo).toEqual(baseline.logo);
     expect(migrated.photoCard).not.toBeNull();
     expect(migrated.photoCard?.borderStyle).toBe('dashed');
     expect(migrated.photoCard?.minHeight).toBe(width === 390 ? 52 : 56);
