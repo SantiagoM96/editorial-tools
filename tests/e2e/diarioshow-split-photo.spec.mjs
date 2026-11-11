@@ -20,10 +20,14 @@ test('Diario Show: fotos compartidas tienen zoom independiente y exportan PNG', 
     await page.locator('#' + id).setInputFiles({ name, mimeType: 'image/png', buffer: Buffer.from(base64, 'base64') });
   }
   await expect(page.locator('#photoStage')).toHaveClass(/split-mode/);
-  await page.locator('#splitPhotoZones [data-side="right"]').click();
+  // En fotos cargadas el Canvas recibe los eventos de reencuadre; el overlay
+  // deliberadamente no intercepta clicks ni drag.
+  const canvasBox = await page.locator('#art').boundingBox();
+  if (!canvasBox) throw new Error('Canvas no disponible');
+  await page.locator('#art').click({ position: { x: canvasBox.width * .74, y: canvasBox.height * .18 } });
   await page.locator('#photoZoom').fill('150');
   await expect(page.locator('#zoomLabel')).toContainText('150');
-  await page.locator('#splitPhotoZones [data-side="left"]').click();
+  await page.locator('#art').click({ position: { x: canvasBox.width * .26, y: canvasBox.height * .18 } });
   await expect(page.locator('#zoomLabel')).toContainText('100');
   const download = page.waitForEvent('download', { timeout: 30000 });
   await page.locator('#download').click();
