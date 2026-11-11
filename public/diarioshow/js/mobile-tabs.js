@@ -30,7 +30,7 @@
     hit.className='ds-preview-logo-hit';
     hit.setAttribute('aria-label','Abrir contenido desde el logo de Diario Show');
     hit.title='Abrir contenido';
-    Object.assign(hit.style,{position:'absolute',zIndex:'9999',background:'rgba(255, 230, 0, 0.58)',outline:'2px solid #ffe600',border:'0',padding:'0',cursor:'pointer',display:'none',touchAction:'manipulation'});
+    Object.assign(hit.style,{position:'absolute',zIndex:'2147483647',background:'rgba(255, 230, 0, 0.58)',outline:'2px solid #ffe600',border:'0',padding:'0',cursor:'pointer',display:'none',touchAction:'manipulation'});
     stage.append(hit);
     const place=()=>{
       const mobile=window.matchMedia('(max-width: 700px)').matches;
