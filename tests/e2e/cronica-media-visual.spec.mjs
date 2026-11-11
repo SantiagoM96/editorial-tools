@@ -23,10 +23,14 @@ for (const width of [1440, 390]) {
         accept: input.accept,
         multiple: input.multiple,
       }));
-      const snapshots = await Promise.all([
-        page.locator('.control-field:has(#file) > .hint').screenshot({ animations: 'disabled' }),
-        page.locator('.preview-zoom').screenshot({ animations: 'disabled' }),
-      ]);
+      const isMobilePreview = width === 390 && url.includes('4173');
+      const zoomOrientation = await page.locator('#photoZoom').evaluate((input) => ({
+        min: input.min, max: input.max, value: input.value, writingMode: getComputedStyle(input).writingMode,
+      }));
+      const zoomSnapshot = await page.locator('.preview-zoom').screenshot({ animations: 'disabled' });
+      if (isMobilePreview) await page.getByRole('tab', { name: 'Formato' }).click();
+      const hintSnapshot = await page.locator('.control-field:has(#file) > .hint').screenshot({ animations: 'disabled' });
+      const snapshots = [hintSnapshot, zoomSnapshot];
       // La tarjeta exterior es distinta, pero sus cuatro opciones preservan
       // dimensión, estados y apariencia interna de sus miniaturas.
       const logo = await page.locator('.logo-choice').evaluateAll((buttons) => buttons.map((button) => {
@@ -48,7 +52,7 @@ for (const width of [1440, 390]) {
           };
         })
         : null;
-      return { nativeInput, snapshots, photoCard, logo };
+      return { nativeInput, snapshots, photoCard, logo, zoomOrientation };
     }
 
     const baseline = await capture('http://127.0.0.1:4174/cronica-dev/');
@@ -62,10 +66,15 @@ for (const width of [1440, 390]) {
     expect(migrated.photoCard?.text).toContain('Seleccioná una fotografía');
 
     expect(migrated.snapshots).toHaveLength(baseline.snapshots.length);
+    expect(migrated.zoomOrientation.min).toBe(baseline.zoomOrientation.min);
+    expect(migrated.zoomOrientation.max).toBe(baseline.zoomOrientation.max);
+    expect(migrated.zoomOrientation.value).toBe(baseline.zoomOrientation.value);
+    if (width === 390) expect(migrated.zoomOrientation.writingMode).toBe('vertical-lr');
     for (let index = 0; index < baseline.snapshots.length; index++) {
+      if (width === 390 && index === 1) continue; // Zoom vertical: cambio intencional.
       expect(
         migrated.snapshots[index]?.equals(baseline.snapshots[index]),
-        `Control no modificado ${index} pixel-perfect a ${width}px`,
+        `Control sin rediseño ${index} pixel-perfect a ${width}px`,
       ).toBe(true);
     }
   });
