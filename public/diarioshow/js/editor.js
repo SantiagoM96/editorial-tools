@@ -295,12 +295,12 @@ photoZone.addEventListener('click',event=>{
   const onLogo=selectedLogo!=='none' &&
     x>=W-LOGO_MARGIN-logoWidth-extra && x<=W-LOGO_MARGIN+extra &&
     y>=LOGO_MARGIN-extra && y<=LOGO_MARGIN+logoHeight+extra;
-  if(window.matchMedia('(max-width: 767px)').matches &&
+  if(window.matchMedia('(max-width: 700px)').matches &&
      document.body.dataset.dsMobileTab==='preview' && onLogo){
     event.preventDefault();
     event.stopPropagation();
     document.querySelector('.ds-mobile-tabs [data-tab="format"]')?.click();
-    requestAnimationFrame(()=>document.querySelector('.editor-panel .panel-group')?.scrollIntoView({behavior:'smooth',block:'start'}));
+    requestAnimationFrame(()=>document.querySelector('.editor-panel .panel-group:nth-of-type(2)')?.scrollIntoView({behavior:'smooth',block:'start'}));
     return;
   }
   el('file').click();
