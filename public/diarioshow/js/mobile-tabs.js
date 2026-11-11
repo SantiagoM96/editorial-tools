@@ -48,11 +48,22 @@
       hit.style.width=((logoWidth+2*extra)*scale)+'px';
       hit.style.height=((logoHeight+2*extra)*scale)+'px';
     };
-    const openLogoContent=(event)=>{\n      event?.preventDefault();\n      event?.stopImmediatePropagation();\n      event?.stopPropagation();\n      setTab('format');\n      document.querySelector('.editor-panel .panel-group')?.scrollIntoView({behavior:'smooth',block:'start'});\n    };\n    hit.addEventListener('pointerdown',event=>{event.stopPropagation();});\n    hit.addEventListener('click',openLogoContent);\n    const dropzone=document.getElementById('photoDropzone');\n    dropzone?.addEventListener('click',event=>{\n      if(hit.style.display==='none')return;\n      const bounds=hit.getBoundingClientRect();\n      if(event.clientX>=bounds.left && event.clientX<=bounds.right && event.clientY>=bounds.top && event.clientY<=bounds.bottom)openLogoContent(event);\n    },true);\n    /* previous handler removed */\n    /*
+    const openLogoContent=(event)=>{
+      event?.preventDefault();
+      event?.stopImmediatePropagation();
+      event?.stopPropagation();
       setTab('format');
       document.querySelector('.editor-panel .panel-group')?.scrollIntoView({behavior:'smooth',block:'start'});
-    });
-    */\n    buttons.forEach(b=>b.addEventListener('click',()=>requestAnimationFrame(place)));
+    };
+    hit.addEventListener('pointerdown',event=>{event.stopPropagation();});
+    hit.addEventListener('click',openLogoContent);
+    const dropzone=document.getElementById('photoDropzone');
+    dropzone?.addEventListener('click',event=>{
+      if(hit.style.display==='none')return;
+      const bounds=hit.getBoundingClientRect();
+      if(event.clientX>=bounds.left && event.clientX<=bounds.right && event.clientY>=bounds.top && event.clientY<=bounds.bottom)openLogoContent(event);
+    },true);
+    buttons.forEach(b=>b.addEventListener('click',()=>requestAnimationFrame(place)));
     window.addEventListener('resize',place);
     new ResizeObserver(place).observe(canvas);
     requestAnimationFrame(place);
