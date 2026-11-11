@@ -27,6 +27,7 @@ async function comparePixels(page, before, after) {
       return { changed: Infinity, maxDelta: Infinity, maxX: Infinity, dimensions: [old.width, old.height, current.width, current.height] };
     }
     let changed = 0;
+    let minY = Infinity;
     let maxDelta = 0;
     let maxX = -1;
     let maxY = -1;
@@ -43,9 +44,10 @@ async function comparePixels(page, before, after) {
       const py = Math.floor((i / 4) / old.width);
       maxX = Math.max(maxX, px);
       maxY = Math.max(maxY, py);
+      minY = Math.min(minY, py);
       if (px > 7 && px < old.width - 8) changedOutsideSideEdges++;
     }
-    return { changed, maxDelta, maxX, maxY, changedOutsideSideEdges, dimensions: [old.width, old.height] };
+    return { changed, maxDelta, maxX, minY, maxY, changedOutsideSideEdges, dimensions: [old.width, old.height] };
   }, { baseline: before.toString('base64'), migrated: after.toString('base64') });
 }
 
@@ -117,6 +119,12 @@ for (const width of [1440, 390]) {
         expect(diff.changed, 'Textarea: máximo 40 px de antialias').toBeLessThanOrEqual(40);
         expect(diff.maxDelta, 'Textarea: máximo 2 RGB').toBeLessThanOrEqual(2);
         expect(diff.changedOutsideSideEdges, 'Textarea: cero cambios fuera de los 8px de bordes').toBe(0);
+      } else if (i === 0 && width === 390 && diff.changed > 0) {
+        // Nuevo corte entre Diseño y Textos: en mobile cambia solo un borde
+        // horizontal de 1 píxel, sin variaciones en el interior del switch.
+        expect(diff.changed, 'Switch: una línea de 1px').toBeLessThanOrEqual(diff.dimensions[0]);
+        expect(diff.minY, 'Switch: únicamente el borde inferior').toBe(diff.dimensions[1] - 1);
+        expect(diff.maxDelta, 'Switch: diferencia acotada').toBeLessThanOrEqual(17);
       } else {
         expect(diff.changed, `Control ${i} pixel-perfect`).toBe(0);
       }
