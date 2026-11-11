@@ -20,7 +20,7 @@ import { createRenderScheduler } from './render-scheduler';
 'use strict';
 
 const el=id=>document.getElementById(id),canvas=el('art'),ctx=canvas.getContext('2d'),W=CANVAS_WIDTH,H=CANVAS_HEIGHT;
-let image=null,zoom=1,offsetX=0,offsetY=0,dragging=false,lastX=0,lastY=0,photoBottom=820,textAlignment='center',forceUppercase=false,selectedLogo='primary',photoHover=false,pageVariant='cover';
+let image=null,photoName=null,zoom=1,offsetX=0,offsetY=0,dragging=false,lastX=0,lastY=0,photoBottom=820,textAlignment='center',forceUppercase=false,selectedLogo='primary',photoHover=false,pageVariant='cover';
 const documentContent=createCoverContent();
 function emitContentState(){
  window.dispatchEvent(new CustomEvent('editorial:cronica:content-state',{detail:{...documentContent}}));
@@ -55,7 +55,7 @@ function syncUppercaseUI(){emitTypographyState();}
 // mediante snapshots; React es propietario de los botones e inputs.
 let previousMediaKey='';
 function emitMediaState(force=false){
- const detail={logo:selectedLogo,zoomPercent:Math.round(zoom*100),hasImage:Boolean(image)};
+ const detail={logo:selectedLogo,zoomPercent:Math.round(zoom*100),hasImage:Boolean(image),photoName};
  const key=JSON.stringify(detail);
  // El arrastre del Canvas no cambia controles: evitar renders React por pointermove.
  if(!force&&key===previousMediaKey)return;
@@ -114,7 +114,7 @@ const carouselStore=new EditorialCarouselStore(readCurrentPage());
 const photoLoads=new PhotoLoadCoordinator();
 function readCurrentPage(){
  return snapshotEditorialPage(documentContent,{
-  alignment:textAlignment,forceUppercase,logo:selectedLogo,image,zoom,offsetX,offsetY,variant:pageVariant
+  alignment:textAlignment,forceUppercase,logo:selectedLogo,image,photoName,zoom,offsetX,offsetY,variant:pageVariant
  });
 }
 function saveActivePage(){carouselStore.saveActive(readCurrentPage())}
@@ -128,7 +128,7 @@ function loadPage(page){
  emitContentState();
  forceUppercase=Boolean(page.forceUppercase);syncUppercaseUI();
  selectedLogo=page.logo||'primary';
- textAlignment=page.alignment;image=page.image;zoom=page.zoom;offsetX=page.offsetX;offsetY=page.offsetY;
+ textAlignment=page.alignment;image=page.image;photoName=page.photoName??null;zoom=page.zoom;offsetX=page.offsetX;offsetY=page.offsetY;
  dragging=false;
  emitTypographyState();
  render();
@@ -229,9 +229,9 @@ function loadPhoto(file){
   const target=carouselStore.getPageById(pageId);
   if(!target)return;
   if(pageId===carouselStore.activePageId){
-   image=img;zoom=1;offsetX=0;offsetY=0;render();
+   image=img;photoName=file.name;zoom=1;offsetX=0;offsetY=0;render();
   }else{
-   target.image=img;target.zoom=1;target.offsetX=0;target.offsetY=0;
+   target.image=img;target.photoName=file.name;target.zoom=1;target.offsetX=0;target.offsetY=0;
   }
  }).catch(error=>{
   // AbortError y errores de una página ya descartada no deben reemplazar el
