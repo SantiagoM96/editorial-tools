@@ -27,10 +27,12 @@ async function comparePixels(page, before, after) {
       return { changed: Infinity, maxDelta: Infinity, maxX: Infinity, dimensions: [old.width, old.height, current.width, current.height] };
     }
     let changed = 0;
+    let minY = Infinity;
     let maxDelta = 0;
     let maxX = -1;
     let maxY = -1;
     let changedOutsideSideEdges = 0;
+    let changedInterior = 0;
     for (let i = 0; i < old.bytes.length; i += 4) {
       let delta = 0;
       for (let channel = 0; channel < 4; channel++) {
@@ -43,9 +45,11 @@ async function comparePixels(page, before, after) {
       const py = Math.floor((i / 4) / old.width);
       maxX = Math.max(maxX, px);
       maxY = Math.max(maxY, py);
+      minY = Math.min(minY, py);
       if (px > 7 && px < old.width - 8) changedOutsideSideEdges++;
+      if (px > 7 && px < old.width - 8 && py < old.height - 1) changedInterior++;
     }
-    return { changed, maxDelta, maxX, maxY, changedOutsideSideEdges, dimensions: [old.width, old.height] };
+    return { changed, maxDelta, maxX, minY, maxY, changedOutsideSideEdges, changedInterior, dimensions: [old.width, old.height] };
   }, { baseline: before.toString('base64'), migrated: after.toString('base64') });
 }
 
@@ -94,7 +98,10 @@ for (const width of [1440, 390]) {
     const updated = await capture('http://127.0.0.1:4173/cronica/');
     expect(updated.strapStyle, 'El CSS de borde/fondo/texto debe ser idéntico').toEqual(old.strapStyle);
     expect(updated.strapSize, 'El campo debe mantener las dimensiones').toEqual(old.strapSize);
-    expect(updated.photoGap, 'El espaciado fotografía/contenidos debe ser idéntico').toBe(old.photoGap);
+    // Cambio deliberado: Diseño y Textos son ahora paneles independientes,
+    // separados por encabezados plegables. El espacio ya no equivale al legado.
+    expect(updated.photoGap, 'Paneles separados con encabezados visibles').toBeGreaterThan(old.photoGap);
+    expect(updated.photoGap, 'La separación entre controles no debe crecer sin límite').toBeLessThan(180);
     expect(updated.screenshots.length).toBe(old.screenshots.length);
 
     for (let i = 0; i < old.screenshots.length; i++) {
@@ -109,11 +116,23 @@ for (const width of [1440, 390]) {
         expect(diff.maxDelta, 'Volanta: máximo 1 RGB').toBeLessThanOrEqual(1);
         expect(diff.maxX, 'Volanta: solo 3px izquierdos').toBeLessThanOrEqual(2);
       } else if (i === 2) {
-        // Textarea: diferencias medidas en esquinas/bordes redondeados.
-        // CI #42753020486: 28 px +/-2 a 1440; 35 px +/-1 a 390.
-        expect(diff.changed, 'Textarea: máximo 40 px de antialias').toBeLessThanOrEqual(40);
-        expect(diff.maxDelta, 'Textarea: máximo 2 RGB').toBeLessThanOrEqual(2);
-        expect(diff.changedOutsideSideEdges, 'Textarea: cero cambios fuera de los 8px de bordes').toBe(0);
+        // Equivalencia estricta en el interior; tras separar el panel mobile,
+        // una única línea de borde inferior difiere además del antialias previo.
+        if (width === 390) {
+          expect(diff.changed, 'Textarea: una fila inferior y hasta 40px de bordes').toBeLessThanOrEqual(diff.dimensions[0] + 40);
+          expect(diff.maxDelta, 'Textarea: delta limitado al nuevo borde').toBeLessThanOrEqual(17);
+          expect(diff.changedInterior, 'Textarea: ningún píxel del interior cambia').toBe(0);
+        } else {
+          expect(diff.changed, 'Textarea: máximo 40 px de antialias').toBeLessThanOrEqual(40);
+          expect(diff.maxDelta, 'Textarea: máximo 2 RGB').toBeLessThanOrEqual(2);
+          expect(diff.changedOutsideSideEdges, 'Textarea: cero cambios fuera de los 8px de bordes').toBe(0);
+        }
+      } else if (i === 0 && width === 390 && diff.changed > 0) {
+        // Nuevo corte entre Diseño y Textos: en mobile cambia solo un borde
+        // horizontal de 1 píxel, sin variaciones en el interior del switch.
+        expect(diff.changed, 'Switch: una línea de 1px').toBeLessThanOrEqual(diff.dimensions[0]);
+        expect(diff.minY, 'Switch: únicamente el borde inferior').toBe(diff.dimensions[1] - 1);
+        expect(diff.maxDelta, 'Switch: diferencia acotada').toBeLessThanOrEqual(17);
       } else {
         expect(diff.changed, `Control ${i} pixel-perfect`).toBe(0);
       }

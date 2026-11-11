@@ -5,6 +5,7 @@ import './engine/legacy-engine.js';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { CarouselControls } from './CarouselControls';
+import { CollapsiblePanel } from './CollapsiblePanel';
 import { ContentEditor } from './ContentEditor';
 import { MediaControls, PhotoZoomControls } from './MediaControls';
 import './controls.css';
@@ -23,7 +24,9 @@ if (!contentMount) throw new Error('No se encontró el contenedor de contenido d
 
 createRoot(contentMount).render(
   <StrictMode>
-    <ContentEditor />
+    <CollapsiblePanel title="Textos" className="cronica-text-panel">
+      <ContentEditor />
+    </CollapsiblePanel>
   </StrictMode>,
 );
 
@@ -32,7 +35,9 @@ if (!mediaMount) throw new Error('No se encontró el contenedor de medios de Cr�
 
 createRoot(mediaMount).render(
   <StrictMode>
-    <MediaControls />
+    <CollapsiblePanel title="Diseño de la placa" className="cronica-media-panel">
+      <MediaControls />
+    </CollapsiblePanel>
   </StrictMode>,
 );
 
