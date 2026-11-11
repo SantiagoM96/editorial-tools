@@ -181,3 +181,14 @@
   outline:0!important;
  }
 }
+
+/* Última tarjeta: modal centrado con backdrop completo, sin spotlight. */
+@media(min-width:701px){
+ .ds-onboarding-layer.is-whole-screen::before{
+  content:"";position:fixed;inset:0;background:rgba(9,10,14,.77);
+  pointer-events:auto;z-index:0;
+ }
+ .ds-onboarding-layer.is-whole-screen .ds-tour-highlight,
+ .ds-onboarding-layer.is-whole-screen .ds-tour-shade{display:none!important}
+ .ds-onboarding-layer.is-whole-screen .ds-tour-card{z-index:1}
+}
