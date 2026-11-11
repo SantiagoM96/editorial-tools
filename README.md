@@ -18,7 +18,7 @@ Ambos incluyen `cronica/`, `bae/` y `diarioshow/`. Son sitios **públicos** e in
 - **Dashboard y Crónica:** React 19, TypeScript estricto, Vite 8, Tailwind CSS v4 y motores Canvas conservados.
 - **BAE y Diario Show:** HTML, CSS y JavaScript heredado, conservados sin migración inversa o refactor ajeno al despliegue.
 - **Calidad:** ESLint, Vitest, React Testing Library, Playwright (incluye navegación, mobile, Canvas, PNG y paridad).
-- **CI/CD:** GitHub Actions compila **ambos** commits por separado, verifica sus assets y despliega un único artefacto atómico. Fallos no reemplazan la última versión válida.
+- **CI/CD:** los pushes a `dev` activan un aviso sin privilegios de escritura; la publicación se ejecuta exclusivamente desde `main`. GitHub Actions compila **ambos** commits por separado, verifica sus assets y despliega un único artefacto atómico desde un job aislado. Fallos no reemplazan la última versión válida.
 
 ## Desarrollo local
 
@@ -52,7 +52,7 @@ EDITORIAL_BASE=/editorial-tools/dev/ VITE_EDITORIAL_ENV=development npm run buil
 
 ## Operación y seguridad
 
-- La publicación usa `.github/workflows/pages.yml` y un único artefacto Pages, sin servicios pagos.
+- DEV avisa mediante `.github/workflows/dev-publish.yml`; `.github/workflows/pages.yml` publica desde `main` con un único artefacto Pages, sin servicios pagos.
 - Las dos revisiones pueden identificarse con `editorial-deployment.json` y `editorial-release.json`.
 - Si CI falla, el deploy se interrumpe antes de actualizar Pages; los rollbacks usan PR de revert.
 - No incluir secretos en builds frontend; ambos ambientes son públicos.
