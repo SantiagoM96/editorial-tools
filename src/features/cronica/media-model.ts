@@ -5,6 +5,8 @@ export interface MediaSnapshot {
   /** Igual que el rango original: porcentaje entero de 100 a 300 en pasos de 5. */
   readonly zoomPercent: number;
   readonly hasImage: boolean;
+  /** Campo opcional para mantener compatibilidad con eventos anteriores. */
+  readonly photoName?: string | null;
 }
 
 export type MediaCommand =
@@ -16,6 +18,7 @@ export const initialMedia: MediaSnapshot = {
   logo: 'primary',
   zoomPercent: 100,
   hasImage: false,
+  photoName: null,
 };
 
 export function isBrandLogo(value: unknown): value is BrandLogo {
@@ -32,5 +35,6 @@ export function isMediaSnapshot(value: unknown): value is MediaSnapshot {
   const snapshot = value as Record<string, unknown>;
   return isBrandLogo(snapshot.logo) &&
     isZoomPercent(snapshot.zoomPercent) &&
-    typeof snapshot.hasImage === 'boolean';
+    typeof snapshot.hasImage === 'boolean' &&
+    (snapshot.photoName === undefined || snapshot.photoName === null || typeof snapshot.photoName === 'string');
 }

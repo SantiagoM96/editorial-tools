@@ -18,6 +18,8 @@ export interface EditorialPage extends EditorialContent {
   forceUppercase: boolean;
   logo: EditorialLogo;
   image: HTMLImageElement | null;
+  /** Nombre informativo de la fotografía por página; nunca interviene en Canvas. */
+  photoName: string | null;
   zoom: number;
   offsetX: number;
   offsetY: number;
@@ -40,6 +42,7 @@ export function createDefaultPage(variant: EditorialVariant): EditorialPage {
       forceUppercase: false,
       logo: 'primary',
       image: null,
+      photoName: null,
       zoom: 1,
       offsetX: 0,
       offsetY: 0,
@@ -55,6 +58,7 @@ export function createDefaultPage(variant: EditorialVariant): EditorialPage {
     forceUppercase: false,
     logo: 'primary',
     image: null,
+    photoName: null,
     zoom: 1,
     offsetX: 0,
     offsetY: 0,

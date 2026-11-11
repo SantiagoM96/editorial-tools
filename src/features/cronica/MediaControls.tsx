@@ -47,20 +47,35 @@ export function MediaControls() {
           ))}
         </div>
       </div>
-      <div className="control-field">
-        <label htmlFor="file">Fotografía</label>
-        <input
-          id="file"
-          type="file"
-          aria-describedby="cronica-photo-help"
-          accept="image/*"
-          onChange={(event) => {
-            const file = event.currentTarget.files?.[0];
-            if (file) sendMediaCommand({ type: 'upload-photo', file });
-            // Permite elegir la misma fotografía otra vez.
-            event.currentTarget.value = '';
-          }}
-        />
+      <div className="control-field cronica-photo-field">
+        <label htmlFor="file" className="cronica-photo-heading">Fotografía</label>
+        <div className="cronica-photo-picker">
+          <input
+            id="file"
+            className="cronica-photo-input"
+            type="file"
+            accept="image/*"
+            aria-label="Fotografía"
+            aria-describedby="cronica-photo-help"
+            onChange={(event) => {
+              const file = event.currentTarget.files?.[0];
+              if (file) sendMediaCommand({ type: 'upload-photo', file });
+              // Permite volver a elegir la misma fotografía.
+              event.currentTarget.value = '';
+            }}
+          />
+          <label htmlFor="file" className="cronica-photo-surface">
+            <span className="material-symbols-outlined cronica-photo-icon" aria-hidden="true">
+              add_photo_alternate
+            </span>
+            <span className="cronica-photo-copy">
+              <strong>{media.hasImage ? 'Cambiar' : 'Seleccioná'}</strong>{' '}
+              <span className="cronica-photo-name" title={media.photoName ?? undefined}>
+                {media.hasImage && media.photoName ? media.photoName : 'una fotografía'}
+              </span>
+            </span>
+          </label>
+        </div>
         <p className="hint compact-hint" id="cronica-photo-help">
           Arrastrá la foto en la vista previa para ajustar su encuadre.
         </p>
