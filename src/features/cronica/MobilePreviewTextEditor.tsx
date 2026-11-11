@@ -23,12 +23,51 @@ export function MobilePreviewTextEditor() {
 
   useEffect(() => {
     const hit = document.getElementById('cronicaTextHit');
-    const focus = () => {
+    if (!hit) return;
+
+    // En pantallas táctiles, un desplazamiento sobre el texto no debe abrir
+    // el editor; el área de fotografía conserva su propio drag de Canvas.
+    let gesture: { id: number; x: number; y: number; started: number } | null = null;
+    let allowPointerClick = false;
+    const down = (event: PointerEvent) => {
+      if (!event.isPrimary) return;
+      gesture = { id: event.pointerId, x: event.clientX, y: event.clientY, started: performance.now() };
+      allowPointerClick = false;
+    };
+    const move = (event: PointerEvent) => {
+      if (gesture?.id === event.pointerId && Math.hypot(event.clientX - gesture.x, event.clientY - gesture.y) > 9) {
+        gesture = null;
+        allowPointerClick = false;
+      }
+    };
+    const up = (event: PointerEvent) => {
+      allowPointerClick = Boolean(
+        gesture?.id === event.pointerId &&
+        Math.hypot(event.clientX - gesture.x, event.clientY - gesture.y) < 9 &&
+        performance.now() - gesture.started < 550,
+      );
+      gesture = null;
+    };
+    const cancel = () => { gesture = null; allowPointerClick = false; };
+    const focus = (event: MouseEvent) => {
+      // detail=0 corresponde a activación por teclado/tecnología asistiva.
+      if (event.detail !== 0 && !allowPointerClick) return;
+      allowPointerClick = false;
       headlineRef.current?.focus({ preventScroll: true });
       headlineRef.current?.scrollIntoView({ block: 'center', behavior: 'smooth' });
     };
-    hit?.addEventListener('click', focus);
-    return () => hit?.removeEventListener('click', focus);
+    hit.addEventListener('pointerdown', down);
+    hit.addEventListener('pointermove', move);
+    hit.addEventListener('pointerup', up);
+    hit.addEventListener('pointercancel', cancel);
+    hit.addEventListener('click', focus);
+    return () => {
+      hit.removeEventListener('pointerdown', down);
+      hit.removeEventListener('pointermove', move);
+      hit.removeEventListener('pointerup', up);
+      hit.removeEventListener('pointercancel', cancel);
+      hit.removeEventListener('click', focus);
+    };
   }, []);
 
   const change = (command: ContentCommand) => issueContentCommand(command);

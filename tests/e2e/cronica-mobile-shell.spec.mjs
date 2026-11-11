@@ -34,3 +34,25 @@ test('Crónica: pestañas se desactivan en escritorio y no bloquean controles', 
   await expect(page.locator('#art')).toBeVisible();
   await expect(page.locator('.cronica-mobile-tabs')).toBeHidden();
 });
+
+test('Crónica: scroll sobre la placa no activa el texto; toque y teclado sí', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/cronica/', { waitUntil: 'load' });
+  const hit = page.locator('#cronicaTextHit');
+  const box = await hit.boundingBox();
+  expect(box).not.toBeNull();
+  const x = box.x + box.width / 2, y = box.y + box.height / 2;
+  await page.mouse.move(x, y);
+  await page.mouse.down();
+  await page.mouse.move(x, y - 40, { steps: 5 });
+  await page.mouse.up();
+  await expect(page.locator('#headlineMobile')).not.toBeFocused();
+  await hit.click();
+  await expect(page.locator('#headlineMobile')).toBeFocused();
+  await page.locator('#headlineMobile').evaluate(el => el.blur());
+  await hit.focus();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#headlineMobile')).toBeFocused();
+  const fontSize = await page.locator('#headlineMobile').evaluate(el => getComputedStyle(el).fontSize);
+  expect(Number.parseFloat(fontSize)).toBeGreaterThanOrEqual(16);
+});

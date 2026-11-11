@@ -183,3 +183,12 @@
   .preview .cronica-text-hit { display:block;position:absolute;left:0;right:0;top:var(--photo-height,60%);bottom:0;width:100%;background:transparent!important;border:0;opacity:0;cursor:text;touch-action:pan-y; }
   .preview .cronica-text-hit:focus-visible { opacity:1;outline:2px dashed #ed0000;outline-offset:-3px; }
 }
+
+/* Andy (10/11): evita que iOS aumente automáticamente el viewport al editar.
+   Los controles móviles siguen vinculados al documento React/Canvas original. */
+@media (max-width: 700px) {
+  .cronica-preview-text-editor textarea,
+  .cronica-preview-text-editor input[type="text"] {
+    font-size: 16px;
+  }
+}
