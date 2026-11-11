@@ -34,7 +34,7 @@ for (const width of [1440, 390]) {
           return {
             borderStyle: style.borderTopStyle,
             minHeight: parseFloat(style.minHeight),
-            text: surface.textContent?.replace(/\\s+/g, ' ').trim() ?? '',
+            text: surface.textContent?.replace(/\s+/g, ' ').trim() ?? '',
           };
         })
         : null;
