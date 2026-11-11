@@ -111,6 +111,7 @@
     description.textContent = step.description;
     previous.disabled = index === 0;
     next.textContent = index === steps.length - 1 ? 'Finalizar' : 'Siguiente';
+    next.setAttribute('aria-label', next.textContent);
     dots.replaceChildren(...steps.map((unused, i) => {
       const dot = document.createElement('span');
       if (i === current) dot.className = 'is-active';
