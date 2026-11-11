@@ -1,165 +1,149 @@
-/* Guía contextual accesible de Diario Show. No modifica Canvas ni el motor editorial. */
-(() => {
-  'use strict';
-  const mq = window.matchMedia('(min-width: 701px)');
-  const query = new URLSearchParams(location.search);
-  if (query.get('onboarding') === 'off') return;
-  const storageKey = 'diarioshow-tour-desktop-v1';
-  const steps = [
-    { selector: '.editor-panel > .panel-group:nth-of-type(1)', title: 'Elegí el diseño de tu placa', description: 'Seleccioná la variante editorial que mejor acompañe la noticia.' },
-    { selector: '.editor-panel .logo-control-field', title: 'Elegí el logo', description: 'Cambiá la versión del logo para adaptarlo al diseño elegido.' },
-    { selector: '#articleImportField', title: 'Importá una noticia', description: 'Pegá la URL de una nota de Diario Show o cargá la información manualmente.' },
-    { selector: '.editor-panel .ds-texts-group', title: 'Editá los textos', description: 'Ajustá el titular, los estilos de texto, la alineación y el tamaño tipográfico.' },
-    { selector: '.editor-panel .control-field:has(#file)', title: 'Agregá una fotografía', description: 'Seleccioná una imagen y arrastrala en la vista previa para reencuadrarla.' },
-    { selector: '#photoStage', title: 'Revisá la vista previa', description: 'Comprobá el resultado sobre la placa antes de descargarla.' },
-    { selector: 'body', title: 'Aprovechá el espacio', description: 'Si te falta espacio, probá el zoom del navegador al 90 % u 80 %. La exportación conserva su resolución.', fullScreen: true },
-  ];
-  const trigger = document.getElementById('dsOnboardingTrigger');
-  const main = document.querySelector('main');
-  const header = document.querySelector('header');
-  if (!trigger || !main) return;
-  let overlay = null, targetBox = null, dialog = null;
-  let progress = null, heading = null, description = null, previous = null, next = null, dots = null;
-  let open = false, current = 0, lastFocus = null, scheduled = 0;
-  const completed = () => { try { return localStorage.getItem(storageKey) === 'complete'; } catch { return false; } };
-  const remember = () => { try { localStorage.setItem(storageKey, 'complete'); } catch {} };
-  const button = (cls, caption, action, accessibleName = caption) => {
-    const item = document.createElement('button');
-    item.type = 'button';
-    item.className = cls;
-    item.textContent = caption;
-    item.setAttribute('aria-label', accessibleName);
-    item.addEventListener('click', action);
-    return item;
-  };
-  function build() {
-    if (overlay) return;
-    overlay = document.createElement('div');
-    overlay.id = 'dsOnboardingLayer';
-    overlay.className = 'ds-tour-layer';
-    overlay.hidden = true;
-    targetBox = document.createElement('div');
-    targetBox.className = 'ds-tour-target';
-    targetBox.setAttribute('aria-hidden', 'true');
-    dialog = document.createElement('section');
-    dialog.className = 'ds-tour-dialog';
-    dialog.setAttribute('role', 'dialog');
-    dialog.setAttribute('aria-modal', 'true');
-    dialog.setAttribute('aria-labelledby', 'dsTourHeading');
-    dialog.setAttribute('aria-describedby', 'dsTourDescription');
-    const top = document.createElement('div');
-    top.className = 'ds-tour-top';
-    progress = document.createElement('span');
-    progress.className = 'ds-tour-progress';
-    top.append(progress, button('ds-tour-close', '×', finish, 'Cerrar el recorrido'));
-    heading = document.createElement('h2');
-    heading.id = 'dsTourHeading';
-    description = document.createElement('p');
-    description.id = 'dsTourDescription';
-    dots = document.createElement('div');
-    dots.className = 'ds-tour-dots';
-    dots.setAttribute('aria-hidden', 'true');
-    const footer = document.createElement('div');
-    footer.className = 'ds-tour-footer';
-    const actions = document.createElement('div');
-    actions.className = 'ds-tour-actions';
-    previous = button('ds-tour-back', 'Anterior', () => show(current - 1));
-    next = button('ds-tour-next', 'Siguiente', () => current === steps.length - 1 ? finish() : show(current + 1));
-    actions.append(previous, next);
-    footer.append(button('ds-tour-skip', 'Omitir', finish), actions);
-    dialog.append(top, heading, description, dots, footer);
-    overlay.append(targetBox, dialog);
-    document.body.appendChild(overlay);
-    overlay.addEventListener('pointerdown', event => {
-      if (event.target === overlay) event.preventDefault();
-    });
+/* Onboarding contextual para Diario Show DEV — solo desktop.
+   Es independiente de la lógica de edición y no se ejecuta en mobile. */
+(()=>{
+ 'use strict';
+ const mq=window.matchMedia('(min-width:701px)');
+ // QA y vista convencional pueden desactivar el recorrido con ?onboarding=off.
+ if(new URLSearchParams(location.search).get('onboarding')==='off')return;
+ const storageKey='ds-editor-tour-desktop-v2';
+ const qs=s=>document.querySelector(s);
+ const steps=[
+  {selector:'#dsMobileControlsPanel .ds-plate-design-group',title:'Elegí el diseño de tu placa',description:'Seleccioná una de las cuatro variantes disponibles para definir el estilo de la publicación.'},
+  {selector:'#dsMobileControlsPanel .ds-photo-layout-group',title:'Definí la distribución fotográfica',description:'Elegí Simple para usar una fotografía o Compartida para trabajar con dos imágenes.'},
+  {selector:'#dsMobileControlsPanel .ds-content-group',title:'Importá el contenido',description:'Pegá el enlace de una noticia para importar sus datos. También podés cambiar el logo y su posición.'},
+  {selector:'#dsMobileControlsPanel .ds-texts-group',title:'Editá los textos',description:'Escribí o ajustá el titular, aplicá formato y elegí la alineación del texto.'},
+  {selector:'#photoUploadArea',title:'Agregá una fotografía',description:'Seleccioná una imagen, arrastrala en la vista previa para reencuadrarla y utilizá el zoom lateral.'},
+  {selector:'#photoStage',title:'Editá desde la vista previa',description:'Hacé clic en el logo para abrir Contenido o en el titular para abrir Textos. El editor te lleva al módulo correspondiente.'},
+  {selector:'body',title:'¿Poco espacio?',description:'Probá el zoom del navegador al 90% u 80% para aprovechar mejor el espacio de trabajo.',fullScreen:true,showZoomDemo:true}
+ ];
+ let index=-1,active=false,layer=null,card=null,highlight=null;
+ let shadows=[],lastFocus=null,scheduled=0;
+ function completed(){try{return localStorage.getItem(storageKey)==='complete'}catch(e){return false}}
+ function remember(){try{localStorage.setItem(storageKey,'complete')}catch(e){}}
+ function toggleCardOpen(element){
+  const accordion=element.closest('.ds-control-card');
+  if(!accordion)return;
+  const button=accordion.querySelector('.ds-control-card-toggle');
+  if(button&&button.getAttribute('aria-expanded')!=='true')button.click();
+ }
+ function setup(){
+  if(layer)return;
+  layer=document.createElement('div');
+  layer.id='dsOnboardingLayer';
+  layer.className='ds-onboarding-layer';
+  layer.hidden=true;
+  layer.innerHTML='<div class="ds-tour-shade" data-side="top"></div><div class="ds-tour-shade" data-side="left"></div><div class="ds-tour-shade" data-side="right"></div><div class="ds-tour-shade" data-side="bottom"></div><div class="ds-tour-highlight" aria-hidden="true"></div><section class="ds-tour-card" role="dialog" aria-modal="true" aria-labelledby="dsTourTitle" aria-describedby="dsTourDesc"><div class="ds-tour-card-header"><span id="dsTourProgress" class="ds-tour-progress"></span><button type="button" class="ds-tour-close" aria-label="Cerrar el recorrido">×</button></div><h2 id="dsTourTitle"></h2><p id="dsTourDesc"></p><div id="dsTourZoomDemo" class="ds-tour-zoom-demo preview" hidden aria-label="Demostración animada del zoom del navegador"></div><div class="ds-tour-dots" aria-hidden="true"></div><div class="ds-tour-footer"><button type="button" class="ds-tour-skip">Omitir</button><div class="ds-tour-nav"><button type="button" class="ds-tour-back">Anterior</button><button type="button" class="ds-tour-next">Siguiente</button></div></div></section>';
+  document.body.appendChild(layer);
+  shadows=[...layer.querySelectorAll('.ds-tour-shade')];
+  highlight=layer.querySelector('.ds-tour-highlight');
+  card=layer.querySelector('.ds-tour-card');
+  layer.querySelector('.ds-tour-close').addEventListener('click',finish);
+  layer.querySelector('.ds-tour-skip').addEventListener('click',finish);
+  layer.querySelector('.ds-tour-back').addEventListener('click',()=>show(index-1));
+  layer.querySelector('.ds-tour-next').addEventListener('click',()=>index===steps.length-1?finish():show(index+1));
+  shadows.forEach(node=>node.addEventListener('click',event=>event.preventDefault()));
+ }
+ function rectStyle(node,left,top,width,height){
+  Object.assign(node.style,{left:left+'px',top:top+'px',width:Math.max(0,width)+'px',height:Math.max(0,height)+'px'});
+ }
+ function position(){
+  scheduled=0;
+  if(!active||!mq.matches)return;
+  const target=qs(steps[index].selector);
+  if(!target)return;
+  const last=Boolean(steps[index].fullScreen);
+  const vw=window.innerWidth,vh=window.innerHeight;
+  const rect=last?{left:0,top:0,right:vw,bottom:vh}:target.getBoundingClientRect();
+  const x=last?0:Math.max(8,rect.left-8),y=last?0:Math.max(8,rect.top-8);
+  const right=last?vw:Math.min(vw-8,rect.right+8),bottom=last?vh:Math.min(vh-8,rect.bottom+8);
+  const w=Math.max(16,right-x),h=Math.max(16,bottom-y);
+  rectStyle(highlight,x,y,w,h);
+  rectStyle(shadows[0],0,0,vw,y);
+  rectStyle(shadows[1],0,y,x,h);
+  rectStyle(shadows[2],right,y,vw-right,h);
+  rectStyle(shadows[3],0,bottom,vw,vh-bottom);
+  // Desktop: posicionar la tarjeta a un lado; si no entra, debajo o arriba.
+  const cw=Math.min(last?345:325,vw-32),ch=card.offsetHeight||230;
+  const fitsRight=right+18+cw<=vw-16;
+  const fitsLeft=x-18-cw>=16;
+  let cx,cy;
+  if(last){cx=(vw-cw)/2;cy=(vh-ch)/2}
+  else if(fitsRight){cx=right+18;cy=y+(h-ch)/2}
+  else if(fitsLeft){cx=x-18-cw;cy=y+(h-ch)/2}
+  else{
+   cx=Math.max(16,Math.min(vw-cw-16,x+(w-cw)/2));
+   cy=bottom+12+ch<=vh-12?bottom+12:Math.max(12,y-ch-12);
   }
-  function position() {
-    scheduled = 0;
-    if (!open || !mq.matches) return;
-    const step = steps[current];
-    const target = document.querySelector(step.selector);
-    if (!target) return;
-    const vw = innerWidth, vh = innerHeight;
-    const rect = step.fullScreen ? { left: 0, top: 0, right: vw, bottom: vh } : target.getBoundingClientRect();
-    const pad = step.fullScreen ? 0 : 7;
-    const left = Math.max(0, rect.left - pad), top = Math.max(0, rect.top - pad);
-    const right = Math.min(vw, rect.right + pad), bottom = Math.min(vh, rect.bottom + pad);
-    Object.assign(targetBox.style, {
-      left: left + 'px', top: top + 'px',
-      width: Math.max(0, right - left) + 'px', height: Math.max(0, bottom - top) + 'px'
-    });
-    const dw = Math.min(350, vw - 32), dh = dialog.offsetHeight || 240;
-    const fitsRight = right + 20 + dw < vw - 16;
-    const fitsLeft = left - 20 - dw > 16;
-    let x, y;
-    if (step.fullScreen) { x = (vw - dw) / 2; y = (vh - dh) / 2; }
-    else if (fitsRight) { x = right + 20; y = top + (bottom - top - dh) / 2; }
-    else if (fitsLeft) { x = left - 20 - dw; y = top + (bottom - top - dh) / 2; }
-    else { x = Math.max(16, left + (right - left - dw) / 2); y = bottom + dh + 12 < vh ? bottom + 12 : top - dh - 12; }
-    dialog.style.width = dw + 'px';
-    dialog.style.left = Math.max(16, Math.min(vw - dw - 16, x)) + 'px';
-    dialog.style.top = Math.max(12, Math.min(vh - dh - 12, y)) + 'px';
+  cx=Math.max(16,Math.min(vw-cw-16,cx));
+  cy=Math.max(12,Math.min(vh-ch-12,cy));
+  card.style.width=cw+'px';
+  card.style.left=cx+'px';card.style.top=cy+'px';
+ }
+ function schedule(){if(active&&!scheduled)scheduled=requestAnimationFrame(position)}
+ function show(next){
+  if(!active||next<0||next>=steps.length)return;
+  index=next;
+  const step=steps[index];
+  const target=qs(step.selector);
+  if(!target)return;
+  toggleCardOpen(target);
+  layer.querySelector('#dsTourProgress').textContent=(index+1)+' de '+steps.length;
+  layer.querySelector('#dsTourTitle').textContent=step.title;
+  layer.querySelector('#dsTourDesc').textContent=step.description;
+  const demoSlot=layer.querySelector('#dsTourZoomDemo');
+  demoSlot.hidden=!step.showZoomDemo;
+  if(step.showZoomDemo&&!demoSlot.firstChild){
+   const template=qs('#dsZoomDemoTemplate');
+   if(template)demoSlot.appendChild(template.content.cloneNode(true));
   }
-  function schedule() { if (open && !scheduled) scheduled = requestAnimationFrame(position); }
-  function show(index) {
-    if (!open || index < 0 || index >= steps.length) return;
-    current = index;
-    const step = steps[current];
-    progress.textContent = (index + 1) + ' de ' + steps.length;
-    heading.textContent = step.title;
-    description.textContent = step.description;
-    previous.disabled = index === 0;
-    next.textContent = index === steps.length - 1 ? 'Finalizar' : 'Siguiente';
-    next.setAttribute('aria-label', next.textContent);
-    dots.replaceChildren(...steps.map((unused, i) => {
-      const dot = document.createElement('span');
-      if (i === current) dot.className = 'is-active';
-      return dot;
-    }));
-    overlay.classList.toggle('ds-tour-fullscreen', Boolean(step.fullScreen));
-    if (!step.fullScreen) document.querySelector(step.selector)?.scrollIntoView({ block: 'center', behavior: 'instant' });
-    schedule();
-    requestAnimationFrame(() => { position(); next.focus({ preventScroll: true }); });
+  layer.classList.toggle('is-whole-screen',Boolean(step.fullScreen));
+  document.body.classList.toggle('ds-tour-preview-step',index===5);
+  layer.querySelector('.ds-tour-back').disabled=index===0;
+  layer.querySelector('.ds-tour-next').textContent=index===steps.length-1?'Finalizar':'Siguiente';
+  layer.querySelector('.ds-tour-dots').innerHTML=steps.map((_,i)=>'<span class="'+(i===index?'is-current':'')+'"></span>').join('');
+  if(!step.fullScreen)target.scrollIntoView({block:'center',inline:'nearest',behavior:'instant'});
+  position();
+  requestAnimationFrame(()=>{position();card.querySelector('.ds-tour-next').focus({preventScroll:true})});
+ }
+ function start(){
+  if(!mq.matches||active)return;
+  setup();
+  lastFocus=document.activeElement;
+  active=true;layer.hidden=false;document.body.classList.add('ds-tour-active');
+  show(0);
+ }
+ function finish(){
+  if(!active)return;
+  active=false;remember();
+  layer.hidden=true;
+  document.body.classList.remove('ds-tour-active');
+  document.body.classList.remove('ds-tour-preview-step');
+  if(lastFocus&&typeof lastFocus.focus==='function')lastFocus.focus({preventScroll:true});
+ }
+ function onKey(event){
+  if(!active)return;
+  if(event.key==='Escape'){event.preventDefault();finish()}
+  if(event.key==='ArrowRight'&&event.altKey){event.preventDefault();if(index<steps.length-1)show(index+1)}
+  if(event.key==='ArrowLeft'&&event.altKey){event.preventDefault();if(index>0)show(index-1)}
+  if(event.key==='Tab'){
+   const items=[...card.querySelectorAll('button:not([disabled])')];
+   if(!items.length)return;
+   const i=items.indexOf(document.activeElement);
+   if(event.shiftKey&&i<=0){event.preventDefault();items[items.length-1].focus()}
+   else if(!event.shiftKey&&i===items.length-1){event.preventDefault();items[0].focus()}
   }
-  function start() {
-    if (!mq.matches || open) return;
-    build();
-    lastFocus = document.activeElement;
-    open = true;
-    overlay.hidden = false;
-    main.inert = true;
-    if (header) header.inert = true;
-    show(0);
-  }
-  function finish() {
-    if (!open) return;
-    remember();
-    open = false;
-    if (scheduled) cancelAnimationFrame(scheduled);
-    scheduled = 0;
-    overlay.hidden = true;
-    main.inert = false;
-    if (header) header.inert = false;
-    const focus = lastFocus instanceof HTMLElement && lastFocus.isConnected ? lastFocus : trigger;
-    focus.focus({ preventScroll: true });
-  }
-  function onKey(event) {
-    if (!open) return;
-    if (event.key === 'Escape') { event.preventDefault(); finish(); return; }
-    if (event.key !== 'Tab') return;
-    const buttons = [...dialog.querySelectorAll('button:not([disabled])')];
-    const index = buttons.indexOf(document.activeElement);
-    if (event.shiftKey && index <= 0) { event.preventDefault(); buttons[buttons.length - 1].focus(); }
-    else if (!event.shiftKey && index === buttons.length - 1) { event.preventDefault(); buttons[0].focus(); }
-  }
-  document.addEventListener('keydown', onKey, true);
-  const mqChanged = () => { if (!mq.matches) finish(); else schedule(); };
-  mq.addEventListener('change', mqChanged);
-  window.addEventListener('resize', schedule);
-  window.addEventListener('scroll', schedule, { passive: true, capture: true });
-  trigger.addEventListener('click', start);
-  if (mq.matches && (query.get('onboarding') === 'force' || !completed())) {
-    window.addEventListener('load', () => requestAnimationFrame(() => requestAnimationFrame(start)), { once: true });
-  }
+ }
+ document.addEventListener('keydown',onKey);
+ window.addEventListener('resize',()=>{
+  if(active&&!mq.matches)finish();
+  else schedule();
+ });
+ window.addEventListener('scroll',schedule,{passive:true});
+ const trigger=qs('#dsOnboardingTrigger');
+ if(trigger)trigger.addEventListener('click',start);
+ if(mq.matches&&(!completed() || new URLSearchParams(location.search).get('onboarding')==='force')){
+  // Después de que el editor termine su primera renderización.
+  window.addEventListener('load',()=>requestAnimationFrame(()=>requestAnimationFrame(start)),{once:true});
+ }
+ window.DiarioShowOnboarding={open:start,close:finish};
 })();
