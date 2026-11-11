@@ -43,7 +43,7 @@ describe('modelo de documento Crónica', () => {
       { headline: 'Actual', strapText: 'VOLANTA', showStrap: true, size: '61' },
       {
         alignment: 'left', forceUppercase: true, logo: 'secondary', image,
-        zoom: 1.35, offsetX: -45.25, offsetY: 72.5, variant: 'internal',
+        photoName: 'nota-principal.png', zoom: 1.35, offsetX: -45.25, offsetY: 72.5, variant: 'internal',
       },
     );
     expect(snapshot.image).toBe(image);
