@@ -50,7 +50,22 @@ document.querySelectorAll('.ds-control-card-toggle').forEach(button=>{
 
 const GRADIENT_BAR_HEIGHT=24;
 const LOGO_MARGIN=80,LOGO_WIDTH=75*1.25*1.15,LOGO_HEIGHT=LOGO_WIDTH*275/253;
-let selectedLogo='primary',logoPosition='right';
+let selectedLogo='primary',logoPosition='right',footerStyle='center';
+function drawFooter(color,baseline){
+ ctx.save();ctx.fillStyle=color;ctx.font='500 30px "Inter",Arial,sans-serif';
+ ctx.textAlign=footerStyle==='center'?'center':'left';
+ ctx.fillText('diarioshow.com.ar',footerStyle==='center'?W/2:80,baseline);
+ if(footerStyle==='carousel'){
+  ctx.strokeStyle=color;ctx.lineWidth=5;ctx.lineCap='round';ctx.lineJoin='round';
+  ctx.beginPath();ctx.moveTo(W-112,baseline-29);ctx.lineTo(W-80,baseline-14);ctx.lineTo(W-112,baseline+1);ctx.stroke();
+ }
+ ctx.restore();
+}
+document.querySelectorAll('[data-footer-style]').forEach(button=>button.addEventListener('click',()=>{
+ footerStyle=button.dataset.footerStyle;
+ document.querySelectorAll('[data-footer-style]').forEach(option=>option.setAttribute('aria-pressed',String(option.dataset.footerStyle===footerStyle)));
+ render();
+}));
 const logoImages={},logoSources={primary:'./logos/primario.svg'};
 for(const [key,src] of Object.entries(logoSources)){
  const img=new Image();logoImages[key]=img;
@@ -173,7 +188,7 @@ function renderQuoteVariant(size,footerBaseline,footerTop,includeHover=true){
  ctx.font='600 '+authorSize+'px "Poppins",Arial,sans-serif';
  if(hasAuthor)ctx.fillText(author,W/2,authorBaseline);
  ctx.font='500 30px "Inter",Arial,sans-serif';
- ctx.fillText('diarioshow.com.ar',W/2,footerBaseline);
+ drawFooter('#FFFFFF',footerBaseline);
  ctx.textAlign='left';
  photoBottom=Math.max(180,Math.min(H,gradientTop));
  const overlay=el('importOverlay');if(overlay)overlay.style.height=(photoBottom/H*100)+'%';
@@ -314,7 +329,7 @@ for(let i=0;i<lines.length;i++){
   x+=part.width;
  }
 }
-ctx.fillStyle=colors.text;ctx.font='500 30px "Inter",Arial,sans-serif';ctx.textAlign='center';ctx.fillText('diarioshow.com.ar',W/2,footerBaseline);ctx.textAlign='left';
+drawFooter(colors.text,footerBaseline);
 const overlay=el('importOverlay');if(overlay){overlay.style.height=(photoBottom/H*100)+'%';}updatePhotoStage();el('dotsLabel').textContent=el('dots').value+'%';el('sizeLabel').textContent=size;syncPhotoZoom();el('status').textContent=boxTop<=80?'Texto demasiado largo: reducí el tamaño.':'Vista previa activa · Arrastrá la foto para reencuadrarla.';
 }catch(error){el('status').textContent='Error de vista previa: '+error.message;console.error(error)}
 finally{syncMobileTextEditor();updatePreviewHitOverlays();if(document.getElementById('dsMobileContentEditor'))syncPreviewContentEditor()}
@@ -394,7 +409,7 @@ function updatePreviewHitOverlays(){
  const logoX=logoPosition==='left'?LOGO_MARGIN:W-LOGO_MARGIN-LOGO_WIDTH;
  const halo=54;
  place(logoHit,logoX-halo,LOGO_MARGIN-halo,logoX+LOGO_WIDTH+halo,LOGO_MARGIN+LOGO_HEIGHT+halo);
- logoHit.setAttribute('aria-label','Editar módulo Contenido y logo Diario Show');
+ logoHit.setAttribute('aria-label','Editar Identidad gráfica y logo Diario Show');
  const regions=headlineHitRegions;
  const l=regions.length?Math.min(...regions.map(x=>x.left)):80;
  const r=regions.length?Math.max(...regions.map(x=>x.right)):W-80;
@@ -576,12 +591,24 @@ el('download').addEventListener('click',()=>{
 // Tooltips: ajustar ancho dentro del panel; hover, teclado, toque y Escape.
 function sizeHelpTooltips(){
  document.querySelectorAll('.help-trigger').forEach(trigger=>{
-  const panel=trigger.closest('.editor-panel');
-  const button=trigger.querySelector('.help-button');
-  if(!panel||!button)return;
-  const rightLimit=panel.getBoundingClientRect().right-12;
-  const space=Math.floor(rightLimit-button.getBoundingClientRect().right-12);
-  trigger.style.setProperty('--help-available-width',Math.max(85,space)+'px');
+  const bubble=trigger.querySelector('.help-tooltip'),button=trigger.querySelector('.help-button');
+  if(!bubble||!button)return;
+  const rect=button.getBoundingClientRect(),panel=trigger.closest('.editor-panel')?.getBoundingClientRect();
+  const margin=16,gap=12,preferred=240;
+  const rightEdge=Math.min(window.innerWidth-margin,(panel?.right??window.innerWidth)-margin);
+  const leftEdge=Math.max(margin,(panel?.left??0)+margin);
+  const rightSpace=rightEdge-rect.right-gap,leftSpace=rect.left-leftEdge-gap;
+  const useLeft=rightSpace<preferred&&leftSpace>rightSpace;
+  const available=Math.max(160,useLeft?leftSpace:rightSpace);
+  const width=Math.min(260,Math.max(160,Math.min(preferred,available)));
+  bubble.style.width=width+'px';bubble.style.maxWidth='calc(100vw - 32px)';
+  bubble.style.left=useLeft?'auto':'calc(100% + 12px)';
+  bubble.style.right=useLeft?'calc(100% + 12px)':'auto';
+  bubble.classList.toggle('is-left',useLeft);
+  bubble.style.top='50%';bubble.style.transform='translateY(-50%)';
+  const size=bubble.getBoundingClientRect();
+  const offset=size.top<margin?margin-size.top:size.bottom>window.innerHeight-margin?window.innerHeight-margin-size.bottom:0;
+  if(offset)bubble.style.transform='translateY(calc(-50% + '+Math.round(offset)+'px))';
  });
 }
 window.addEventListener('resize',sizeHelpTooltips);
@@ -808,7 +835,7 @@ const previewContentHost=document.createElement('div');
 previewContentHost.id='dsMobileContentEditor';
 previewContentHost.className='ds-mobile-content-editor editor-panel';
 previewContentHost.hidden=true;
-previewContentHost.setAttribute('aria-label','Contenido de la placa');
+previewContentHost.setAttribute('aria-label','Identidad gráfica de la placa');
 const sourceContent=document.querySelector('#dsMobileControlsPanel .ds-content-group');
 const previewContentCard=sourceContent.cloneNode(true);
 previewContentCard.querySelectorAll('[id]').forEach(node=>node.id+='Preview');
@@ -825,36 +852,28 @@ previewContentToggle.addEventListener('click',()=>{
  requestAnimationFrame(updateMobileSlideHeight);
 });
 previewContentCard.addEventListener('click',event=>{
- const choice=event.target.closest('[data-logo],[data-logo-position]');
+ const choice=event.target.closest('[data-logo],[data-logo-position],[data-footer-style]');
  if(choice){
   const source=choice.dataset.logo!==undefined?
    sourceContent.querySelector('[data-logo="'+choice.dataset.logo+'"]'):
-   sourceContent.querySelector('[data-logo-position="'+choice.dataset.logoPosition+'"]');
+   choice.dataset.logoPosition!==undefined?
+   sourceContent.querySelector('[data-logo-position="'+choice.dataset.logoPosition+'"]'):
+   sourceContent.querySelector('[data-footer-style="'+choice.dataset.footerStyle+'"]');
   source?.click();syncPreviewContentEditor();
   return;
  }
- const importButton=event.target.closest('#importArticlePreview');
- if(importButton){
-  const input=previewContentCard.querySelector('#articleUrlPreview');
-  const original=el('articleUrl');
-  if(input&&original){original.value=input.value;original.dispatchEvent(new Event('input',{bubbles:true}))}
-  el('importArticle')?.click();
- }
-});
-const previewArticleUrl=previewContentCard.querySelector('#articleUrlPreview');
-previewArticleUrl?.addEventListener('input',()=>{
- const original=el('articleUrl');original.value=previewArticleUrl.value;
- original.dispatchEvent(new Event('input',{bubbles:true}));
+
 });
 function syncPreviewContentEditor(){
  if(!previewContentHost.isConnected)return;
- for(const button of previewContentCard.querySelectorAll('[data-logo],[data-logo-position]')){
+ for(const button of previewContentCard.querySelectorAll('[data-logo],[data-logo-position],[data-footer-style]')){
   const selector=button.dataset.logo!==undefined?
-   '[data-logo="'+button.dataset.logo+'"]':'[data-logo-position="'+button.dataset.logoPosition+'"]';
+   '[data-logo="'+button.dataset.logo+'"]':button.dataset.logoPosition!==undefined?
+   '[data-logo-position="'+button.dataset.logoPosition+'"]':'[data-footer-style="'+button.dataset.footerStyle+'"]';
   const source=sourceContent.querySelector(selector);
   if(source)button.setAttribute('aria-pressed',source.getAttribute('aria-pressed'));
  }
- if(previewArticleUrl&&document.activeElement!==previewArticleUrl)previewArticleUrl.value=el('articleUrl').value;
+
 }
 // Desplazar hasta el pie DESPUÉS de actualizar el alto del carrusel móvil.
 // El contenido contextual permanece en el DOM, sin enfocar ni seleccionar texto.
@@ -998,7 +1017,7 @@ function makePreviewHit(id,label,handler,context){
  hitLayer.appendChild(button);
  return button;
 }
-makePreviewHit('dsLogoHitButton','Editar logo y Contenido',showMobileContentEditor,'logo');
+makePreviewHit('dsLogoHitButton','Editar logo e Identidad gráfica',showMobileContentEditor,'logo');
 makePreviewHit('dsHeadlineHitButton','Editar Texto principal',()=>{
  if(mobileTabViewport.matches)openMobileHeadlineEditor();
  else{
