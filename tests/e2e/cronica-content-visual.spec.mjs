@@ -32,6 +32,7 @@ async function comparePixels(page, before, after) {
     let maxX = -1;
     let maxY = -1;
     let changedOutsideSideEdges = 0;
+    let changedInterior = 0;
     for (let i = 0; i < old.bytes.length; i += 4) {
       let delta = 0;
       for (let channel = 0; channel < 4; channel++) {
@@ -46,8 +47,9 @@ async function comparePixels(page, before, after) {
       maxY = Math.max(maxY, py);
       minY = Math.min(minY, py);
       if (px > 7 && px < old.width - 8) changedOutsideSideEdges++;
+      if (px > 7 && px < old.width - 8 && py < old.height - 1) changedInterior++;
     }
-    return { changed, maxDelta, maxX, minY, maxY, changedOutsideSideEdges, dimensions: [old.width, old.height] };
+    return { changed, maxDelta, maxX, minY, maxY, changedOutsideSideEdges, changedInterior, dimensions: [old.width, old.height] };
   }, { baseline: before.toString('base64'), migrated: after.toString('base64') });
 }
 
@@ -114,11 +116,17 @@ for (const width of [1440, 390]) {
         expect(diff.maxDelta, 'Volanta: máximo 1 RGB').toBeLessThanOrEqual(1);
         expect(diff.maxX, 'Volanta: solo 3px izquierdos').toBeLessThanOrEqual(2);
       } else if (i === 2) {
-        // Textarea: diferencias medidas en esquinas/bordes redondeados.
-        // CI #42753020486: 28 px +/-2 a 1440; 35 px +/-1 a 390.
-        expect(diff.changed, 'Textarea: máximo 40 px de antialias').toBeLessThanOrEqual(40);
-        expect(diff.maxDelta, 'Textarea: máximo 2 RGB').toBeLessThanOrEqual(2);
-        expect(diff.changedOutsideSideEdges, 'Textarea: cero cambios fuera de los 8px de bordes').toBe(0);
+        // Equivalencia estricta en el interior; tras separar el panel mobile,
+        // una única línea de borde inferior difiere además del antialias previo.
+        if (width === 390) {
+          expect(diff.changed, 'Textarea: una fila inferior y hasta 40px de bordes').toBeLessThanOrEqual(diff.dimensions[0] + 40);
+          expect(diff.maxDelta, 'Textarea: delta limitado al nuevo borde').toBeLessThanOrEqual(17);
+          expect(diff.changedInterior, 'Textarea: ningún píxel del interior cambia').toBe(0);
+        } else {
+          expect(diff.changed, 'Textarea: máximo 40 px de antialias').toBeLessThanOrEqual(40);
+          expect(diff.maxDelta, 'Textarea: máximo 2 RGB').toBeLessThanOrEqual(2);
+          expect(diff.changedOutsideSideEdges, 'Textarea: cero cambios fuera de los 8px de bordes').toBe(0);
+        }
       } else if (i === 0 && width === 390 && diff.changed > 0) {
         // Nuevo corte entre Diseño y Textos: en mobile cambia solo un borde
         // horizontal de 1 píxel, sin variaciones en el interior del switch.
