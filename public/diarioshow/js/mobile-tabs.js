@@ -55,14 +55,23 @@
       setTab('format');
       document.querySelector('.editor-panel .panel-group')?.scrollIntoView({behavior:'smooth',block:'start'});
     };
-    hit.addEventListener('pointerdown',event=>{event.stopPropagation();});
-    hit.addEventListener('click',openLogoContent);
-    const dropzone=document.getElementById('photoDropzone');
-    dropzone?.addEventListener('click',event=>{
-      if(hit.style.display==='none')return;
+    // Interceptar antes del dropzone, incluso si otro elemento recibe el toque.
+    const insideLogo=(event)=>{
+      if(hit.style.display==='none')return false;
       const bounds=hit.getBoundingClientRect();
-      if(event.clientX>=bounds.left && event.clientX<=bounds.right && event.clientY>=bounds.top && event.clientY<=bounds.bottom)openLogoContent(event);
+      return event.clientX>=bounds.left && event.clientX<=bounds.right &&
+        event.clientY>=bounds.top && event.clientY<=bounds.bottom;
+    };
+    stage.addEventListener('pointerdown',event=>{
+      if(!insideLogo(event))return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      openLogoContent();
     },true);
+    stage.addEventListener('click',event=>{
+      if(insideLogo(event))openLogoContent(event);
+    },true);
+    hit.addEventListener('click',openLogoContent);
     buttons.forEach(b=>b.addEventListener('click',()=>requestAnimationFrame(place)));
     window.addEventListener('resize',place);
     new ResizeObserver(place).observe(canvas);
