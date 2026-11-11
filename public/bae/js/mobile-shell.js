@@ -87,7 +87,7 @@
   const mobile = document.createElement('section');
   mobile.className = 'bae-preview-text-editor';
   mobile.setAttribute('aria-label', 'Editar textos desde vista previa');
-  mobile.innerHTML = '<h2>Editar textos</h2><label for="baeHeadlineMobile">Texto principal</label><textarea id="baeHeadlineMobile"></textarea><label for="baeSizeMobile">Tamaño de tipografía: <output id="baeSizeMobileLabel">70</output> px</label><input type="range" id="baeSizeMobile" min="42" max="105"><label class="bae-mobile-quote-label"><input type="checkbox" id="baeQuoteEnabledMobile"> Incluir textual</label><textarea id="baeQuoteMobile" aria-label="Textual" placeholder="Escribí el textual"></textarea><div class="bae-mobile-format" role="group" aria-label="Formato del texto"><button type="button" data-mark="*" aria-label="Destacar selección">Destacar</button><button type="button" data-mark="_" aria-label="Aplicar cursiva">Cursiva</button><button type="button" data-mark="~" aria-label="Tachar selección">Tachar</button><button type="button" data-align="left" aria-label="Alinear a la izquierda">Izquierda</button><button type="button" data-align="center" aria-label="Alinear al centro">Centro</button></div>';
+  mobile.innerHTML = '<h2>Editar textos</h2><label for="baeHeadlineMobile">Texto principal</label><textarea id="baeHeadlineMobile"></textarea><label for="baeSizeMobile">Tamaño de tipografía: <output id="baeSizeMobileLabel">70</output> px</label><input type="range" id="baeSizeMobile" min="42" max="105"><label class="bae-mobile-quote-label"><input type="checkbox" id="baeQuoteEnabledMobile"> Incluir textual</label><textarea id="baeQuoteMobile" aria-label="Textual" placeholder="Escribí el textual"></textarea><div class="bae-mobile-format" role="group" aria-label="Formato del texto"><button type="button" data-mark="*" aria-label="Destacar selección">Destacar</button><button type="button" data-mark="_" aria-label="Aplicar cursiva">Cursiva</button><button type="button" data-mark="~" aria-label="Tachar selección">Tachar</button><button type="button" data-align="left" aria-label="Alinear a la izquierda">Izquierda</button><button type="button" data-align="center" aria-label="Alinear al centro">Centro</button><button type="button" data-action="uppercase" aria-label="Mostrar texto en mayúsculas desde la vista previa" aria-pressed="false">Mayúsculas</button><button type="button" data-action="clear" aria-label="Quitar formato de la selección desde la vista previa">Limpiar formato</button></div>';
   preview.insertBefore(mobile, preview.querySelector('.preview-actions'));
   const headline = $('baeHeadlineMobile'), size = $('baeSizeMobile');
   const quote = $('baeQuoteMobile'), enabled = $('baeQuoteEnabledMobile');
@@ -105,6 +105,8 @@
     quote.hidden = !enabled.checked;
     $('baeSizeMobileLabel').textContent = size.value;
     headline.classList.toggle('uppercase-preview', upper.getAttribute('aria-pressed') === 'true');
+    const mobileUpper = mobile.querySelector('[data-action="uppercase"]');
+    mobileUpper?.setAttribute('aria-pressed', upper.getAttribute('aria-pressed'));
     for (const button of mobile.querySelectorAll('[data-align]')) {
       const source = $('align' + (button.dataset.align === 'left' ? 'Left' : 'Center'));
       button.setAttribute('aria-pressed', source.getAttribute('aria-pressed'));
@@ -128,6 +130,19 @@
   for (const button of mobile.querySelectorAll('[data-align]')) {
     button.addEventListener('click', () => { $('align' + (button.dataset.align === 'left' ? 'Left' : 'Center')).click(); sync(); });
   }
+  mobile.querySelector('[data-action="uppercase"]')?.addEventListener('click', () => {
+    upper.click(); // El estado canónico permanece en BAEEditor.
+    sync();
+  });
+  mobile.querySelector('[data-action="clear"]')?.addEventListener('pointerdown', event => event.preventDefault());
+  mobile.querySelector('[data-action="clear"]')?.addEventListener('click', () => {
+    const a = headline.selectionStart, b = headline.selectionEnd;
+    if (a === b) { headline.focus(); return; }
+    const cleaned = headline.value.slice(a, b).replace(/[\\*_~]/g, '');
+    headline.setRangeText(cleaned, a, b, 'select');
+    notify('headline', headline.value);
+    headline.focus({ preventScroll: true });
+  });
   addEventListener('editorial:bae:render', sync);
   for (const id of ['headline','quote','size','enableQuote']) {
     $(id).addEventListener('input', sync);
@@ -139,7 +154,30 @@
   hit.type = 'button';
   hit.className = 'bae-text-hit';
   hit.setAttribute('aria-label','Editar texto principal desde la placa');
-  hit.addEventListener('click', () => {
+  // Paridad con el área táctil de Andy: scroll ≠ abrir editor.
+  // Los clics sin pointer (Enter/Espacio) siguen siendo accesibles.
+  let gesture = null, allowPointerClick = false;
+  hit.addEventListener('pointerdown', event => {
+    if (!event.isPrimary) return;
+    gesture = { id:event.pointerId, x:event.clientX, y:event.clientY, started:performance.now() };
+    allowPointerClick = false;
+  });
+  hit.addEventListener('pointermove', event => {
+    if (gesture?.id === event.pointerId &&
+        Math.hypot(event.clientX - gesture.x, event.clientY - gesture.y) > 9) {
+      gesture = null; allowPointerClick = false;
+    }
+  });
+  hit.addEventListener('pointerup', event => {
+    allowPointerClick = Boolean(gesture?.id === event.pointerId &&
+      Math.hypot(event.clientX - gesture.x, event.clientY - gesture.y) < 9 &&
+      performance.now() - gesture.started < 550);
+    gesture = null;
+  });
+  hit.addEventListener('pointercancel', () => { gesture = null; allowPointerClick = false; });
+  hit.addEventListener('click', event => {
+    if (event.detail !== 0 && !allowPointerClick) return;
+    allowPointerClick = false;
     headline.focus({ preventScroll:true });
     headline.scrollIntoView({ block:'center', behavior:'smooth' });
   });
