@@ -19,6 +19,8 @@ describe('Modelo de medios', () => {
     expect(isMediaSnapshot({ logo: 'invalid', zoomPercent: 100, hasImage: false })).toBe(false);
     expect(isMediaSnapshot({ logo: 'primary', zoomPercent: 127, hasImage: false })).toBe(false);
     expect(isMediaSnapshot({ logo: 'primary', zoomPercent: 100, hasImage: 'yes' })).toBe(false);
+    expect(isMediaSnapshot({ logo: 'primary', zoomPercent: 100, hasImage: true, photoName: 123 })).toBe(false);
+    expect(isMediaSnapshot({ logo: 'primary', zoomPercent: 100, hasImage: true, photoName: 'foto.png' })).toBe(true);
   });
 });
 
