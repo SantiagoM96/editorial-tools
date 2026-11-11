@@ -92,10 +92,33 @@ test('BAE: variantes, carga de imagen y exportación PNG', async ({ page }) => {
   await page.locator('#headline').fill('Prueba editorial BAE');
   await page.locator('button[data-theme="white"]').click();
   await expect(page.locator('button[data-theme="white"]')).toHaveAttribute('aria-pressed', 'true');
+  const chooser = page.waitForEvent('filechooser');
+  await page.locator('.bae-photo-surface').click();
+  expect(await (await chooser).element().getAttribute('id')).toBe('file');
   await uploadSyntheticImage(page);
+  await expect(page.locator('#baePhotoAction')).toHaveText('Cambiar');
+  await expect(page.locator('#baePhotoCaption')).toHaveText('qa-imagen.png');
   const download = page.waitForEvent('download', { timeout: 30000 });
   await page.locator('#download').click();
   await verifyPng(await download);
+  await page.locator('#clearAll').click();
+  await expect(page.locator('#baePhotoAction')).toHaveText('Seleccioná');
+  await expect(page.locator('#baePhotoCaption')).toHaveText('una fotografía');
+  // Simula la devolución del importador sin depender de servicios externos.
+  await page.evaluate(async () => {
+    const preview = document.createElement('canvas');
+    preview.width = 16; preview.height = 16;
+    const ctx = preview.getContext('2d');
+    if (!ctx) throw new Error('No Canvas 2D');
+    ctx.fillStyle = '#d82626';
+    ctx.fillRect(0, 0, 16, 16);
+    const image = new Image();
+    image.src = preview.toDataURL('image/png');
+    await image.decode();
+    window.BAEEditor.setImage(image);
+  });
+  await expect(page.locator('#baePhotoAction')).toHaveText('Cambiar');
+  await expect(page.locator('#baePhotoCaption')).toHaveText('Fotografía importada');
   expect(errors).toEqual([]);
 });
 

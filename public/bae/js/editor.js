@@ -2,7 +2,7 @@
 (function(){
 'use strict';
 const el=id=>document.getElementById(id),canvas=el('art'),ctx=canvas.getContext('2d'),W=1080,H=1440;
-let halftone=null;const halftoneLayer=document.createElement('canvas');halftoneLayer.width=1080;halftoneLayer.height=1236;const halftoneCtx=halftoneLayer.getContext('2d');let importingArticle=false;let selectedTexture='1';const halftoneAssets={};function loadTexture(id,path){const asset=new Image();asset.onload=()=>{halftoneAssets[id]=asset;if(selectedTexture===id){halftone=asset;render()}};asset.onerror=()=>console.error('No se pudo cargar '+path);asset.src=path}loadTexture('1','../bae/halftone-2.svg?v=1');loadTexture('2','./textures/punteado-grises-ajustados.svg?v=1');let textAlignment='left';let image=null,zoom=1,offsetX=0,offsetY=0,dragging=false,lastX=0,lastY=0,photoBottom=820;
+let halftone=null;const halftoneLayer=document.createElement('canvas');halftoneLayer.width=1080;halftoneLayer.height=1236;const halftoneCtx=halftoneLayer.getContext('2d');let importingArticle=false;let selectedTexture='1';const halftoneAssets={};function loadTexture(id,path){const asset=new Image();asset.onload=()=>{halftoneAssets[id]=asset;if(selectedTexture===id){halftone=asset;render()}};asset.onerror=()=>console.error('No se pudo cargar '+path);asset.src=path}loadTexture('1','../bae/halftone-2.svg?v=1');loadTexture('2','./textures/punteado-grises-ajustados.svg?v=1');let textAlignment='left';let image=null,photoName=null,zoom=1,offsetX=0,offsetY=0,dragging=false,lastX=0,lastY=0,photoBottom=820;
 const LOGO_MARGIN=80,LOGO_WIDTH=123.75*1.15,LOGO_HEIGHT=LOGO_WIDTH*192/358;
 let selectedLogo='primary';
 const logoImages={},logoSources={primary:'./logos/primario.svg',white:'./logos/blanco.svg'};
@@ -144,11 +144,18 @@ function updatePhotoStage(){
  canvas.style.cursor=image?'grab':'default';
 }
 window.addEventListener('resize',updatePhotoStage);
+function updatePhotoPicker(){
+ const action=el('baePhotoAction'),caption=el('baePhotoCaption');
+ if(!action||!caption)return;
+ action.textContent=image?'Cambiar':'Seleccioná';
+ caption.textContent=image?(photoName||'Fotografía importada'):'una fotografía';
+ caption.title=image?(photoName||''):'';
+}
 function loadPhoto(file){
  if(!file)return;
  if(!file.type.startsWith('image/')){el('status').textContent='Seleccioná un archivo de imagen válido.';return}
  const url=URL.createObjectURL(file),img=new Image();
- img.onload=()=>{image=img;zoom=1;offsetX=0;offsetY=0;render();URL.revokeObjectURL(url)};
+ img.onload=()=>{image=img;photoName=file.name;zoom=1;offsetX=0;offsetY=0;updatePhotoPicker();render();URL.revokeObjectURL(url)};
  img.onerror=()=>{el('status').textContent='No se pudo abrir esta fotografía';URL.revokeObjectURL(url)};
  img.src=url;
 }
@@ -190,7 +197,7 @@ el('clearAll').addEventListener('click',()=>{
  el('theme').value='dark';document.querySelectorAll('.theme-swatch').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.theme==='dark')));
  el('size').value='70';el('dots').value='5';textAlignment='left';
  el('alignLeft').setAttribute('aria-pressed','true');el('alignCenter').setAttribute('aria-pressed','false');
- image=null;zoom=1;offsetX=0;offsetY=0;dragging=false;selectedLogo='primary';syncLogoChoices();photoStage.classList.remove('is-drag-over');
+ image=null;photoName=null;zoom=1;offsetX=0;offsetY=0;dragging=false;selectedLogo='primary';syncLogoChoices();updatePhotoPicker();photoStage.classList.remove('is-drag-over');
  el('importStatus').textContent='Pegá una URL de BAE Negocios.';
  render();
 });
@@ -247,5 +254,5 @@ function closeHelpTooltips(){
 document.addEventListener('click',event=>{if(!event.target.closest('.help-trigger'))closeHelpTooltips()});
 document.addEventListener('keydown',event=>{if(event.key==='Escape')closeHelpTooltips()});
 sizeHelpTooltips();
-window.BAEEditor={setImporting(active){importingArticle=active;render()},setImage(img){image=img;zoom=1;offsetX=0;offsetY=0;render()},refresh:render};render();document.fonts.ready.then(render);
+window.BAEEditor={setImporting(active){importingArticle=active;render()},setImage(img){image=img;photoName=null;zoom=1;offsetX=0;offsetY=0;updatePhotoPicker();render()},refresh:render};render();document.fonts.ready.then(render);
 })();
