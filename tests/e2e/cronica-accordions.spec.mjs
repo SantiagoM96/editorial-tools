@@ -3,6 +3,7 @@ import { expect, test } from '@playwright/test';
 test('Crónica: paneles plegables conservan estado editorial y navegación', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/cronica/', { waitUntil: 'load' });
+  await page.getByRole('tab', { name: 'Formato' }).click();
   const labels = ['Páginas', 'Diseño de placas', 'Diseño de la placa', 'Textos'];
   for (const label of labels) {
     const control = page.getByRole('button', { name: label, exact: true });
