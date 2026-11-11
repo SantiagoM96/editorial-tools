@@ -188,9 +188,7 @@
    Los controles móviles siguen vinculados al documento React/Canvas original. */
 @media (max-width: 700px) {
   .cronica-preview-text-editor textarea,
-  .cronica-preview-text-editor input[type="text"],
-  #cronicaEditorPanel textarea,
-  #cronicaEditorPanel input[type="text"] {
+  .cronica-preview-text-editor input[type="text"] {
     font-size: 16px;
   }
 }
