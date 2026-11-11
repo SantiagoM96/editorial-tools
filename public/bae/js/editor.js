@@ -2,7 +2,7 @@
 (function(){
 'use strict';
 const el=id=>document.getElementById(id),canvas=el('art'),ctx=canvas.getContext('2d'),W=1080,H=1440;
-let halftone=null;const halftoneLayer=document.createElement('canvas');halftoneLayer.width=1080;halftoneLayer.height=1236;const halftoneCtx=halftoneLayer.getContext('2d');let importingArticle=false;let selectedTexture='1';const halftoneAssets={};function loadTexture(id,path){const asset=new Image();asset.onload=()=>{halftoneAssets[id]=asset;if(selectedTexture===id){halftone=asset;render()}};asset.onerror=()=>console.error('No se pudo cargar '+path);asset.src=path}loadTexture('1','../bae/halftone-2.svg?v=1');loadTexture('2','./textures/punteado-grises-ajustados.svg?v=1');let textAlignment='left';let image=null,photoName=null,zoom=1,offsetX=0,offsetY=0,dragging=false,lastX=0,lastY=0,photoBottom=820;
+let halftone=null;const halftoneLayer=document.createElement('canvas');halftoneLayer.width=1080;halftoneLayer.height=1236;const halftoneCtx=halftoneLayer.getContext('2d');let importingArticle=false;let selectedTexture='1';const halftoneAssets={};function loadTexture(id,path){const asset=new Image();asset.onload=()=>{halftoneAssets[id]=asset;if(selectedTexture===id){halftone=asset;render()}};asset.onerror=()=>console.error('No se pudo cargar '+path);asset.src=path}loadTexture('1','../bae/halftone-2.svg?v=1');loadTexture('2','./textures/punteado-grises-ajustados.svg?v=1');let textAlignment='left',forceUppercase=false;let image=null,photoName=null,zoom=1,offsetX=0,offsetY=0,dragging=false,lastX=0,lastY=0,photoBottom=820;
 const LOGO_MARGIN=80,LOGO_WIDTH=123.75*1.15,LOGO_HEIGHT=LOGO_WIDTH*192/358;
 let selectedLogo='primary';
 const logoImages={},logoSources={primary:'./logos/primario.svg',white:'./logos/blanco.svg'};
@@ -30,7 +30,7 @@ function parseRich(text){const out=[];let style={accent:false,italic:false,strik
 function wrapRich(text,size,quote=false){const result=[];for(const paragraph of String(text).split('\n')){const spans=quote?[{text:paragraph,italic:true,accent:false,strike:false}]:parseRich(paragraph);let line=[],width=0;for(const span of spans){for(const part of span.text.match(/\S+|\s+/g)||[]){const font=(span.italic?'italic ':'')+size+'px "DM Serif Display",Georgia,serif';ctx.font=font;const partWidth=ctx.measureText(part).width;if(width+partWidth>920&&width>0&&part.trim()){result.push({parts:line,quote});line=[];width=0}if(!line.length&&!part.trim())continue;line.push({...span,text:part,width:partWidth});width+=partWidth}}if(line.length)result.push({parts:line,quote})}return result}
 function render(){
 try{
-const colors=palette[el('theme').value]||palette.dark,size=Number(el('size').value),lineHeight=Math.round(size*1.12*0.8*1.10),main=wrapRich(el('headline').value,size),quotes=el('enableQuote').checked?wrapRich(el('quote').value,size,true):[];
+const colors=palette[el('theme').value]||palette.dark,size=Number(el('size').value),lineHeight=Math.round(size*1.12*0.8*1.10),main=wrapRich(forceUppercase?el('headline').value.toLocaleUpperCase('es-AR'):el('headline').value,size),quotes=el('enableQuote').checked?wrapRich(el('quote').value,size,true):[];
 // Coordenadas en píxeles reales del PNG (1080 × 1440), no píxeles CSS.
 // Piso de la firma exactamente a 80 px del borde inferior.
 ctx.textBaseline='alphabetic';
@@ -109,8 +109,9 @@ for(let i=0;i<lines.length;i++){
 }
 ctx.fillStyle=colors.text;ctx.font='30px Arial';ctx.textAlign='center';ctx.fillText('baenegocios.com',W/2,footerBaseline);ctx.textAlign='left';
 const overlay=el('importOverlay');if(overlay){overlay.style.height=(photoBottom/H*100)+'%';}updatePhotoStage();el('dotsLabel').textContent=el('dots').value+'%';el('sizeLabel').textContent=size;el('zoomLabel').textContent=Math.round(zoom*100)+' %';el('photoZoom').value=Math.round(zoom*100);el('status').textContent=boxTop<=80?'Texto demasiado largo: reducí el tamaño.':'Vista previa activa · Arrastrá la foto para reencuadrarla.';
-}catch(error){el('status').textContent='Error de vista previa: '+error.message;console.error(error)}
-}
+ }catch(error){el('status').textContent='Error de vista previa: '+error.message;console.error(error)}
+ finally{window.dispatchEvent(new Event('editorial:bae:render'));}
+ }
 // Algunos navegadores restauran el valor anterior del slider aunque el HTML diga 5.
 function resetDefaultHalftone(){el('dots').value='5';el('dotsLabel').textContent='5%';render()}
 resetDefaultHalftone();
@@ -195,7 +196,7 @@ el('clearAll').addEventListener('click',()=>{
  el('articleUrl').value='';el('headline').value='';el('quote').value='';el('enableQuote').checked=false;el('quote').hidden=true;el('file').value='';
  selectedTexture='1';halftone=halftoneAssets['1']||null;document.querySelectorAll('.texture-option').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.texture==='1')));
  el('theme').value='dark';document.querySelectorAll('.theme-swatch').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.theme==='dark')));
- el('size').value='70';el('dots').value='5';textAlignment='left';
+ el('size').value='70';el('dots').value='5';textAlignment='left';forceUppercase=false;el('headline').classList.remove('uppercase-preview');const upper=el('baeUppercase');if(upper)upper.setAttribute('aria-pressed','false');
  el('alignLeft').setAttribute('aria-pressed','true');el('alignCenter').setAttribute('aria-pressed','false');
  image=null;photoName=null;zoom=1;offsetX=0;offsetY=0;dragging=false;selectedLogo='primary';syncLogoChoices();updatePhotoPicker();photoStage.classList.remove('is-drag-over');
  el('importStatus').textContent='Pegá una URL de BAE Negocios.';
@@ -254,5 +255,5 @@ function closeHelpTooltips(){
 document.addEventListener('click',event=>{if(!event.target.closest('.help-trigger'))closeHelpTooltips()});
 document.addEventListener('keydown',event=>{if(event.key==='Escape')closeHelpTooltips()});
 sizeHelpTooltips();
-window.BAEEditor={setImporting(active){importingArticle=active;render()},setImage(img){image=img;photoName=null;zoom=1;offsetX=0;offsetY=0;updatePhotoPicker();render()},refresh:render};render();document.fonts.ready.then(render);
+window.BAEEditor={setImporting(active){importingArticle=active;render()},setImage(img){image=img;photoName=null;zoom=1;offsetX=0;offsetY=0;updatePhotoPicker();render()},setUppercase(value){forceUppercase=Boolean(value);el('headline').classList.toggle('uppercase-preview',forceUppercase);render()},refresh:render};render();document.fonts.ready.then(render);
 })();
