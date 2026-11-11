@@ -1,0 +1,22 @@
+/* Mobile tabs: fixed to viewport top when scrolling, with an opaque 24px lower clearance. */
+.ds-mobile-tabs{display:none}
+@media(max-width:700px){
+  .ds-mobile-tabs{
+    display:flex;position:sticky;top:0;z-index:100;
+    width:100%;gap:8px;padding:10px 12px 24px;
+    background:#101114;
+    isolation:isolate;
+  }
+  .ds-mobile-tabs button{
+    flex:1;min-height:42px;background:#24262b;color:#d9dce3;
+    border:1px solid #41454d;border-radius:8px;font-weight:600;
+  }
+  .ds-mobile-tabs button[aria-selected="true"]{
+    background:#E6008D;border-color:#E6008D;color:white;
+  }
+  body.ds-mobile-ready main{display:block}
+  body.ds-mobile-ready main>.editor-panel,
+  body.ds-mobile-ready main>.preview{width:100%;max-width:100%}
+  body.ds-mobile-ready[data-ds-mobile-tab="format"] main>.preview,
+  body.ds-mobile-ready[data-ds-mobile-tab="preview"] main>.editor-panel{display:none}
+}
