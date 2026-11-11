@@ -25,6 +25,7 @@ test('Diario Show: recorrido de 7 pasos, persistencia y reinicio accesible', asy
 test('Diario Show: el onboarding no bloquea dispositivos móviles', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/diarioshow/?onboarding=force', { waitUntil: 'load' });
+  await page.getByRole('button', { name: 'Vista previa' }).click();
   await expect(page.locator('#art')).toBeVisible();
   await expect(page.getByRole('dialog')).toHaveCount(0);
   await expect(page.locator('#dsOnboardingTrigger')).toBeHidden();
