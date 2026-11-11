@@ -1,4 +1,7 @@
 import { defineConfig } from '@playwright/test';
+
+const deploySmoke = process.env.EDITORIAL_DEPLOY_SMOKE === '1';
+
 export default defineConfig({
   testDir: './tests/e2e',
   timeout: 60_000,
@@ -7,14 +10,19 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: process.env.CI ? [['list'], ['html', { open: 'never' }]] : 'list',
   use: {
-    baseURL: 'http://127.0.0.1:4173',
+    baseURL: deploySmoke ? 'http://127.0.0.1:4177' : 'http://127.0.0.1:4173',
     browserName: 'chromium',
     viewport: { width: 1440, height: 900 },
     acceptDownloads: true,
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
   },
-  webServer: [
+  webServer: deploySmoke ? [{
+    command: 'SERVE_ROOT=../dist-pages SERVE_PREFIX=/editorial-tools/ PORT=4177 node scripts/serve.mjs',
+    url: 'http://127.0.0.1:4177/editorial-tools/',
+    reuseExistingServer: false,
+    timeout: 30_000,
+  }] : [
     {
       command: 'npm run dev',
       url: 'http://127.0.0.1:4173/',

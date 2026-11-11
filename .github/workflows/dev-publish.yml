@@ -1,0 +1,18 @@
+name: Solicitar publicación DEV
+
+on:
+  push:
+    branches: [dev]
+
+# DEV no publica Pages ni recibe permisos de escritura.
+# Al concluir este workflow, Pages se ejecuta desde el main predeterminado
+# mediante workflow_run y vuelve a compilar ambos HEAD actuales.
+permissions:
+  contents: read
+
+jobs:
+  notify:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Avisar cambio aprobado de DEV
+        run: echo "DEV actualizado; solicitar rebuild atómico desde main."

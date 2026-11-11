@@ -1,46 +1,113 @@
-name: Publicar Editorial Tools en GitHub Pages
+name: Publicar Editorial Tools · DEV y PROD
+
 on:
   push:
     branches: [main]
-    paths:
-      - 'index.html'
-      - 'src/**'
-      - 'public/**'
-      - 'vite.config.ts'
-      - 'tsconfig.json'
-      - 'package.json'
-      - 'package-lock.json'
-      - 'scripts/prepare-pages.mjs'
-      - 'scripts/validate-pages.mjs'
-      - '.github/workflows/pages.yml'
+  workflow_run:
+    workflows: ['Solicitar publicación DEV']
+    branches: [dev]
+    types: [completed]
   workflow_dispatch:
+
+# No hay token de despliegue durante builds que ejecutan código de DEV.
 permissions:
   contents: read
-  pages: write
-  id-token: write
+
 concurrency:
-  group: github-pages
-  cancel-in-progress: true
+  group: editorial-tools-pages
+  cancel-in-progress: false
+
 jobs:
-  deploy:
+  build:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    permissions:
+      contents: read
+    steps:
+      - name: Obtener la versión exacta de PROD (main)
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: production
+          persist-credentials: false
+      - name: Obtener la versión exacta de DEV (dev)
+        uses: actions/checkout@v4
+        with:
+          ref: dev
+          path: development
+          persist-credentials: false
+      - name: Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Registrar commits de ambos entornos
+        id: revision
+        shell: bash
+        run: |
+          echo "prod=$(git -C production rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          echo "dev=$(git -C development rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - name: Verificar y compilar PROD de main
+        working-directory: production
+        env:
+          EDITORIAL_BASE: /editorial-tools/
+          VITE_EDITORIAL_ENV: production
+          VITE_EDITORIAL_SHA: ${{ steps.revision.outputs.prod }}
+        run: |
+          npm ci --no-audit --no-fund
+          npm run check
+      - name: Verificar y compilar DEV de dev
+        working-directory: development
+        env:
+          EDITORIAL_BASE: /editorial-tools/dev/
+          VITE_EDITORIAL_ENV: development
+          VITE_EDITORIAL_SHA: ${{ steps.revision.outputs.dev }}
+        run: |
+          npm ci --no-audit --no-fund
+          npm run check
+      - name: Componer y validar el sitio único
+        env:
+          PROD_SHA: ${{ steps.revision.outputs.prod }}
+          DEV_SHA: ${{ steps.revision.outputs.dev }}
+        run: |
+          node production/scripts/compose-pages.mjs production/dist-pages development/dist-pages dist-pages
+          PAGES_ROOT=dist-pages EDITORIAL_BASE=/editorial-tools/ VITE_EDITORIAL_ENV=production VITE_EDITORIAL_SHA="$PROD_SHA" node production/scripts/validate-pages.mjs
+          PAGES_ROOT=dist-pages/dev EDITORIAL_BASE=/editorial-tools/dev/ VITE_EDITORIAL_ENV=development VITE_EDITORIAL_SHA="$DEV_SHA" node production/scripts/validate-pages.mjs
+      - name: Instalar Chromium para pruebas del artefacto
+        working-directory: production
+        run: npx playwright install --with-deps chromium
+      - name: Playwright · DEV y PROD publicados en rutas reales
+        working-directory: production
+        env:
+          CI: 'true'
+          EDITORIAL_DEPLOY_SMOKE: '1'
+        run: npx playwright test tests/e2e/deployment.spec.mjs
+      - name: Adjuntar evidencias ante errores
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: deploy-smoke-evidence
+          path: |
+            production/playwright-report/
+            production/test-results/
+          if-no-files-found: ignore
+      - name: Subir artefacto completo y validado
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist-pages
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-      - run: npm ci --no-audit --no-fund
-      - run: npm run typecheck
-      - run: npm run lint
-      - run: npm run test:unit
-      - run: npm test
-      - run: npm run build:pages
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist-pages
-      - id: deployment
+      - name: Publicar artefacto atómico
+        id: deployment
         uses: actions/deploy-pages@v4
