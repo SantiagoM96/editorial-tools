@@ -28,7 +28,9 @@ for (const product of [
   { name: 'Diario Show', original: 'diarioshow-dev', migrated: 'diarioshow' },
 ]) {
   test(product.name + ': canvas idéntico al commit original', async ({ page }) => {
-    const originalUrl = 'http://127.0.0.1:4174/' + product.original + '/';
+    const originalUrl = product.migrated === 'diarioshow'
+      ? 'http://127.0.0.1:4175/diarioshow-dev/?onboarding=off'
+      : 'http://127.0.0.1:4174/' + product.original + '/';
     const migratedUrl = 'http://127.0.0.1:4173/' + product.migrated + '/' + (product.migrated === 'diarioshow' ? '?onboarding=off' : '');
     const original = await stableCanvasFingerprint(page, originalUrl);
     await mkdir('tests/artifacts/parity', { recursive: true });
