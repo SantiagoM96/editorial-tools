@@ -2479,3 +2479,30 @@ main:has(#dsMobileViewport){overflow-anchor:none}
   animation-duration:.01ms;
  }
 }
+
+/* Cabeceras de los módulos editoriales, sin alterar su comportamiento. */
+.editor-panel .ds-control-card-toggle .ds-section-icon{
+ font-size:19px;line-height:20px;flex:0 0 20px;color:#d6d9e1;
+}
+.editor-panel .ds-control-card-toggle .ds-control-card-title{flex:1;min-width:0}
+.editor-panel .ds-import-group #articleImportField{margin-top:0!important}
+.editor-panel .ds-content-group .ds-footer-style-field{margin-top:16px}
+.editor-panel .ds-footer-style-field>label{display:block;margin-bottom:9px;font-weight:600}
+.editor-panel .ds-footer-style-options{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.editor-panel .ds-footer-style-options button{
+ min-height:43px;background:#292c32;color:#f4f4f4;border:1px solid #4a4e56;
+ border-radius:7px;padding:8px 10px;font:600 13px/20px system-ui,Arial,sans-serif;cursor:pointer
+}
+.editor-panel .ds-footer-style-options button[aria-pressed="true"]{
+ border-color:#e6008d;box-shadow:inset 0 0 0 1px #e6008d
+}
+.editor-panel .ds-footer-style-options button:hover{background:#343841}
+/* Tooltip: ancho legible y orientación dependiente del espacio disponible. */
+.editor-panel .help-tooltip{
+ box-sizing:border-box;min-width:160px;width:240px;max-width:calc(100vw - 32px);
+ overflow-wrap:normal;word-break:normal;z-index:500;
+}
+.editor-panel .help-tooltip.is-left::before{
+ left:auto;right:-6px;border-left:0;border-bottom:0;
+ border-top:1px solid #525762;border-right:1px solid #525762;
+}
