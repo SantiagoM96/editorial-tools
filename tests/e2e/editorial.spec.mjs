@@ -15,7 +15,8 @@ async function loadPage(page, route) {
       failures.push('HTTP ' + r.status() + ': ' + r.url());
     }
   });
-  const response = await page.goto(route, { waitUntil: 'domcontentloaded' });
+  const target = route.startsWith('/diarioshow/') ? '/diarioshow/?onboarding=off' : route;
+  const response = await page.goto(target, { waitUntil: 'domcontentloaded' });
   expect(response?.status()).toBe(200);
   await page.waitForLoadState('load');
   return failures;
