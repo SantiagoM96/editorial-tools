@@ -74,9 +74,18 @@ for (const env of environments) {
         buffer: Buffer.from(base64, 'base64'),
       });
       await expect.poll(() => page.locator('#photoDropzone').evaluate(element => element.hidden)).toBe(true);
+      // Crónica con una página descarga directamente. Con dos páginas abre
+      // el diálogo: cubrir explícitamente el flujo de carrusel ya probado.
+      if (slug === 'cronica') {
+        await page.locator('#addPage').click();
+        await expect(page.locator('#pageIndicator')).toContainText('2 de 2');
+      }
       const downloadPromise = page.waitForEvent('download', { timeout: 30000 });
       await page.locator('#download').click();
-      if (slug === 'cronica') await page.locator('#exportCurrent').click();
+      if (slug === 'cronica') {
+        await expect(page.locator('#exportDialog')).toBeVisible();
+        await page.locator('#exportCurrent').click();
+      }
       const download = await downloadPromise;
       const path = await download.path();
       expect(path).toBeTruthy();
