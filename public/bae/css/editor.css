@@ -196,3 +196,64 @@
 }
 .editor-panel .theme-swatch-caption{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 .editor-panel .theme-swatch[aria-pressed="true"]{outline:2px solid #d82626;outline-offset:2px;border-color:#565a63}
+
+/* Selector fotográfico de BAE: aspecto inspirado en MLZ, sin reemplazar el loader. */
+.panel-group .bae-photo-picker { position: relative; min-width: 0; }
+.panel-group input[type=file]#file.bae-photo-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  min-height: 0;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  border: 0;
+}
+.panel-group .bae-photo-surface {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  min-height: 72px;
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid #4a4e56;
+  border-radius: 9px;
+  background: #292c32;
+  color: #f4f4f5;
+  cursor: pointer;
+  transition: background-color 150ms ease, border-color 150ms ease;
+}
+.panel-group .bae-photo-surface:hover { background: #34383e; border-color: #858991; }
+.panel-group input[type=file]#file.bae-photo-input:focus-visible + .bae-photo-surface {
+  outline: 2px solid #d82626;
+  outline-offset: 2px;
+}
+.panel-group .bae-photo-icon {
+  flex: none;
+  font-size: 28px;
+  line-height: 1;
+}
+.panel-group .bae-photo-copy {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  text-align: left;
+}
+.panel-group .bae-photo-copy strong { font-size: 13px; font-weight: 700; }
+.panel-group .bae-photo-caption {
+  display: block;
+  overflow: hidden;
+  color: #c7c9d0;
+  font-size: 12px;
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+@media (prefers-reduced-motion: reduce) {
+  .panel-group .bae-photo-surface { transition: none; }
+}
