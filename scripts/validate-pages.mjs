@@ -38,8 +38,14 @@ for (const page of ['index.html', 'cronica/index.html', 'bae/index.html', 'diari
     !html.includes('<meta name="robots" content="noindex, nofollow">'))) {
     throw Error('Falta marca DEV: ' + page);
   }
-  if (environment === 'production' && html.includes('id="editorial-dev-badge"')) {
-    throw Error('Insignia DEV filtrada a PROD: ' + page);
+  if (environment === 'production') {
+    if (html.includes('id="editorial-dev-badge"') ||
+        /dashboard de desarrollo/i.test(html)) {
+      throw Error('Identificación de DEV filtrada a PROD: ' + page);
+    }
+    if (page === 'index.html' && !html.includes('<title>Herramientas editoriales</title>')) {
+      throw Error('Título de producción incorrecto: ' + page);
+    }
   }
   if (page === 'index.html' && !html.includes('src="' + base + 'assets/')) {
     throw Error('La aplicación React no apunta al base path ' + base);
