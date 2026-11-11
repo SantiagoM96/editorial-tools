@@ -71,6 +71,7 @@
       if(insideLogo(event))openLogoContent(event);
     },true);
     hit.addEventListener('click',openLogoContent);
+    hit.addEventListener('pointerdown',event=>{event.preventDefault();event.stopPropagation();});
     buttons.forEach(b=>b.addEventListener('click',()=>requestAnimationFrame(place)));
     window.addEventListener('resize',place);
     window.addEventListener('scroll',place,true);
