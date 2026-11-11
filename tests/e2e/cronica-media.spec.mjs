@@ -24,9 +24,9 @@ async function syntheticImage(page) {
   return Buffer.from(payload, 'base64');
 }
 
-async function upload(page, buffer) {
+async function upload(page, buffer, filename = 'fixture-cronica.png') {
   await page.locator('#file').setInputFiles({
-    name: 'fixture-cronica.png',
+    name: filename,
     mimeType: 'image/png',
     buffer,
   });
@@ -62,6 +62,7 @@ test('Crónica: logos, carga, zoom y reencuadre persisten por página', async ({
   await expect(page.locator('.logo-choice[data-logo="white"]')).toHaveAttribute('aria-pressed', 'true');
 
   await upload(page, fixture);
+  await expect(page.locator('.cronica-photo-name')).toHaveText('fixture-cronica.png');
   await page.locator('#photoZoom').fill('170');
   await expect(page.locator('#zoomLabel')).toHaveText('170 %');
   const beforeDrag = await canvasFingerprint(page);
@@ -72,24 +73,29 @@ test('Crónica: logos, carga, zoom y reencuadre persisten por página', async ({
   await page.locator('#addPage').click();
   await expect(page.locator('#pageIndicator')).toHaveText('2 de 2 · Interior');
   await expect(page.locator('#photoDropzone')).toBeVisible();
+  await expect(page.locator('.cronica-photo-name')).toHaveText('una fotografía');
   await expect(page.locator('#zoomLabel')).toHaveText('100 %');
   await expect(page.locator('.logo-choice[data-logo="primary"]')).toHaveAttribute('aria-pressed', 'true');
   await page.locator('.logo-choice[data-logo="secondary"]').click();
-  await upload(page, fixture);
+  await upload(page, fixture, 'interior.png');
+  await expect(page.locator('.cronica-photo-name')).toHaveText('interior.png');
   await page.locator('#photoZoom').fill('130');
   await expect(page.locator('#zoomLabel')).toHaveText('130 %');
 
   await page.getByRole('button', { name: 'Página 1, portada' }).click();
   await expect(page.locator('.logo-choice[data-logo="white"]')).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('.cronica-photo-name')).toHaveText('fixture-cronica.png');
   await expect(page.locator('#zoomLabel')).toHaveText('170 %');
   await expect(page.locator('#photoDropzone')).toBeHidden();
   expect(await canvasFingerprint(page)).toBe(afterDrag);
 
   await page.getByRole('button', { name: 'Página 2, interior' }).click();
   await expect(page.locator('.logo-choice[data-logo="secondary"]')).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('.cronica-photo-name')).toHaveText('interior.png');
   await expect(page.locator('#zoomLabel')).toHaveText('130 %');
 
   await page.locator('#clearAll').click();
+  await expect(page.locator('.cronica-photo-name')).toHaveText('una fotografía');
   await expect(page.locator('#photoDropzone')).toBeVisible();
   await expect(page.locator('#zoomLabel')).toHaveText('100 %');
   await expect(page.locator('.logo-choice[data-logo="primary"]')).toHaveAttribute('aria-pressed', 'true');
