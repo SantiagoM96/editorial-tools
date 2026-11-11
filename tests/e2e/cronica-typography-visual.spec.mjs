@@ -14,11 +14,54 @@ for (const width of [1440, 390]) {
       // Comparar estados SEMÁNTICAMENTE equivalentes y no el aria-pressed heredado.
       await page.locator('#alignCenter').click();
       await expect(page.locator('#alignCenter')).toHaveAttribute('aria-pressed', 'true');
-      return page.locator('.cronica-format-row').screenshot({ animations: 'disabled' });
+      const element = page.locator('.cronica-format-row');
+      const metrics = await element.evaluate(node => {
+        const rect = node.getBoundingClientRect();
+        const style = getComputedStyle(node);
+        return {
+          rect: [rect.x, rect.y, rect.width, rect.height].map(n => Number(n.toFixed(3))),
+          css: {
+            display: style.display, gap: style.gap, gridTemplateColumns: style.gridTemplateColumns,
+            alignItems: style.alignItems, font: style.font, color: style.color,
+          },
+        };
+      });
+      return { image: await element.screenshot({ animations: 'disabled' }), metrics };
     }
 
     const baseline = await screenshot('http://127.0.0.1:4174/cronica-dev/');
     const updated = await screenshot('http://127.0.0.1:4173/cronica/');
-    expect(updated.equals(baseline), 'Controles tipográficos pixel-perfect').toBe(true);
+    if (!updated.image.equals(baseline.image)) {
+      const difference = await page.evaluate(async ({ oldImage, newImage }) => {
+        async function decode(encoded) {
+          const img = new Image();
+          img.src = 'data:image/png;base64,' + encoded;
+          await img.decode();
+          const canvas = document.createElement('canvas');
+          canvas.width = img.width;
+          canvas.height = img.height;
+          const ctx = canvas.getContext('2d', { willReadFrequently: true });
+          if (!ctx) throw Error('No Canvas de comparación');
+          ctx.drawImage(img, 0, 0);
+          return { width: img.width, height: img.height, data: ctx.getImageData(0, 0, img.width, img.height).data };
+        }
+        const a = await decode(oldImage), b = await decode(newImage);
+        if (a.width !== b.width || a.height !== b.height) {
+          return { before: [a.width, a.height], after: [b.width, b.height] };
+        }
+        let count = 0, maxDelta = 0, minX = a.width, maxX = 0, minY = a.height, maxY = 0;
+        for (let offset = 0; offset < a.data.length; offset += 4) {
+          const delta = Math.max(...[0, 1, 2, 3].map(channel => Math.abs(a.data[offset + channel] - b.data[offset + channel])));
+          if (!delta) continue;
+          const x = (offset / 4) % a.width, y = Math.floor(offset / 4 / a.width);
+          count++; maxDelta = Math.max(maxDelta, delta);
+          minX = Math.min(minX, x); maxX = Math.max(maxX, x);
+          minY = Math.min(minY, y); maxY = Math.max(maxY, y);
+        }
+        return { width: a.width, height: a.height, count, maxDelta, minX, maxX, minY, maxY };
+      }, { oldImage: baseline.image.toString('base64'), newImage: updated.image.toString('base64') });
+      console.log('TIPOGRAFIA-DIFF', JSON.stringify({ width, difference, source: baseline.metrics, destination: updated.metrics }));
+    }
+    expect(updated.image.equals(baseline.image), 'Controles tipográficos pixel-perfect').toBe(true);
   });
 }
