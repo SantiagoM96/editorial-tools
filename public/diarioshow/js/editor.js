@@ -285,7 +285,26 @@ photoZone.addEventListener('pointerenter',()=>setPhotoHover(true));
 photoZone.addEventListener('pointerleave',()=>setPhotoHover(false));
 photoZone.addEventListener('focus',()=>setPhotoHover(true));
 photoZone.addEventListener('blur',()=>setPhotoHover(false));
-photoZone.addEventListener('click',()=>el('file').click());
+photoZone.addEventListener('click',event=>{
+  // El logo dibujado en el canvas tiene prioridad sobre el adjuntador.
+  // Detectamos en coordenadas reales de la placa, independientemente de overlays.
+  const rect=canvas.getBoundingClientRect();
+  const x=(event.clientX-rect.left)*W/rect.width;
+  const y=(event.clientY-rect.top)*H/rect.height;
+  const logoWidth=LOGO_WIDTH,logoHeight=LOGO_HEIGHT,extra=54;
+  const onLogo=selectedLogo!=='none' &&
+    x>=W-LOGO_MARGIN-logoWidth-extra && x<=W-LOGO_MARGIN+extra &&
+    y>=LOGO_MARGIN-extra && y<=LOGO_MARGIN+logoHeight+extra;
+  if(window.matchMedia('(max-width: 767px)').matches &&
+     document.body.dataset.dsMobileTab==='preview' && onLogo){
+    event.preventDefault();
+    event.stopPropagation();
+    document.querySelector('.ds-mobile-tabs [data-tab="format"]')?.click();
+    requestAnimationFrame(()=>document.querySelector('.editor-panel .panel-group')?.scrollIntoView({behavior:'smooth',block:'start'}));
+    return;
+  }
+  el('file').click();
+});
 photoZone.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();el('file').click()}});
 function isImageDrag(event){
  const dt=event.dataTransfer;
