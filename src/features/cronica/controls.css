@@ -148,7 +148,7 @@
 #cronica-mobile-tabs-root { display: contents; }
 .cronica-mobile-tabs,#cronica-preview-text-root,.preview .cronica-text-hit { display:none; }
 @media(max-width:700px) {
-  main:has(.cronica-mobile-tabs) { display:block!important;max-width:720px!important;width:calc(100% - 32px)!important;padding:10px 0 18px!important;margin:auto!important; }
+  main:has(.cronica-mobile-tabs) { display:block!important;max-width:720px!important;width:calc(100% - 48px)!important;padding:10px 0 18px!important;margin:auto!important; }
   main .cronica-mobile-tabs { display:grid;grid-template-columns:1fr 1fr;margin:0 0 14px;border-bottom:1px solid #393d45; }
   .cronica-mobile-tabs button { position:relative;min-height:48px;padding:11px;background:transparent!important;border:0!important;border-radius:0;color:#b5b9c4!important; }
   .cronica-mobile-tabs button[aria-selected=true] { color:#fff!important;font-weight:700; }
