@@ -1,4 +1,4 @@
-/* File picker: control integrado, suave y consistente con el resto del editor */.panel-group input[type=file]#file{display:block;width:100%;min-height:52px;height:auto;padding:7px;background:#24262b;border:1px solid #464a52;border-radius:10px;color:#aeb4bf;font-size:12px;line-height:34px;cursor:pointer;transition:border-color .15s,background-color .15s,box-shadow .15s}.panel-group input[type=file]#file:hover{border-color:#6b707a;background:#292c32}.panel-group input[type=file]#file:focus-visible{outline:2px solid #a1a1aa;outline-offset:2px}.panel-group input[type=file]#file::file-selector-button{appearance:none;-webkit-appearance:none;background:#373b43;color:#e7e9ed;border:1px solid #555a63;border-radius:7px;padding:9px 13px;margin-right:12px;font:500 12px system-ui;line-height:16px;cursor:pointer;transition:background-color .15s,border-color .15s}.panel-group input[type=file]#file::file-selector-button:hover{background:#464b54;border-color:#747a84}.texture-field{margin-bottom:16px}.texture-options{display:flex;gap:10px}.texture-option{display:flex;flex-direction:column;align-items:center;gap:7px;background:transparent;color:#d5d8de;padding:6px;border:1px solid transparent;border-radius:10px;font-size:12px;min-width:88px}.texture-option .texture-number{display:flex;align-items:center;justify-content:center;width:56px;height:43px;border:2px solid #565a63;border-radius:8px;background:#292c32;color:#f2f2f3;font-size:16px;font-weight:600}.texture-option[aria-pressed=true] .texture-number{outline:2px solid #a5a8b0;outline-offset:2px;border-color:#9096a1}.texture-option:hover .texture-number{background:#393d45}.texture-option:focus-visible{outline:2px solid #a5a8b0;outline-offset:2px} .article-label-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:7px;flex-wrap:wrap}.article-label-row label{margin:0}.newspaper-link{display:inline-flex;align-items:center;gap:4px;color:#d9dce3;text-decoration:none;font-size:12px;font-weight:600;white-space:nowrap}.newspaper-link .material-icons{font-size:16px}.newspaper-link:hover{text-decoration:underline;color:white}.newspaper-link:focus-visible{outline:2px solid #a5a8b0;outline-offset:3px;border-radius:3px}.panel-group .typography-row{margin-top:0}.panel-group .size-field{margin-top:18px!important;margin-bottom:20px}.format-buttons{display:flex;gap:5px}.panel-group .typography-row .format-buttons button{width:35px;min-width:0}.panel-group .typography-row{grid-template-columns:minmax(0,1.9fr) minmax(0,1fr)} .article-label-row{justify-content:flex-start;gap:10px;flex-wrap:nowrap}.article-label-row .newspaper-link{font-size:14px;font-weight:400;color:#b6bbc5;gap:3px}.article-label-row .newspaper-link .material-icons{font-size:15px;line-height:1}.article-label-row .newspaper-link:hover{color:#fff}.format-buttons{gap:0!important}.format-buttons button{width:42px!important;min-width:0}.format-buttons button:nth-child(3){border-radius:0 7px 7px 0}.format-buttons button:nth-child(4){margin-left:9px;border:1px solid #4a4e56;border-radius:7px!important}.format-buttons button:nth-child(4):hover{background:#3b4048}textarea[hidden]{display:none!important}.canvas-stage{width:min(100%,540px);position:relative}.canvas-stage canvas{width:100%}.import-overlay[hidden]{display:none!important}.import-overlay{position:absolute;inset:0;background:rgba(16,17,20,.62);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:13px;color:white;font-size:13px;font-weight:500;text-align:center;padding:20px;pointer-events:none}.loading-spinner{font-size:39px;animation:bae-spin .85s linear infinite}@keyframes bae-spin{to{transform:rotate(360deg)}} .texture-field>label{display:block;margin:0 0 10px!important}.texture-options{display:flex;align-items:flex-start;gap:10px}.texture-option{min-width:0;width:56px;padding:0!important;border:0!important;border-radius:0!important;gap:9px;flex:0 0 56px}.texture-option .texture-number{flex:0 0 43px;width:56px;height:43px}.texture-option>span:last-child{font-size:11px;line-height:16px;white-space:nowrap}.import-overlay{inset:0 0 auto 0;background:transparent;justify-content:center;gap:9px}.import-overlay .loading-spinner{font-size:43px}.import-overlay>span:last-child{font-size:12px} .format-instructions{margin:11px 0 0!important;color:#aeb3be;font-size:12px;line-height:1.5}.preview-toolbar{width:min(100%,540px);display:flex;align-items:center;justify-content:space-between;gap:18px;min-height:52px;background:#1e2025;border:0;border-radius:9px;padding:10px 14px;margin-bottom:0}.preview-zoom{display:flex;align-items:center;gap:9px;flex:0 0 auto}.preview-zoom label{margin:0;font-size:12px;color:#c5c8d0;font-weight:500}.preview-zoom input[type=range]{width:110px;margin:0;accent-color:#e4e4e7;cursor:pointer}.preview-zoom output{font-size:12px;color:#e5e7eb;min-width:40px;white-space:nowrap;font-variant-numeric:tabular-nums}.preview-instructions{margin:0!important;text-align:right;line-height:1.4;flex:1}.bae-credits{width:min(1200px,calc(100% - 40px));margin:10px auto 28px;text-align:center;color:#8f949f;font-size:12px;line-height:1.5}@media(max-width:700px){.preview-toolbar{flex-wrap:wrap;gap:7px}.preview-instructions{text-align:left;flex-basis:100%}} .preview .bae-credits{width:min(100%,540px);margin:12px 0 0;text-align:center;color:#8f949f;font-size:12px;line-height:1.5} .panel-group:last-child{border-bottom:0;margin-bottom:0;padding-bottom:0} 
+/* File picker: control integrado, suave y consistente con el resto del editor */.panel-group input[type=file]:is(#file,#fileLeft,#fileRight){display:block;width:100%;min-height:52px;height:auto;padding:7px;background:#24262b;border:1px solid #464a52;border-radius:10px;color:#aeb4bf;font-size:12px;line-height:34px;cursor:pointer;transition:border-color .15s,background-color .15s,box-shadow .15s}.panel-group input[type=file]:is(#file,#fileLeft,#fileRight):hover{border-color:#6b707a;background:#292c32}.panel-group input[type=file]:is(#file,#fileLeft,#fileRight):focus-visible{outline:2px solid #a1a1aa;outline-offset:2px}.panel-group input[type=file]:is(#file,#fileLeft,#fileRight)::file-selector-button{appearance:none;-webkit-appearance:none;background:#373b43;color:#e7e9ed;border:1px solid #555a63;border-radius:7px;padding:9px 13px;margin-right:12px;font:500 12px system-ui;line-height:16px;cursor:pointer;transition:background-color .15s,border-color .15s}.panel-group input[type=file]:is(#file,#fileLeft,#fileRight)::file-selector-button:hover{background:#464b54;border-color:#747a84}.texture-field{margin-bottom:16px}.texture-options{display:flex;gap:10px}.texture-option{display:flex;flex-direction:column;align-items:center;gap:7px;background:transparent;color:#d5d8de;padding:6px;border:1px solid transparent;border-radius:10px;font-size:12px;min-width:88px}.texture-option .texture-number{display:flex;align-items:center;justify-content:center;width:56px;height:43px;border:2px solid #565a63;border-radius:8px;background:#292c32;color:#f2f2f3;font-size:16px;font-weight:600}.texture-option[aria-pressed=true] .texture-number{outline:2px solid #a5a8b0;outline-offset:2px;border-color:#9096a1}.texture-option:hover .texture-number{background:#393d45}.texture-option:focus-visible{outline:2px solid #a5a8b0;outline-offset:2px} .article-label-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:7px;flex-wrap:wrap}.article-label-row label{margin:0}.newspaper-link{display:inline-flex;align-items:center;gap:4px;color:#d9dce3;text-decoration:none;font-size:12px;font-weight:600;white-space:nowrap}.newspaper-link .material-icons{font-size:16px}.newspaper-link:hover{text-decoration:underline;color:white}.newspaper-link:focus-visible{outline:2px solid #a5a8b0;outline-offset:3px;border-radius:3px}.panel-group .typography-row{margin-top:0}.panel-group .size-field{margin-top:18px!important;margin-bottom:20px}.format-buttons{display:flex;gap:5px}.panel-group .typography-row .format-buttons button{width:35px;min-width:0}.panel-group .typography-row{grid-template-columns:minmax(0,1.9fr) minmax(0,1fr)} .article-label-row{justify-content:flex-start;gap:10px;flex-wrap:nowrap}.article-label-row .newspaper-link{font-size:14px;font-weight:400;color:#b6bbc5;gap:3px}.article-label-row .newspaper-link .material-icons{font-size:15px;line-height:1}.article-label-row .newspaper-link:hover{color:#fff}.format-buttons{gap:0!important}.format-buttons button{width:42px!important;min-width:0}.format-buttons button:nth-child(3){border-radius:0 7px 7px 0}.format-buttons button:nth-child(4){margin-left:9px;border:1px solid #4a4e56;border-radius:7px!important}.format-buttons button:nth-child(4):hover{background:#3b4048}textarea[hidden]{display:none!important}.canvas-stage{width:min(100%,540px);position:relative}.canvas-stage canvas{width:100%}.import-overlay[hidden]{display:none!important}.import-overlay{position:absolute;inset:0;background:rgba(16,17,20,.62);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:13px;color:white;font-size:13px;font-weight:500;text-align:center;padding:20px;pointer-events:none}.loading-spinner{font-size:39px;animation:bae-spin .85s linear infinite}@keyframes bae-spin{to{transform:rotate(360deg)}} .texture-field>label{display:block;margin:0 0 10px!important}.texture-options{display:flex;align-items:flex-start;gap:10px}.texture-option{min-width:0;width:56px;padding:0!important;border:0!important;border-radius:0!important;gap:9px;flex:0 0 56px}.texture-option .texture-number{flex:0 0 43px;width:56px;height:43px}.texture-option>span:last-child{font-size:11px;line-height:16px;white-space:nowrap}.import-overlay{inset:0 0 auto 0;background:transparent;justify-content:center;gap:9px}.import-overlay .loading-spinner{font-size:43px}.import-overlay>span:last-child{font-size:12px} .format-instructions{margin:11px 0 0!important;color:#aeb3be;font-size:12px;line-height:1.5}.preview-toolbar{width:min(100%,540px);display:flex;align-items:center;justify-content:space-between;gap:18px;min-height:52px;background:#1e2025;border:0;border-radius:9px;padding:10px 14px;margin-bottom:0}.preview-zoom{display:flex;align-items:center;gap:9px;flex:0 0 auto}.preview-zoom label{margin:0;font-size:12px;color:#c5c8d0;font-weight:500}.preview-zoom input[type=range]{width:110px;margin:0;accent-color:#e4e4e7;cursor:pointer}.preview-zoom output{font-size:12px;color:#e5e7eb;min-width:40px;white-space:nowrap;font-variant-numeric:tabular-nums}.preview-instructions{margin:0!important;text-align:right;line-height:1.4;flex:1}.bae-credits{width:min(1200px,calc(100% - 40px));margin:10px auto 28px;text-align:center;color:#8f949f;font-size:12px;line-height:1.5}@media(max-width:700px){.preview-toolbar{flex-wrap:wrap;gap:7px}.preview-instructions{text-align:left;flex-basis:100%}} .preview .bae-credits{width:min(100%,540px);margin:12px 0 0;text-align:center;color:#8f949f;font-size:12px;line-height:1.5} .panel-group:last-child{border-bottom:0;margin-bottom:0;padding-bottom:0} 
 
 /* BAE Dev: zona de carga de foto idéntica al sistema de Crónica (no se exporta al PNG). */
 .preview .canvas-stage{position:relative;--photo-height:60%;--hover-inset:18px;--hover-radius:6px}
@@ -367,21 +367,52 @@
  position:absolute;inset:6px;display:flex;align-items:stretch;gap:6px;
  transform-origin:center center;animation:ds-browser-zoom-content 6s ease-in-out infinite
 }
+.preview .browser-zoom-demo-stage{background:#ededf0}
+.preview .browser-zoom-demo-content{gap:5px}
 .preview .browser-zoom-demo-controls{
- display:flex;flex-direction:column;gap:5px;width:30%;flex:0 0 30%;
- padding:8px 5px;background:#c9ccd3;border-radius:2px
+ display:flex;flex-direction:column;gap:5px;width:31%;flex:0 0 31%;
+ padding:7px 5px;background:#24262b;border-radius:3px
 }
-.preview .browser-zoom-demo-controls i{display:block;height:4px;background:#999fa9;border-radius:1px}
-.preview .browser-zoom-demo-preview{position:relative;flex:1;background:#aeb6c3;border-radius:2px;overflow:hidden}
-.preview .browser-zoom-demo-preview i:first-child{position:absolute;left:0;right:0;bottom:0;height:45%;background:#fff}
-.preview .browser-zoom-demo-preview i:last-child{position:absolute;left:12%;right:12%;bottom:12%;height:4px;background:#7749a6}
+.preview .browser-zoom-demo-control-title{display:block;width:70%;height:3px;border-radius:2px;background:#d6d8df}
+.preview .browser-zoom-demo-controls i{
+ display:block;width:100%;height:7px;flex:0 0 7px;background:#3b4049;border-radius:2px;
+ border:1px solid #505560
+}
+.preview .browser-zoom-demo-controls i:nth-of-type(2){width:80%;height:3px;flex-basis:3px;background:linear-gradient(90deg,#e6008d 45%,#70747e 45%);border:0}
+.preview .browser-zoom-demo-controls i:nth-of-type(4){width:75%;height:3px;flex-basis:3px;background:#6d727c;border:0}
+.preview .browser-zoom-demo-workspace{
+ display:flex;flex:1;min-width:0;flex-direction:column;align-items:center;gap:4px
+}
+.preview .browser-zoom-demo-toolbar{
+ display:block;width:100%;height:9px;flex:0 0 9px;background:#24262b;border-radius:2px
+}
+.preview .browser-zoom-demo-preview{
+ position:relative;display:flex;flex-direction:column;width:54%;max-width:65px;flex:1;
+ min-height:0;background:#9ba2ad;border-radius:2px;overflow:hidden;
+ box-shadow:0 2px 7px rgba(0,0,0,.2)
+}
+.preview .browser-zoom-demo-photo{
+ flex:1;min-height:0;background:
+ linear-gradient(145deg,transparent 44%,rgba(45,56,74,.37) 45%,rgba(45,56,74,.37) 65%,transparent 66%),
+ linear-gradient(155deg,#c6cbd2,#88929f)
+}
+.preview .browser-zoom-demo-headline{
+ height:36%;min-height:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+ border-top:3px solid #e6008d;background:#fff
+}
+.preview .browser-zoom-demo-headline i{display:block;width:77%;height:3px;background:#7749a6;border-radius:1px}
+.preview .browser-zoom-demo-headline i:nth-child(2){width:61%;background:#e6008d}
+.preview .browser-zoom-demo-headline i:nth-child(3){width:43%}
+.preview .browser-zoom-demo-export{
+ display:block;width:65%;height:5px;flex:0 0 5px;background:#e6008d;border-radius:2px
+}
 .preview .browser-zoom-demo-percent{
  position:absolute;right:5px;top:15px;min-width:44px;height:20px;z-index:2;
- border-radius:4px;background:rgba(255,255,255,.94);box-shadow:0 1px 4px rgba(0,0,0,.12)
+ border-radius:4px;background:#E6008D;box-shadow:0 1px 4px rgba(0,0,0,.12)
 }
 .preview .browser-zoom-demo-percent span{
  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
- white-space:nowrap;font:700 11px/1 Inter,Arial,sans-serif;color:#252733;opacity:0
+ white-space:nowrap;font:700 11px/1 Inter,Arial,sans-serif;color:#FFFFFF;opacity:0
 }
 .preview .browser-zoom-demo-percent span:nth-child(1){animation:ds-browser-zoom-number-100 6s linear infinite}
 .preview .browser-zoom-demo-percent span:nth-child(2){animation:ds-browser-zoom-number-90 6s linear infinite}
@@ -411,13 +442,2040 @@
 .preview .browser-zoom-tip-close:focus-visible{outline:2px solid #E6008D;outline-offset:2px}
 /* Cuando la tercera columna no cabe, conservar el aviso separado
    del zoom y en el flujo del editor, sin crear scroll horizontal. */
-@media(max-width:1439px){
- .preview .browser-zoom-tip{
-  position:static;align-self:flex-end;width:min(100%,260px);
-  margin:0;order:1
+
+/* Miniatura del zoom: versión oscura, ilustrativa y de bajo contraste.
+   Se mantienen las dimensiones, el marco fijo y el porcentaje destacado. */
+.preview .browser-zoom-demo-viewport{
+ border-color:#393b42;background:#17191e
+}
+.preview .browser-zoom-demo-page{background:#17191e}
+.preview .browser-zoom-demo-header{
+ background:#22242a;border-bottom:1px solid #343740
+}
+.preview .browser-zoom-demo-stage{background:#191b20}
+.preview .browser-zoom-demo-controls{background:#24262b}
+.preview .browser-zoom-demo-control-title{background:#626773}
+.preview .browser-zoom-demo-controls i{
+ background:#30343c;border-color:#3c414a
+}
+.preview .browser-zoom-demo-controls i:nth-of-type(2){
+ background:linear-gradient(90deg,#84526f 45%,#474b55 45%);border:0
+}
+.preview .browser-zoom-demo-controls i:nth-of-type(4){background:#555a65}
+.preview .browser-zoom-demo-toolbar{background:#282b32}
+.preview .browser-zoom-demo-preview{
+ background:#343943;box-shadow:0 2px 6px rgba(0,0,0,.16)
+}
+.preview .browser-zoom-demo-photo{
+ background:
+ linear-gradient(145deg,transparent 44%,rgba(21,26,34,.33) 45%,rgba(21,26,34,.33) 65%,transparent 66%),
+ linear-gradient(155deg,#565d68,#343a44)
+}
+.preview .browser-zoom-demo-headline{
+ border-top-color:#79506a;background:#33353d
+}
+.preview .browser-zoom-demo-headline i{background:#686074}
+.preview .browser-zoom-demo-headline i:nth-child(2){background:#8b5372}
+.preview .browser-zoom-demo-export{background:#87516e}
+/* El indicador mantiene el contraste institucional intencionalmente. */
+.preview .browser-zoom-demo-percent{background:#E6008D}
+.preview .browser-zoom-demo-percent span{color:#fff}
+
+/* Ejemplo realista y esquemático de Diario Show, Variante 1.
+   La UI circundante es oscura; la placa mantiene exactamente sus
+   colores editoriales: fotografía gris, caja blanca, franja fucsia-violeta,
+   titulares violetas y acento fucsia. */
+.preview .browser-zoom-demo-stage{background:#191b20}
+.preview .browser-zoom-demo-controls{background:#1e2025}
+.preview .browser-zoom-demo-control-title{background:#aeb4c0}
+.preview .browser-zoom-demo-controls i{background:#292c32;border-color:#4a4e56}
+.preview .browser-zoom-demo-toolbar{background:#1e2025}
+.preview .browser-zoom-demo-photo{
+ background:
+ linear-gradient(145deg,transparent 40%,rgba(91,100,113,.24) 41%,rgba(91,100,113,.24) 68%,transparent 69%),
+ linear-gradient(155deg,#c4c8cf,#aeb4bc)
+}
+.preview .browser-zoom-demo-preview{
+ background:#aeb4bc;
+ box-shadow:0 2px 7px rgba(0,0,0,.22)
+}
+.preview .browser-zoom-demo-headline{
+ height:43%;min-height:21px;gap:3px;
+ border-top:0;background:#fff;
+ position:relative;padding-top:5px;padding-bottom:6px
+}
+.preview .browser-zoom-demo-headline::before{
+ content:'';position:absolute;top:0;left:0;right:0;height:4px;
+ background:linear-gradient(90deg,#E6008D,#7749A6)
+}
+.preview .browser-zoom-demo-headline i{background:#7749A6}
+.preview .browser-zoom-demo-headline i:nth-child(2){background:#E6008D}
+.preview .browser-zoom-demo-headline i:nth-child(3){background:#7749A6}
+.preview .browser-zoom-demo-signature{
+ position:absolute;bottom:3px;left:50%;transform:translateX(-50%);
+ width:40%;height:2px;background:#7749A6;border-radius:1px;opacity:.75
+}
+.preview .browser-zoom-demo-export{background:#E6008D}
+
+/* Icono Google Material Icons: misma lupa de zoom en los tres generadores. */
+.preview .browser-zoom-demo-percent{min-width:67px;height:23px}
+.preview .browser-zoom-demo-percent span{gap:3px;font-size:11px}
+.preview .browser-zoom-demo-percent .material-icons{
+ font-family:"Material Icons";font-size:14px;font-weight:normal;line-height:1;
+ display:inline-block;flex:none;letter-spacing:normal;font-feature-settings:"liga";
+}
+
+/* Ayuda de espacio: no mostrarla en la versión celular. */
+@media(max-width:700px){.preview .browser-zoom-tip{display:none!important}}
+
+/* Diario Show Dev: 3:4 como Crónica en el módulo Variantes.
+   Las variantes 1 y 2 muestran foto + caja blanca inferior con la barra degradada;
+   las 3 y 4 muestran cita sobre fondo degradado, como las placas reales. */
+.editor-panel .ds-variant-options{gap:12px;align-items:flex-start}
+.editor-panel .ds-variant-option{
+ width:60px;min-width:60px;flex:0 0 60px;gap:8px
+}
+.editor-panel .ds-variant-preview{
+ position:relative;display:block;box-sizing:border-box;
+ width:60px;aspect-ratio:3/4;height:auto;overflow:hidden;
+ border:2px solid #565a63;border-radius:7px;
+}
+.editor-panel .ds-variant-preview-pink,
+.editor-panel .ds-variant-preview-blue{
+ background:
+ linear-gradient(to bottom,transparent 53%,#fff 53%),
+ linear-gradient(145deg,#c3c9d0,#7e8897);
+}
+.editor-panel .ds-variant-preview-pink::before,
+.editor-panel .ds-variant-preview-blue::before{
+ top:53%;left:0;right:0;height:4px
+}
+.editor-panel .ds-variant-preview-pink::after,
+.editor-panel .ds-variant-preview-blue::after{
+ left:50%;top:62%;height:28px;width:44px;
+ background:
+ linear-gradient(#7749a6,#7749a6) center top / 42px 3px no-repeat,
+ linear-gradient(var(--variant-contrast),var(--variant-contrast)) center 9px / 34px 3px no-repeat,
+ linear-gradient(#7749a6,#7749a6) center 18px / 26px 3px no-repeat,
+ linear-gradient(#7749a6,#7749a6) center 27px / 18px 2px no-repeat;
+}
+.editor-panel .ds-variant-preview-quote{
+ background:linear-gradient(to bottom,rgba(45,42,54,.2),rgba(230,0,141,.17) 32%,#a30065 72%,#e6008d 100%),
+ linear-gradient(145deg,#aeb4bc,#777a82);
+}
+.editor-panel .ds-variant-preview-quote-blue{
+ background:linear-gradient(to bottom,rgba(45,42,54,.18),rgba(0,166,217,.2) 32%,#3584c0 76%,#00a6d9 100%),
+ linear-gradient(145deg,#aeb4bc,#777a82);
+}
+.editor-panel .ds-variant-preview-quote::before,
+.editor-panel .ds-variant-preview-quote-blue::before{
+ content:'';position:absolute;inset:auto 7px 12px;height:18px;
+ background:linear-gradient(#fff,#fff) center 5px / 90% 3px no-repeat,
+ linear-gradient(#fff,#fff) center 12px / 64% 3px no-repeat;
+ opacity:.85
+}
+.editor-panel .ds-variant-preview-quote::after,
+.editor-panel .ds-variant-preview-quote-blue::after{
+ top:25px;font-size:32px;line-height:1
+}
+
+/* Síntesis visual 3:4: fotografía gris neutra y dos trazos redondos. */
+.editor-panel .ds-variant-preview-pink,
+.editor-panel .ds-variant-preview-blue{
+ background:linear-gradient(to bottom,transparent 53%,#fff 53%),#aeb4bc
+}
+.editor-panel .ds-variant-preview-pink::after,
+.editor-panel .ds-variant-preview-blue::after{content:none}
+.editor-panel .ds-variant-preview-pink i,
+.editor-panel .ds-variant-preview-blue i{
+ position:absolute;z-index:1;left:50%;height:4px;border-radius:5px;
+ transform:translateX(-50%);background:#7749a6;display:block;
+}
+.editor-panel .ds-variant-preview-pink i:first-child,
+.editor-panel .ds-variant-preview-blue i:first-child{top:66%;width:78%}
+.editor-panel .ds-variant-preview-pink i:nth-child(2),
+.editor-panel .ds-variant-preview-blue i:nth-child(2){
+ top:78%;width:56%;background:var(--variant-contrast)
+}
+/* Las citas usan color pleno; dos signos de cita identifican el diseño. */
+.editor-panel .ds-variant-preview-quote{background:#a30065}
+.editor-panel .ds-variant-preview-quote-blue{background:#008fbe}
+.editor-panel .ds-variant-preview-quote::before,
+.editor-panel .ds-variant-preview-quote-blue::before{
+ content:'“ ”';position:absolute;inset:16px 0 auto;text-align:center;
+ color:#fff;font:700 27px/1 Georgia,serif;background:none;opacity:1;height:auto
+}
+.editor-panel .ds-variant-preview-quote::after,
+.editor-panel .ds-variant-preview-quote-blue::after{content:none}
+.editor-panel .ds-variant-preview-quote i,
+.editor-panel .ds-variant-preview-quote-blue i{
+ position:absolute;left:50%;transform:translateX(-50%);
+ display:block;height:4px;border-radius:5px;background:#fff;
+}
+.editor-panel .ds-variant-preview-quote i:first-child,
+.editor-panel .ds-variant-preview-quote-blue i:first-child{top:64%;width:73%}
+.editor-panel .ds-variant-preview-quote i:nth-child(2),
+.editor-panel .ds-variant-preview-quote-blue i:nth-child(2){top:76%;width:54%}
+.editor-panel .ds-variant-option[aria-pressed="true"] .ds-variant-preview{
+ outline-width:4px;outline-offset:2px
+}
+/* Consejo superpuesto, sin reservar espacio entre la barra y el canvas. */
+
+/* El aviso se posiciona en función del canvas y del borde real del viewport.
+   La geometría se actualiza en JS, sin breakpoints ni participación en flex. */
+.preview > .browser-zoom-tip:not([hidden]){
+ position:absolute!important;
+ top:var(--zoom-help-top,88px)!important;
+ left:var(--zoom-help-left,calc(50% + 282px))!important;
+ right:auto!important;
+ width:210px;margin:0;z-index:30;align-self:auto;order:initial;
+ transition:left .14s ease-out,top .14s ease-out;
+}
+@media(prefers-reduced-motion:reduce){
+ .preview > .browser-zoom-tip{transition:none}
+}
+@media(max-width:700px){
+ .preview > .browser-zoom-tip{display:none!important}
+}
+
+
+/* Lenguaje común de miniaturas: 3:4, 52% foto gris, 48% módulo editorial,
+   dos barras de 4px redondeadas; diferencia de marca solo por color. */
+.preview .editor-mini{
+ box-sizing:border-box;width:min(100%,56px);height:auto;aspect-ratio:3/4;
+ display:flex;flex-direction:column;overflow:hidden;margin:auto;
+ background:#aeb4bc;border-radius:3px;--mini-panel:#fff;--mini-text:#171717;
+ --mini-accent:#ed0000;--mini-bar:#ed0000;
+}
+.preview .editor-mini-photo{flex:0 0 52%;background:#aeb4bc}
+.preview .editor-mini-body{
+ flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;
+ background:var(--mini-panel);position:relative
+}
+.preview .editor-mini-strap{
+ width:100%;height:4px;flex:0 0 4px;background:var(--mini-bar);
+}
+.preview .editor-mini-lines{
+ flex:1;min-height:0;display:flex;flex-direction:column;
+ align-items:center;justify-content:center;gap:5px;width:100%;
+}
+.preview .editor-mini-lines i{
+ display:block;width:84%;height:4px;flex:0 0 4px;
+ background:var(--mini-text);border-radius:10px;
+}
+.preview .editor-mini-lines i:nth-child(2){
+ width:60%;background:var(--mini-accent);
+}
+.preview .editor-mini-quote{display:none}
+.preview .editor-mini-bae-white{
+ --mini-panel:#fff;--mini-text:#171717;--mini-accent:#d82626;--mini-bar:#fff;
+}
+.preview .editor-mini-ds-pink{
+ --mini-panel:#fff;--mini-text:#7749a6;--mini-accent:#e6008d;--mini-bar:#e6008d;
+}
+.preview .editor-mini-ds-pink .editor-mini-strap{
+ background:linear-gradient(90deg,#e6008d,#7749a6)
+}
+.preview .editor-mini-cronica-cover{
+ --mini-panel:#fff;--mini-text:#171717;--mini-accent:#ed0000;--mini-bar:#ed0000;
+}
+.preview .editor-mini-cronica-cover .editor-mini-strap{
+ height:12px;flex-basis:12px;position:relative
+}
+.preview .editor-mini-cronica-cover .editor-mini-strap::after{
+ content:'';position:absolute;left:20%;right:20%;top:4px;
+ height:4px;border-radius:10px;background:#fff
+}
+.preview .browser-zoom-demo-preview{background:transparent;box-shadow:none;display:flex;align-items:center;justify-content:center}
+.preview .browser-zoom-demo-preview>.editor-mini{max-height:100%}
+
+/* Diario Show: una única comilla en variantes de cita y tono pleno. */
+.editor-panel .ds-variant-preview-quote,
+.editor-panel .ds-variant-preview-quote-blue{background-image:none}
+.editor-panel .ds-variant-preview-quote{background-color:#a30065}
+.editor-panel .ds-variant-preview-quote-blue{background-color:#008fbe}
+.editor-panel .ds-variant-preview-quote::before,
+.editor-panel .ds-variant-preview-quote-blue::before{
+ content:'“';inset:15px 0 auto;top:15px;text-align:center;font:700 30px/1 Georgia,serif
+}
+.editor-panel .ds-variant-preview i{border-radius:10px}
+.editor-panel .ds-variant-option[aria-pressed="true"] .ds-variant-preview{outline-width:4px}
+
+/* Posicionamiento nativo CSS Anchor Positioning (Chrome/Edge modernos).
+   Se ancla a la placa real, respeta el tope lateral mínimo de 20px, igual que el panel izquierdo, y
+   no salta por breakpoints ni interpola mediciones de JS. */
+@supports (position-anchor: --editor-poster) and (left: anchor(right)){
+ .preview .canvas-stage{anchor-name:--editor-poster}
+ .preview > .browser-zoom-tip:not([hidden]){
+  position:fixed!important;
+  position-anchor:--editor-poster;
+  left:min(calc(anchor(right) + 24px),calc(100vw - 230px))!important;
+  top:calc(anchor(top) + 24px)!important;
+  right:auto!important;
+  transition:none!important;
+  z-index:40
  }
- .preview .preview-toolbar{order:0}
- .preview .canvas-stage{order:2}
- .preview .preview-actions{order:3}
- .preview .bae-credits{order:4}
+}
+
+
+/* Misma jerarquía de dos renglones que BAE y Crónica.
+   Primario más grueso y largo; destacado más fino y corto. */
+.editor-panel .ds-variant-preview i:first-child{
+ height:5px;border-radius:10px;
+}
+.editor-panel .ds-variant-preview i:nth-child(2){
+ height:3px;border-radius:10px;
+}
+.editor-panel .ds-variant-preview-pink i:first-child,
+.editor-panel .ds-variant-preview-blue i:first-child{width:84%}
+.editor-panel .ds-variant-preview-pink i:nth-child(2),
+.editor-panel .ds-variant-preview-blue i:nth-child(2){width:60%}
+.editor-panel .ds-variant-preview-quote i:first-child,
+.editor-panel .ds-variant-preview-quote-blue i:first-child{width:84%}
+.editor-panel .ds-variant-preview-quote i:nth-child(2),
+.editor-panel .ds-variant-preview-quote-blue i:nth-child(2){width:60%}
+
+/* Navegación común: identidad del producto a la izquierda y Volver a la derecha.
+   En celular la marca y la descripción siguen juntas, con flecha a su derecha. */
+.header-inner .header-brand{
+ display:flex;align-items:center;gap:22px;
+ min-width:0;flex:1 1 auto;
+}
+.header-inner .header-brand .header-logo-link{flex:0 0 auto;min-width:0}
+.header-inner .header-brand .header-title{min-width:0}
+@media(max-width:700px){
+ .header-inner{
+  display:flex;flex-wrap:nowrap!important;
+  align-items:center;gap:10px;
+ }
+ .header-inner .header-brand{
+  display:flex;flex-direction:column;align-items:flex-start;
+  flex:1 1 auto;min-width:0;gap:5px;
+ }
+ .header-inner .header-brand .header-title{
+  font-size:14px;line-height:1.35;
+  overflow-wrap:anywhere;
+ }
+ .header-inner .dashboard-back-link{
+  flex:0 0 40px;width:40px!important;height:40px;min-height:40px;
+  margin:0 0 0 auto!important;padding:0!important;
+  align-self:center;justify-content:center;
+ }
+ .header-inner .dashboard-back-link .back-link-text{display:none}
+ .header-inner .dashboard-back-link .material-icons{font-size:22px}
+}
+@media(max-width:440px){
+ .header-inner .dashboard-back-link{
+  flex:0 0 40px;width:40px!important;
+  margin-left:auto!important;
+ }
+}
+
+/* Consejo flotante: geometría real del canvas, la caja y el viewport útil.
+   JS lo mantiene al costado mientras entre; el límite derecho es 20px. */
+@media(min-width:701px){
+ .preview > .browser-zoom-tip:not([hidden]){
+  position:fixed!important;
+  position-anchor:auto!important;
+  left:var(--zoom-tip-x,calc(100vw - 230px))!important;
+  top:var(--zoom-tip-y,90px)!important;
+  right:auto!important;
+  margin:0!important;
+  transition:none!important;
+  z-index:40;
+ }
+}
+
+/* Scrollbar exterior uniforme, fina y discreta en todos los productos Dev. */
+html{
+ scrollbar-width:thin;
+ scrollbar-color:#525864 #101114;
+}
+html::-webkit-scrollbar{width:8px;height:8px}
+html::-webkit-scrollbar-track{background:#101114}
+html::-webkit-scrollbar-thumb{
+ background:#525864;border:2px solid #101114;border-radius:999px;
+}
+html::-webkit-scrollbar-thumb:hover{background:#747b88}
+
+/* Consejo de zoom · escala +20% (solo Diario Show Dev).
+   El posicionador JS mide el ancho real y conserva el margen de 24px;
+   cuando no entra, la tarjeta se superpone sin modificar la grilla. */
+.preview .browser-zoom-tip,
+.preview > .browser-zoom-tip:not([hidden]){
+ width:252px;
+ padding:12px;
+ gap:11px;
+ border-radius:11px;
+ font-size:13.2px;
+ line-height:1.45;
+}
+.preview .browser-zoom-tip-head{gap:10px}
+.preview .browser-zoom-tip-copy{gap:4px}
+.preview .browser-zoom-tip-title{font-size:14.4px;line-height:1.3}
+.preview .browser-zoom-tip-description{font-size:13.2px;line-height:1.45}
+.preview .browser-zoom-tip-close{
+ flex-basis:26px;width:26px;height:26px;border-radius:6px
+}
+.preview .browser-zoom-tip-close .material-icons{font-size:19px}
+.preview .browser-zoom-demo-viewport{border-radius:7px}
+.preview .browser-zoom-demo-preview>.editor-mini{width:min(100%,67px)}
+.preview .browser-zoom-demo-preview{max-width:78px}
+
+
+/* Experimento exclusivo Diario Show Dev: vidrio esmerilado oscuro.
+   El fondo semitransparente conserva el contraste del texto aun sobre
+   la zona gris de la fotografía; sin transparencias en el texto. */
+.preview .browser-zoom-tip,
+.preview > .browser-zoom-tip:not([hidden]){
+ background:rgba(22,23,30,.70);
+ -webkit-backdrop-filter:blur(18px) saturate(125%);
+ backdrop-filter:blur(18px) saturate(125%);
+ border-color:rgba(255,255,255,.22);
+ box-shadow:0 12px 36px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.10);
+ color:#f2f2f6;
+}
+.preview .browser-zoom-tip-title{color:#fff}
+.preview .browser-zoom-tip-description{color:#f0eff5}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+ .preview .browser-zoom-tip,
+ .preview > .browser-zoom-tip:not([hidden]){background:#24252d}
+}
+
+/* Unificar glassmorphism y márgenes en las tarjetas de ayuda Dev.
+   Padding refinado: 21.6px × 0.8 = 17.28px. El posicionamiento mide la caja real. */
+.preview .browser-zoom-tip,
+.preview > .browser-zoom-tip:not([hidden]){
+ width:302.4px;
+ padding:17.28px;
+ background:rgba(22,23,30,.70);
+ -webkit-backdrop-filter:blur(18px) saturate(125%);
+ backdrop-filter:blur(18px) saturate(125%);
+ border-color:rgba(255,255,255,.22);
+ box-shadow:0 12px 36px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.10);
+ color:#f2f2f6;
+}
+.preview .browser-zoom-tip-title{font-size:22.31px;line-height:1.2;font-weight:700;color:#fff}
+.preview .browser-zoom-tip-description{color:#f0eff5}
+.preview .browser-zoom-tip-description strong{font-weight:700;color:#fff}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+ .preview .browser-zoom-tip,
+ .preview > .browser-zoom-tip:not([hidden]){background:#24252d}
+}
+
+
+/* Diario Show Dev — distribución de fotografía (1 ó 2 imágenes).
+   Reutiliza las miniaturas de las variantes editoriales. */
+.editor-panel .photo-layout-options{display:flex;align-items:flex-start;gap:12px}
+.editor-panel .photo-layout-option{width:84px;min-width:84px;flex:0 0 84px;align-items:center;gap:8px}
+.editor-panel .photo-layout-thumbnail{
+ width:60px;height:81px;display:flex;flex-direction:column;
+ padding:4px;gap:4px;border:2px solid #565a63;border-radius:7px;background:#fff;
+ box-sizing:border-box;overflow:hidden;
+}
+.editor-panel .photo-layout-art{display:flex;flex:1;min-height:0;gap:3px}
+.editor-panel .photo-layout-art i{background:#515153;border-radius:3px;flex:1;min-width:0}
+.editor-panel .photo-layout-thumbnail-lines{display:flex;flex-direction:column;gap:3px}
+.editor-panel .photo-layout-thumbnail-lines i{display:block;height:4px;width:100%;border-radius:4px;background:#7749a6}
+.editor-panel .photo-layout-thumbnail-lines i:last-child{width:65%;height:3px;align-self:center;background:#e6008d}
+.editor-panel .photo-layout-option[aria-pressed="true"] .photo-layout-thumbnail{
+ outline:2px solid #e6008d;outline-offset:2px;
+}
+.editor-panel .photo-layout-option>span:last-child{font-size:11px;line-height:16px;white-space:nowrap}
+.editor-panel .split-photo-fields{display:flex;flex-direction:column;gap:12px}
+.editor-panel .split-photo-fields[hidden]{display:none!important}
+.editor-panel .ds-photo-upload-group .help-label-row[hidden],
+.editor-panel .ds-photo-upload-group #file[hidden]{display:none!important}
+/* Los contenedores no deben recibir eventos una vez cargada una foto:
+   de ese modo el canvas recupera el drag de encuadre. */
+.preview .split-photo-zones{
+ position:absolute;top:0;left:0;width:100%;height:var(--photo-height);
+ display:flex;z-index:3;pointer-events:none;
+}
+.preview .split-photo-zones[hidden]{display:none!important}
+.preview .split-photo-zone{
+ position:relative;flex:1;min-width:0;display:flex;flex-direction:column;
+ justify-content:center;align-items:center;text-align:center;gap:7px;
+ color:#41464e;cursor:pointer;pointer-events:auto;
+ padding:12px 8px;box-sizing:border-box;
+}
+.preview .split-photo-zone.has-photo{pointer-events:none}
+.preview .split-photo-zone::before{
+ content:'';position:absolute;top:var(--hover-inset);bottom:var(--hover-inset);
+ border:1px dashed #41464e;border-radius:var(--hover-radius);
+ opacity:0;pointer-events:none;box-sizing:border-box;
+}
+/* Cada mitad utiliza el mismo margen de 50 px reales en ambos costados.
+   El espacio entre ambas líneas equivale a la suma de sus márgenes centrales. */
+.preview .split-photo-zone[data-side="left"]::before{
+ left:var(--hover-inset);right:var(--hover-inset);
+}
+.preview .split-photo-zone[data-side="right"]::before{
+ left:var(--hover-inset);right:var(--hover-inset);
+}
+.preview .split-photo-zone:hover::before,
+.preview .split-photo-zone:focus-visible::before,
+.preview .split-photo-zone.is-active.is-hovered::before{opacity:1}
+.preview .split-photo-zone .material-icons{font-size:30px}
+.preview .split-photo-zone-title{font:700 13px/1.3 Arial,sans-serif}
+.preview .split-photo-zone-description{font:400 11px/1.4 Arial,sans-serif;max-width:135px}
+.preview .split-photo-zone-replace{display:none}
+.preview .split-photo-zone.has-photo>*{display:none!important}
+.preview .split-mode .photo-hover-border{display:none!important}
+.preview .split-mode.is-drag-over::after{display:none!important}
+.preview .split-mode .split-photo-zone:not(.has-photo).is-active::before{opacity:1}
+@media(max-width:480px){
+ .preview .split-photo-zone{gap:4px;padding:6px 3px}
+ .preview .split-photo-zone .material-icons{font-size:22px}
+ .preview .split-photo-zone-title{font-size:10px}
+ .preview .split-photo-zone-description{font-size:9px}
+}
+
+/* Borde punteado por mitad también cuando ya existe foto y se arrastra sobre el Canvas. */
+.preview .canvas-stage.split-mode.hover-left .split-photo-zone[data-side="left"]::before,
+.preview .canvas-stage.split-mode.hover-right .split-photo-zone[data-side="right"]::before{opacity:1}
+.preview .canvas-stage.split-mode.hover-left,
+.preview .canvas-stage.split-mode.hover-right{cursor:grab}
+
+
+/* Ajustes de miniaturas: mismo documento editorial que Diseño de la placa.
+   La distribución solo cambia la parte fotográfica; colores siguen la variante. */
+.editor-panel #photoLayoutOptions{
+ --photo-mini-primary:#7749a6;
+ --photo-mini-accent:#e6008d;
+ --photo-mini-bar-start:#e6008d;
+ --photo-mini-bar-end:#7749a6;
+}
+.editor-panel #photoLayoutOptions[data-variant="blue"]{
+ --photo-mini-accent:#00a6d9;
+ --photo-mini-bar-start:#7749a6;
+ --photo-mini-bar-end:#397fc6;
+}
+.editor-panel #photoLayoutOptions[data-variant="quote"]{
+ --photo-mini-primary:#fff;
+ --photo-mini-accent:#fff;
+ --photo-mini-bar-start:#e6008d;
+ --photo-mini-bar-end:#e6008d;
+}
+.editor-panel #photoLayoutOptions[data-variant="quote-blue"]{
+ --photo-mini-primary:#fff;
+ --photo-mini-accent:#fff;
+ --photo-mini-bar-start:#00a6d9;
+ --photo-mini-bar-end:#00a6d9;
+}
+.editor-panel #photoLayoutOptions .photo-layout-thumbnail{
+ background:#fff;background-image:none;
+ width:60px;height:81px;padding:4px;gap:0;
+}
+.editor-panel #photoLayoutOptions .photo-layout-art{
+ flex:0 0 65%;height:65%;gap:3px;
+ padding-bottom:3px;box-sizing:border-box;
+}
+.editor-panel #photoLayoutOptions .photo-layout-art i{background:#4d4d50}
+.editor-panel #photoLayoutOptions .photo-layout-thumbnail-lines{
+ position:relative;flex:1;min-height:0;
+ padding-top:6px;gap:4px;justify-content:flex-start;
+ background:#fff;
+}
+.editor-panel #photoLayoutOptions .photo-layout-thumbnail-lines::before{
+ content:'';position:absolute;top:0;left:0;right:0;height:4px;
+ background:linear-gradient(90deg,var(--photo-mini-bar-start),var(--photo-mini-bar-end));
+}
+.editor-panel #photoLayoutOptions .photo-layout-thumbnail-lines i:first-child{
+ background:var(--photo-mini-primary);height:4px;width:90%;
+}
+.editor-panel #photoLayoutOptions .photo-layout-thumbnail-lines i:last-child{
+ background:var(--photo-mini-accent);height:3px;width:65%;
+}
+.editor-panel #photoLayoutOptions[data-variant^="quote"] .photo-layout-thumbnail{
+ background:var(--photo-mini-bar-start);
+}
+.editor-panel #photoLayoutOptions[data-variant^="quote"] .photo-layout-thumbnail-lines{
+ background:var(--photo-mini-bar-start);
+}
+.editor-panel #photoLayoutOptions[data-variant^="quote"] .photo-layout-art i{
+ background:rgba(40,40,45,.55);
+}
+.editor-panel .ds-photo-upload-group .photo-single-field[hidden]{display:none!important}
+.editor-panel .ds-photo-upload-group .split-photo-fields input[type="file"]{
+ width:100%;max-width:100%;box-sizing:border-box;
+}
+/* El icono se alinea con el centro de la letra, sin cambiar el alto del campo. */
+.editor-panel .ds-photo-upload-group .help-label-row{
+ display:flex;align-items:center;gap:5px;height:20px;min-height:20px;
+}
+.editor-panel .ds-photo-upload-group .help-label-row>label{line-height:20px}
+.editor-panel .ds-photo-upload-group .help-trigger{height:20px;align-items:center}
+.editor-panel .ds-photo-upload-group .help-button{transform:translateY(1px)}
+
+/* Sin borde punteado cuando ya hay fotografía. El hover solo oscurece
+   un 7% la mitad cargada: feedback independiente sin alterar el PNG. */
+.preview .split-mode .split-photo-zone.has-photo::before,
+.preview .canvas-stage.split-mode.hover-left .split-photo-zone.has-photo[data-side="left"]::before,
+.preview .canvas-stage.split-mode.hover-right .split-photo-zone.has-photo[data-side="right"]::before{
+ opacity:0!important;
+}
+.preview .split-mode .split-photo-zone.has-photo::after{
+ content:'';position:absolute;inset:0;
+ background:rgba(0,0,0,.07);
+ opacity:0;pointer-events:none;transition:opacity .12s ease;
+}
+.preview .canvas-stage.split-mode.hover-left .split-photo-zone.has-photo[data-side="left"]::after,
+.preview .canvas-stage.split-mode.hover-right .split-photo-zone.has-photo[data-side="right"]::after{
+ opacity:1;
+}
+@media(prefers-reduced-motion:reduce){
+ .preview .split-mode .split-photo-zone.has-photo::after{transition:none}
+}
+
+
+/* Ajuste final de referencia de miniaturas fotográficas:
+   mismo aspecto de placa 3:4, sin reglas heredadas que deformen las cajas. */
+.editor-panel #photoLayoutOptions .photo-layout-thumbnail{
+ position:relative!important;display:flex!important;flex-direction:column!important;
+ width:60px!important;height:81px!important;
+ min-width:60px;box-sizing:border-box!important;
+ padding:4px!important;gap:0!important;
+ overflow:hidden;background:#fff!important;background-image:none!important;
+ border:2px solid #565a63;border-radius:7px;
+}
+.editor-panel #photoLayoutOptions .photo-layout-thumbnail::before,
+.editor-panel #photoLayoutOptions .photo-layout-thumbnail::after{content:none!important}
+.editor-panel #photoLayoutOptions .photo-layout-art{
+ display:flex!important;flex:0 0 64%!important;width:100%!important;
+ height:64%!important;min-height:0!important;
+ padding:0 0 4px!important;gap:3px!important;
+ border:0!important;position:relative!important;
+}
+.editor-panel #photoLayoutOptions .photo-layout-art i{
+ position:static!important;display:block!important;
+ top:auto!important;left:auto!important;transform:none!important;
+ width:auto!important;height:auto!important;
+ flex:1 1 0!important;min-width:0!important;
+ border:0!important;border-radius:4px!important;background:#414143!important;
+}
+.editor-panel #photoLayoutOptions .photo-layout-thumbnail-lines{
+ display:flex!important;position:relative!important;
+ flex:1 1 0!important;min-height:0!important;width:100%!important;
+ flex-direction:column!important;align-items:center!important;
+ padding:8px 0 0!important;gap:4px!important;
+ background:#fff!important;
+}
+.editor-panel #photoLayoutOptions .photo-layout-thumbnail-lines::before{
+ content:''!important;position:absolute!important;
+ top:0!important;left:-4px!important;right:-4px!important;height:4px!important;
+ background:linear-gradient(90deg,var(--photo-mini-bar-start),var(--photo-mini-bar-end))!important;
+}
+.editor-panel #photoLayoutOptions .photo-layout-thumbnail-lines i,
+.editor-panel #photoLayoutOptions .photo-layout-thumbnail-lines i:first-child,
+.editor-panel #photoLayoutOptions .photo-layout-thumbnail-lines i:last-child{
+ position:static!important;display:block!important;transform:none!important;
+ top:auto!important;left:auto!important;flex:none!important;
+ max-width:100%;border:0!important;border-radius:10px!important;
+}
+.editor-panel #photoLayoutOptions .photo-layout-thumbnail-lines i:first-child{
+ width:84%!important;height:5px!important;background:var(--photo-mini-primary)!important;
+}
+.editor-panel #photoLayoutOptions .photo-layout-thumbnail-lines i:last-child{
+ width:60%!important;height:3px!important;background:var(--photo-mini-accent)!important;
+}
+.editor-panel #photoLayoutOptions[data-variant^="quote"] .photo-layout-thumbnail,
+.editor-panel #photoLayoutOptions[data-variant^="quote"] .photo-layout-thumbnail-lines{
+ background:var(--photo-mini-bar-start)!important;
+}
+
+/* El borde punteado es una señal de carga: únicamente en mitades vacías,
+   con puntero encima, o foco de teclado. Nunca se muestra por selección. */
+.preview .canvas-stage.split-mode .split-photo-zone::before{opacity:0!important}
+.preview .canvas-stage.split-mode .split-photo-zone:not(.has-photo):hover::before,
+.preview .canvas-stage.split-mode .split-photo-zone:not(.has-photo):focus-visible::before,
+.preview .canvas-stage.split-mode .split-photo-zone:not(.has-photo).is-hovered::before{
+ opacity:1!important;
+}
+/* Hover oscurece 8,4% tanto la mitad vacía como la cargada:
+   aumento del 20% respecto del valor anterior de 7%. */
+.preview .canvas-stage.split-mode .split-photo-zone::after{
+ content:'';position:absolute;inset:0;pointer-events:none;
+ background:rgba(0,0,0,.084);opacity:0;
+ transition:opacity .12s ease;
+}
+.preview .canvas-stage.split-mode.hover-left .split-photo-zone[data-side="left"]::after,
+.preview .canvas-stage.split-mode.hover-right .split-photo-zone[data-side="right"]::after{
+ opacity:1;
+}
+/* En zonas vacías, el indicador permanece visible encima del oscurecimiento. */
+.preview .canvas-stage.split-mode .split-photo-zone:not(.has-photo)::before{z-index:2}
+.preview .canvas-stage.split-mode .split-photo-zone:not(.has-photo)>span{position:relative;z-index:3}
+@media(prefers-reduced-motion:reduce){
+ .preview .canvas-stage.split-mode .split-photo-zone::after{transition:none}
+}
+
+
+/* Paridad estricta: las opciones fotográficas usan las mismas dimensiones,
+   separación, proporción 3:4 y anillo que Diseño de la placa.
+   Solo se sustituyen los sectores de imagen por recuadros internos. */
+.editor-panel #photoLayoutOptions.ds-variant-options{
+ display:flex;flex-wrap:wrap;align-items:flex-start;gap:12px;
+}
+.editor-panel #photoLayoutOptions .photo-layout-option.ds-variant-option{
+ box-sizing:border-box;width:60px;min-width:60px;flex:0 0 60px;
+ padding:0;gap:8px;align-items:center;
+}
+.editor-panel #photoLayoutOptions .photo-layout-thumbnail.ds-variant-preview{
+ box-sizing:border-box!important;width:60px!important;min-width:60px!important;
+ height:auto!important;aspect-ratio:3/4!important;
+ padding:0!important;border:2px solid #565a63!important;
+ border-radius:7px!important;overflow:hidden;
+ background:linear-gradient(to bottom,transparent 53%,#fff 53%),linear-gradient(145deg,#c3c9d0,#7e8897)!important;
+}
+.editor-panel #photoLayoutOptions .photo-layout-art{
+ position:absolute!important;top:4px!important;left:4px!important;right:4px!important;
+ width:auto!important;height:calc(53% - 8px)!important;
+ display:flex!important;gap:3px!important;padding:0!important;
+ flex:none!important;box-sizing:border-box!important;
+}
+.editor-panel #photoLayoutOptions .photo-layout-art i{
+ display:block!important;flex:1 1 0!important;width:auto!important;height:100%!important;
+ min-width:0!important;background:#424244!important;border-radius:4px!important;
+}
+.editor-panel #photoLayoutOptions .photo-layout-thumbnail-lines{
+ position:absolute!important;top:53%!important;left:0!important;right:0!important;
+ width:100%!important;height:47%!important;
+ display:block!important;padding:0!important;margin:0!important;
+ background:#fff!important;
+}
+.editor-panel #photoLayoutOptions .photo-layout-thumbnail-lines::before{
+ content:''!important;position:absolute!important;top:0!important;left:0!important;right:0!important;
+ height:4px!important;background:linear-gradient(90deg,var(--photo-mini-bar-start),var(--photo-mini-bar-end))!important;
+}
+.editor-panel #photoLayoutOptions .photo-layout-thumbnail-lines i:first-child,
+.editor-panel #photoLayoutOptions .photo-layout-thumbnail-lines i:last-child{
+ position:absolute!important;left:50%!important;transform:translateX(-50%)!important;
+ display:block!important;flex:none!important;border-radius:10px!important;
+}
+.editor-panel #photoLayoutOptions .photo-layout-thumbnail-lines i:first-child{
+ top:24%!important;width:84%!important;height:5px!important;background:var(--photo-mini-primary)!important;
+}
+.editor-panel #photoLayoutOptions .photo-layout-thumbnail-lines i:last-child{
+ top:52%!important;width:60%!important;height:3px!important;background:var(--photo-mini-accent)!important;
+}
+/* Mismo anillo seleccionado (4px, separado 2px), sin recuadro adicional. */
+.editor-panel #photoLayoutOptions .photo-layout-option[aria-pressed="true"] .photo-layout-thumbnail{
+ outline:4px solid #e6008d!important;outline-offset:2px!important;
+ border-color:#565a63!important;
+}
+.editor-panel #photoLayoutOptions .photo-layout-option[aria-pressed="false"] .photo-layout-thumbnail{
+ outline:none!important;
+}
+.editor-panel #photoLayoutOptions .photo-layout-option>span:last-child{
+ font-size:11px;line-height:16px;white-space:nowrap;
+}
+
+/* Variantes 3 y 4: ocultar completamente el módulo de distribución fotográfica. */
+.editor-panel .ds-photo-layout-group[hidden]{display:none!important}
+
+
+/* Panel de Diario Show Dev: módulos plegables con las miniaturas originales.
+   Reorganización de contenedores, sin cambiar tamaños ni reglas de cada control. */
+.editor-panel .ds-control-card{
+ display:block;
+ margin:0 0 12px;
+ padding:0;
+ border:1px solid #383d46;
+ border-radius:10px;
+ background:#24262c;
+ overflow:visible;
+}
+.editor-panel .ds-control-card[hidden]{display:none!important}
+.editor-panel .ds-control-card-toggle{
+ display:flex;align-items:center;justify-content:space-between;gap:12px;
+ width:100%;min-height:45px;margin:0;padding:11px 14px;
+ border:0;border-radius:9px 9px 0 0;
+ background:#2b2e35;
+ color:#f1f2f6;
+ font:600 13px/20px system-ui,Arial,sans-serif;
+ text-align:left;cursor:pointer;
+}
+.editor-panel .ds-control-card-toggle[aria-expanded="false"]{border-radius:9px}
+.editor-panel .ds-control-card-toggle:hover{background:#33363e}
+.editor-panel .ds-control-card-toggle:focus-visible{
+ outline:2px solid #e6008d;outline-offset:2px;position:relative;z-index:2
+}
+.editor-panel .ds-control-card-chevron{
+ font-size:21px;line-height:1;flex:none;color:#c7c9d0;
+ transition:transform .15s ease;
+}
+.editor-panel .ds-control-card-toggle[aria-expanded="false"] .ds-control-card-chevron{
+ transform:rotate(180deg)
+}
+.editor-panel .ds-control-card-body{
+ min-width:0;padding:18px 14px;
+ border-top:0;
+ background:#202228;border-radius:0 0 9px 9px;
+}
+.editor-panel .ds-control-card-body[hidden]{display:none!important}
+.editor-panel .ds-control-card-body .control-field:first-child{margin-top:0}
+.editor-panel .ds-control-card-body .ds-variant-field>label{display:none}
+.editor-panel .ds-control-card-body .ds-variant-options{margin-top:0}
+.editor-panel .ds-photo-upload-area{margin-top:22px;padding-top:0;border-top:0}
+.editor-panel .ds-photo-upload-area .split-photo-fields{margin-top:0}
+.editor-panel .ds-photo-layout-group .photo-single-field[hidden]{display:none!important}
+.editor-panel .ds-photo-layout-group .split-photo-fields[hidden]{display:none!important}
+.editor-panel .ds-photo-layout-group .help-label-row,
+.editor-panel .ds-quote-photo-group .help-label-row{
+ display:flex;align-items:center;gap:5px;height:20px;min-height:20px;
+}
+.editor-panel .ds-photo-layout-group .help-label-row>label,
+.editor-panel .ds-quote-photo-group .help-label-row>label{line-height:20px}
+.editor-panel .ds-photo-layout-group .help-trigger,
+.editor-panel .ds-quote-photo-group .help-trigger{height:20px;align-items:center}
+.editor-panel .ds-photo-layout-group .help-button,
+.editor-panel .ds-quote-photo-group .help-button{transform:translateY(1px)}
+@media(max-width:700px){
+ .editor-panel .ds-control-card-toggle{min-height:43px;padding:10px 12px}
+ .editor-panel .ds-control-card-body{padding:15px 12px}
+}
+@media(prefers-reduced-motion:reduce){
+ .editor-panel .ds-control-card-chevron{transition:none}
+}
+
+
+/* Textos: control de tamaño junto al textarea, sin una fila de título.
+   El valor queda al extremo derecho para leerse mientras se arrastra. */
+.editor-panel .ds-texts-group .ds-headline-field{margin-top:12px}
+.editor-panel .ds-texts-group .ds-inline-type-size{
+ display:flex;align-items:center;gap:3px;
+ margin:10px 0 0!important;padding:0;min-width:0;
+}
+.editor-panel .ds-texts-group .ds-inline-type-size input[type="range"]{
+ flex:1 1 auto;width:auto;min-width:0;margin:0;
+ accent-color:#e6008d;
+}
+.editor-panel .ds-texts-group .ds-inline-type-size output{
+ flex:0 0 auto;min-width:25px;text-align:right;
+ font:600 12px/18px system-ui,Arial,sans-serif;color:#eff0f3;
+ font-variant-numeric:tabular-nums;
+}
+.editor-panel .ds-texts-group .ds-inline-type-size .ds-size-unit{
+ flex:none;color:#aeb4c0;font:500 11px/18px system-ui,Arial,sans-serif;
+}
+.editor-panel .ds-texts-group .ds-inline-type-size input[type="range"]::-webkit-slider-thumb{
+ width:19px;height:19px;
+}
+.editor-panel .ds-texts-group .ds-inline-type-size input[type="range"]::-moz-range-thumb{
+ width:19px;height:19px;
+}
+
+/* Estado exacto del encabezado gris claro (NO del contorno exterior).
+   Abierto: esquinas inferiores a 0. Cerrado: las cuatro a 9px. */
+.editor-panel .ds-control-card > .ds-control-card-toggle[aria-expanded="true"]{
+ border-radius:9px 9px 0 0!important;
+ border-bottom-left-radius:0!important;
+ border-bottom-right-radius:0!important;
+}
+.editor-panel .ds-control-card > .ds-control-card-toggle[aria-expanded="false"]{
+ border-radius:9px!important;
+ border-bottom-left-radius:9px!important;
+ border-bottom-right-radius:9px!important;
+}
+
+
+/* Diario Show Dev — respiro inferior consistente en distribución fotográfica.
+   Los laterales y el margen inferior se mantienen en 14px. */
+.editor-panel .ds-photo-layout-group .ds-control-card-body{
+ padding-bottom:14px;
+}
+/* Logo: selector horizontal a la derecha del título, sin alterar miniaturas. */
+.editor-panel .ds-logo-position-row{
+ display:flex;align-items:center;justify-content:space-between;gap:12px;
+ min-width:0;
+}
+.editor-panel .ds-logo-position-row>label{
+ margin:0!important;line-height:20px;flex:1 1 auto;
+}
+.editor-panel .ds-logo-position-controls{
+ display:flex;align-items:center;gap:5px;flex:none;
+}
+.editor-panel .ds-logo-position-button{
+ display:flex;align-items:center;justify-content:center;
+ width:35px;height:35px;padding:0;
+ border:1px solid #4a4e56;border-radius:7px;
+ background:#292c32;color:#f4f4f4;
+}
+.editor-panel .ds-logo-position-button[aria-pressed="true"]{
+ background:#e6008d;border-color:#e6008d;color:#fff;
+}
+.editor-panel .ds-logo-position-button:hover:not([aria-pressed="true"]){background:#343841}
+.editor-panel .ds-logo-position-button:focus-visible{outline:2px solid #f4f4f4;outline-offset:2px}
+.editor-panel .ds-logo-position-button .material-icons{font-size:21px}
+.editor-panel .ds-logo-position-row+.logo-choices{margin-top:10px}
+@media(max-width:700px){
+ .editor-panel .ds-photo-layout-group .ds-control-card-body{padding-bottom:12px}
+}
+
+
+/* Contenido: dos columnas, misma jerarquía y alineación que Formato / Alineación. */
+.editor-panel .ds-content-group .ds-logo-layout-row{
+ display:grid;grid-template-columns:minmax(0,1.9fr) minmax(0,1fr);
+ align-items:start;column-gap:12px;width:100%;
+}
+.editor-panel .ds-content-group .ds-logo-layout-row>.control-field{
+ min-width:0;margin:0!important;
+}
+.editor-panel .ds-content-group .ds-logo-layout-row>.control-field>label{
+ display:block;margin:0 0 8px!important;line-height:20px;
+ min-height:20px;white-space:nowrap;
+}
+.editor-panel .ds-content-group .ds-logo-layout-row .logo-choices{
+ margin-top:0;gap:10px;max-width:100%;
+}
+.editor-panel .ds-content-group .ds-logo-position-controls{
+ display:flex;justify-content:flex-start;align-items:center;
+ gap:8px;margin-top:0;min-height:43px;
+}
+.editor-panel .ds-content-group .ds-logo-position-button{
+ width:39px;height:42px;flex:none;
+}
+.editor-panel .ds-content-group .ds-logo-position-button .material-symbols-outlined{
+ font-size:24px;line-height:1;font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;
+}
+@media(max-width:380px){
+ .editor-panel .ds-content-group .ds-logo-layout-row{
+  grid-template-columns:minmax(0,1.65fr) minmax(0,1fr);column-gap:8px;
+ }
+ .editor-panel .ds-content-group .ds-logo-position-button{width:35px}
+ .editor-panel .ds-content-group .ds-logo-position-controls{gap:5px}
+}
+
+
+/* Diseño coherente de herramientas: etiquetas y controles a 43px,
+   tomando como referencia la miniatura de Logo Diario Show. */
+.editor-panel .ds-texts-group .typography-row .help-label-row>label,
+.editor-panel .ds-content-group .ds-logo-layout-row>.control-field>label{
+ font-size:14px!important;
+ font-weight:600;
+ line-height:20px;
+}
+.editor-panel .ds-texts-group .typography-row .help-label-row{
+ height:20px;min-height:20px;margin-bottom:9px!important;
+}
+.editor-panel .ds-texts-group .typography-row .format-buttons button,
+.editor-panel .ds-texts-group .typography-row .align-buttons button,
+.editor-panel .ds-content-group .ds-logo-position-button{
+ height:43px!important;
+}
+/* Botonera de alineación de texto y de objetos: una misma pieza segmentada.
+   El realce seleccionado se pinta *dentro* del botón, para preservar
+   los cuatro lados incluso en el segundo segmento (línea central). */
+.editor-panel .ds-texts-group .typography-row .align-buttons,
+.editor-panel .ds-content-group .ds-logo-position-controls{
+ display:inline-flex;
+ align-items:stretch;
+ gap:0!important;
+ height:43px;
+ border-radius:7px;
+}
+.editor-panel .ds-texts-group .typography-row .align-buttons button,
+.editor-panel .ds-content-group .ds-logo-position-controls .ds-logo-position-button{
+ display:flex;align-items:center;justify-content:center;
+ position:relative;
+ flex:0 0 39px;
+ width:39px!important;min-width:0;
+ padding:0;
+ border:1px solid #4a4e56!important;
+ border-radius:0!important;
+ background:#292c32!important;
+ color:#f4f4f4!important;
+ box-shadow:none;
+}
+.editor-panel .ds-texts-group .typography-row .align-buttons button:first-child,
+.editor-panel .ds-content-group .ds-logo-position-controls .ds-logo-position-button:first-child{
+ border-radius:7px 0 0 7px!important;
+}
+.editor-panel .ds-texts-group .typography-row .align-buttons button:last-child,
+.editor-panel .ds-content-group .ds-logo-position-controls .ds-logo-position-button:last-child{
+ border-radius:0 7px 7px 0!important;
+ border-left:0!important;
+}
+.editor-panel .ds-texts-group .typography-row .align-buttons button[aria-pressed="true"],
+.editor-panel .ds-content-group .ds-logo-position-controls .ds-logo-position-button[aria-pressed="true"]{
+ background:#3b3f46!important;
+ color:#fff!important;
+ box-shadow:inset 0 0 0 1.5px #f4f4f4!important;
+ z-index:1;
+}
+.editor-panel .ds-texts-group .typography-row .align-buttons button:hover:not([aria-pressed="true"]),
+.editor-panel .ds-content-group .ds-logo-position-controls .ds-logo-position-button:hover:not([aria-pressed="true"]){
+ background:#343841!important;
+}
+.editor-panel .ds-content-group .ds-logo-position-controls{
+ margin:0;min-height:43px;
+}
+/* El conjunto se adapta al espacio disponible sin perder la altura estándar. */
+@media(max-width:440px){
+ .editor-panel .ds-texts-group .typography-row .align-buttons button,
+ .editor-panel .ds-content-group .ds-logo-position-controls .ds-logo-position-button{
+  flex-basis:35px;width:35px!important;
+ }
+}
+
+
+/* Diario Show Dev: ubicación de logo pegada al extremo derecho.
+   Herramientas de texto cuadradas de 43 × 43 px, con alineación al final. */
+.editor-panel .ds-content-group .ds-logo-layout-row{
+ grid-template-columns:minmax(0,1fr) auto;
+}
+.editor-panel .ds-content-group .ds-logo-position-field{
+ justify-self:end;
+ width:max-content;
+}
+.editor-panel .ds-content-group .ds-logo-position-field>label{
+ text-align:left;
+}
+.editor-panel .ds-content-group .ds-logo-position-controls{
+ justify-content:flex-end;
+ width:max-content;
+ margin-left:auto;
+}
+.editor-panel .ds-texts-group .typography-row{
+ grid-template-columns:minmax(0,1fr) auto!important;
+ gap:8px!important;
+ align-items:start;
+}
+.editor-panel .ds-texts-group .typography-row .format-field{
+ min-width:0;
+}
+.editor-panel .ds-texts-group .typography-row .format-buttons{
+ display:flex;
+ flex-wrap:nowrap;
+ width:max-content;
+ max-width:none;
+ gap:0!important;
+}
+.editor-panel .ds-texts-group .typography-row .format-buttons button,
+.editor-panel .ds-texts-group .typography-row .format-buttons #formatUppercase,
+.editor-panel .ds-texts-group .typography-row .format-buttons #formatClear{
+ box-sizing:border-box;
+ flex:0 0 43px!important;
+ width:43px!important;
+ min-width:43px!important;
+ height:43px!important;
+}
+.editor-panel .ds-texts-group .typography-row .align-field{
+ justify-self:end;
+ width:max-content;
+}
+.editor-panel .ds-texts-group .typography-row .align-buttons{
+ justify-content:flex-end;
+ width:max-content;
+}
+@media(max-width:420px){
+ /* Si no entran los 5 botones cuadrados, la alineación pasa a una segunda fila. */
+ .editor-panel .ds-texts-group .typography-row{
+  grid-template-columns:minmax(0,1fr)!important;
+  row-gap:16px!important;
+ }
+ .editor-panel .ds-texts-group .typography-row .align-field{
+  justify-self:end;
+ }
+}
+
+/* Espaciado único entre submódulos internos, siguiendo Formato/Alineación → Texto principal. */
+.editor-panel{--ds-internal-module-gap:12px}
+.editor-panel .ds-texts-group .ds-headline-field{
+ margin-top:var(--ds-internal-module-gap)!important;
+}
+.editor-panel .ds-content-group #articleImportField{
+ margin-top:var(--ds-internal-module-gap)!important;
+}
+.editor-panel .ds-photo-layout-group .ds-photo-upload-area{
+ margin-top:var(--ds-internal-module-gap)!important;
+}
+.editor-panel .ds-photo-layout-group .split-photo-fields>.control-field+.control-field{
+ margin-top:var(--ds-internal-module-gap)!important;
+}
+
+
+/* Selección uniforme: mismo anillo que las miniaturas Logo Diario Show.
+   Se conserva el contorno gris del propio thumbnail, sin borde fucsia doble. */
+.editor-panel .ds-plate-design-group .ds-variant-option[aria-pressed="true"] .ds-variant-preview,
+.editor-panel #photoLayoutOptions .photo-layout-option[aria-pressed="true"] .photo-layout-thumbnail{
+ outline:2px solid #e6008d!important;
+ outline-offset:2px!important;
+ border-color:#565a63!important;
+}
+.editor-panel .ds-plate-design-group .ds-variant-option[aria-pressed="false"] .ds-variant-preview,
+.editor-panel #photoLayoutOptions .photo-layout-option[aria-pressed="false"] .photo-layout-thumbnail{
+ outline:none!important;
+}
+.editor-panel .ds-plate-design-group .ds-variant-options,
+.editor-panel #photoLayoutOptions.ds-variant-options{
+ column-gap:14px;
+}
+/* Etiquetas de las dos distribuciones: un término por línea y centradas. */
+.editor-panel #photoLayoutOptions .photo-layout-option>span.photo-layout-caption{
+ display:flex!important;flex-direction:column;align-items:center;justify-content:flex-start;
+ width:100%;gap:0;
+ text-align:center;white-space:normal!important;
+ font:500 11px/15px system-ui,Arial,sans-serif;
+}
+.editor-panel #photoLayoutOptions .photo-layout-caption>span{
+ display:block;white-space:nowrap;
+}
+
+
+/* Carga de fotografía: superficie punteada integrada al lenguaje del editor.
+   Input nativo accesible, visualmente oculto. */
+.editor-panel .ds-photo-picker{position:relative;width:100%;min-width:0}
+.editor-panel .ds-photo-picker .ds-photo-picker-native{
+ position:absolute!important;width:1px!important;height:1px!important;
+ padding:0!important;margin:0!important;overflow:hidden!important;
+ opacity:0!important;clip-path:inset(50%)!important;pointer-events:none!important;
+}
+.editor-panel .ds-photo-picker-surface{
+ display:flex;align-items:center;justify-content:center;gap:11px;
+ width:100%;min-width:0;min-height:58px;box-sizing:border-box;
+ margin:0!important;padding:12px 15px;
+ border:1.5px dashed #777c87;border-radius:10px;
+ background:#25272d;color:#adb1bb;cursor:pointer;
+ font:400 13px/20px system-ui,Arial,sans-serif;
+ transition:background-color .15s,border-color .15s,color .15s;
+}
+.editor-panel .ds-photo-picker-icon{flex:none;font-size:24px;color:#fff}
+.editor-panel .ds-photo-picker-text{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.editor-panel .ds-photo-picker-action{color:#f1f2f6;font-weight:700}
+.editor-panel .ds-photo-picker-caption{color:#aeb4bf;font-weight:400}
+.editor-panel .ds-photo-picker-surface:hover,
+.editor-panel .ds-photo-picker.is-drag-over .ds-photo-picker-surface{
+ background:#30323a;border-color:#e6008d;
+}
+.editor-panel .ds-photo-picker-native:focus-visible+.ds-photo-picker-surface{
+ outline:2px solid #e6008d;outline-offset:2px;
+}
+.editor-panel .ds-photo-picker.has-photo .ds-photo-picker-caption{color:#c3c6ce}
+@media(prefers-reduced-motion:reduce){
+ .editor-panel .ds-photo-picker-surface{transition:none}
+}
+
+
+/* Selector compacto: toda la información en una sola fila, sin label superior.
+   El contorno punteado abarca zona de carga y ayuda. */
+.editor-panel .ds-photo-picker .ds-photo-picker-surface{
+ display:flex;align-items:center;justify-content:flex-start;
+ gap:6px;min-height:44px;padding:7px 12px;
+ border-color:#777c87;
+}
+.editor-panel .ds-photo-picker-clickable{
+ display:flex;flex:0 1 auto;align-items:center;justify-content:flex-start;
+ gap:6px;min-width:0;min-height:28px;margin:0!important;padding:0;
+ font:400 13px/20px system-ui,Arial,sans-serif;
+ cursor:pointer;
+}
+.editor-panel .ds-photo-picker-icon{
+ font-family:'Material Symbols Outlined';font-size:22px;line-height:1;
+ font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;
+}
+.editor-panel .ds-photo-picker-help{
+ display:inline-flex;align-items:center;justify-content:center;flex:none;
+ margin:0;min-width:22px;height:26px;
+}
+.editor-panel .ds-photo-picker-help .help-button{
+ display:inline-flex;align-items:center;justify-content:center;
+ padding:0;margin:0;transform:none;
+}
+.editor-panel .ds-photo-picker .ds-photo-picker-surface:hover,
+.editor-panel .ds-photo-picker.is-drag-over .ds-photo-picker-surface{
+ background:#30323a;border-color:#fff;
+}
+.editor-panel .ds-photo-picker-native:focus-visible+.ds-photo-picker-surface{
+ outline:2px solid #fff;outline-offset:2px;
+}
+.editor-panel .ds-photo-picker-surface:focus-within{border-color:#fff}
+
+/* Distribución fotográfica: misma separación de submódulos que Contenido.
+   Evitar que margin-top y gap del flex se sumen entre fotos izquierda/derecha. */
+.editor-panel .ds-photo-layout-group .ds-photo-upload-area{
+ margin-top:var(--ds-internal-module-gap)!important;
+}
+.editor-panel .ds-photo-layout-group .split-photo-fields{
+ display:flex;flex-direction:column;
+ gap:var(--ds-internal-module-gap)!important;
+}
+.editor-panel .ds-photo-layout-group .split-photo-fields>.control-field,
+.editor-panel .ds-photo-layout-group .split-photo-fields>.control-field+.control-field{
+ margin-top:0!important;
+ margin-bottom:0!important;
+}
+
+
+/* Tarjetas flotantes: eliminar la caja gris exterior del editor.
+   El ancho de cada acordeón ocupa toda la columna y mantiene sus controles. */
+.ds-mobile-track > aside.editor-panel{
+ background:transparent;
+ border:0;
+ border-radius:0;
+ box-shadow:none;
+ padding:0;
+ min-width:0;
+}
+.editor-panel > .ds-control-card{
+ width:100%;
+ max-width:none;
+ margin:0 0 12px;
+ background:#24262c;
+}
+.editor-panel > .ds-control-card > .ds-control-card-body{
+ background:#202228;
+}
+
+
+/* Slider de tipografía, variante fina: pista de 3px y thumb circular de 15px. */
+.editor-panel .ds-texts-group .ds-inline-type-size input[type="range"]{
+ -webkit-appearance:none;appearance:none;
+ display:block;box-sizing:border-box;
+ height:22px;min-height:22px;padding:0!important;
+ border:0!important;border-radius:0;
+ background:transparent!important;
+ accent-color:#e6008d;cursor:pointer;
+}
+.editor-panel .ds-texts-group .ds-inline-type-size input[type="range"]::-webkit-slider-runnable-track{
+ height:3px;border:0;border-radius:99px;
+ background:linear-gradient(to right,#e6008d 0%,#e6008d var(--ds-size-progress,44.44%),#484c55 var(--ds-size-progress,44.44%),#484c55 100%);
+}
+.editor-panel .ds-texts-group .ds-inline-type-size input[type="range"]::-moz-range-track{
+ height:3px;border:0;border-radius:99px;background:#484c55;
+}
+.editor-panel .ds-texts-group .ds-inline-type-size input[type="range"]::-moz-range-progress{
+ height:3px;border:0;border-radius:99px;background:#e6008d;
+}
+.editor-panel .ds-texts-group .ds-inline-type-size input[type="range"]::-webkit-slider-thumb{
+ -webkit-appearance:none;appearance:none;
+ box-sizing:border-box;width:15px;height:15px;
+ margin-top:-6px;border:2px solid #f4f4f4;border-radius:50%;
+ background:#292c32;box-shadow:0 0 0 2px #202228;
+ transition:background-color .15s,box-shadow .15s;
+}
+.editor-panel .ds-texts-group .ds-inline-type-size input[type="range"]::-moz-range-thumb{
+ box-sizing:border-box;width:15px;height:15px;
+ border:2px solid #f4f4f4;border-radius:50%;
+ background:#292c32;box-shadow:0 0 0 2px #202228;
+ transition:background-color .15s,box-shadow .15s;
+}
+.editor-panel .ds-texts-group .ds-inline-type-size input[type="range"]:hover::-webkit-slider-thumb,
+.editor-panel .ds-texts-group .ds-inline-type-size input[type="range"]:active::-webkit-slider-thumb{
+ background:#f4f4f4;box-shadow:0 0 0 3px #ffffff25;
+}
+.editor-panel .ds-texts-group .ds-inline-type-size input[type="range"]:hover::-moz-range-thumb,
+.editor-panel .ds-texts-group .ds-inline-type-size input[type="range"]:active::-moz-range-thumb{
+ background:#f4f4f4;box-shadow:0 0 0 3px #ffffff25;
+}
+.editor-panel .ds-texts-group .ds-inline-type-size input[type="range"]:focus-visible{
+ outline:2px solid #f4f4f4;outline-offset:5px;border-radius:4px;
+}
+@media(prefers-reduced-motion:reduce){
+ .editor-panel .ds-texts-group .ds-inline-type-size input[type="range"]::-webkit-slider-thumb,
+ .editor-panel .ds-texts-group .ds-inline-type-size input[type="range"]::-moz-range-thumb{transition:none}
+}
+
+
+/* Slider sobrio: blanco y gris en reposo; fucsia solo durante la interacción. */
+.editor-panel .ds-texts-group .ds-inline-type-size input[type="range"]{accent-color:#f4f4f4}
+.editor-panel .ds-texts-group .ds-inline-type-size input[type="range"]::-webkit-slider-runnable-track{
+ background:linear-gradient(to right,#f4f4f4 0%,#f4f4f4 var(--ds-size-progress,44.44%),#484c55 var(--ds-size-progress,44.44%),#484c55 100%);
+}
+.editor-panel .ds-texts-group .ds-inline-type-size input[type="range"]::-moz-range-progress{background:#f4f4f4}
+.editor-panel .ds-texts-group .ds-inline-type-size input[type="range"]::-webkit-slider-thumb{
+ background:#292c32;box-shadow:none;
+}
+.editor-panel .ds-texts-group .ds-inline-type-size input[type="range"]::-moz-range-thumb{
+ background:#292c32;box-shadow:none;
+}
+.editor-panel .ds-texts-group .ds-inline-type-size input[type="range"]:hover::-webkit-slider-thumb,
+.editor-panel .ds-texts-group .ds-inline-type-size input[type="range"]:active::-webkit-slider-thumb{
+ background:#e6008d;border-color:#fff;box-shadow:0 0 0 3px #e6008d30,0 0 11px 3px #e6008d80;
+}
+.editor-panel .ds-texts-group .ds-inline-type-size input[type="range"]:hover::-moz-range-thumb,
+.editor-panel .ds-texts-group .ds-inline-type-size input[type="range"]:active::-moz-range-thumb{
+ background:#e6008d;border-color:#fff;box-shadow:0 0 0 3px #e6008d30,0 0 11px 3px #e6008d80;
+}
+.editor-panel .ds-texts-group .ds-inline-type-size.is-adjusting output,
+.editor-panel .ds-texts-group .ds-inline-type-size.is-adjusting .ds-size-unit{color:#e6008d}
+
+/* Importador integrado: campo y acción dentro de una única superficie. */
+.editor-panel #articleImportField .import-row{
+ display:flex;align-items:stretch;flex-wrap:nowrap;gap:0;
+ width:100%;min-width:0;min-height:44px;overflow:hidden;
+ background:#292c32;border:1px solid #4a4e56;border-radius:9px;
+ transition:border-color .15s ease,background-color .15s ease;
+}
+.editor-panel #articleImportField .import-row:hover{border-color:#858991}
+.editor-panel #articleImportField .import-row:focus-within{
+ border-color:#f4f4f4;
+ box-shadow:0 0 0 1px #f4f4f4;
+}
+.editor-panel #articleImportField .import-row #articleUrl{
+ flex:1 1 auto;min-width:0;width:0;height:44px;
+ margin:0!important;padding:10px 12px!important;
+ border:0!important;border-radius:0!important;box-shadow:none!important;
+ background:transparent!important;color:#f4f4f4;font-size:12px;
+ outline:none!important;
+}
+.editor-panel #articleImportField .import-row #articleUrl::placeholder{
+ color:#9297a2;opacity:1;
+}
+.editor-panel #articleImportField .import-row #importArticle{
+ flex:0 0 auto;min-width:84px;margin:0;padding:0 14px;
+ border:0;border-left:1px solid #4a4e56;border-radius:0;
+ background:#383c45;color:#fff;font-size:12px;font-weight:650;
+ transition:background-color .15s ease,color .15s ease;
+}
+.editor-panel #articleImportField .import-row #importArticle:hover:not(:disabled){
+ background:#4a4e58;color:#fff;
+}
+.editor-panel #articleImportField .import-row #importArticle:active:not(:disabled){background:#555a65}
+.editor-panel #articleImportField .import-row #importArticle:focus-visible{
+ outline:2px solid #fff;outline-offset:-3px;
+}
+@media(max-width:480px){
+ .editor-panel #articleImportField .import-row{flex-wrap:nowrap!important}
+ .editor-panel #articleImportField .import-row #articleUrl{flex-basis:0!important;min-width:0!important}
+ .editor-panel #articleImportField .import-row #importArticle{min-width:76px;padding:0 10px}
+}
+
+
+/* Token común de hover en todas las herramientas del panel.
+   Tono de referencia: selector Logo Diario Show (#393d45).
+   No se alteran selección, foco, texturas de las placas ni el halo propio del slider. */
+.editor-panel{--ds-control-hover:#393d45}
+.editor-panel .logo-choice:hover .logo-choice-preview,
+.editor-panel .ds-photo-picker .ds-photo-picker-surface:hover,
+.editor-panel .ds-photo-picker.is-drag-over .ds-photo-picker-surface,
+.editor-panel .ds-control-card-toggle:hover,
+.editor-panel .typography-row .format-buttons button:hover:not([aria-pressed="true"]),
+.editor-panel .typography-row .align-buttons button:hover:not([aria-pressed="true"]),
+.editor-panel .ds-content-group .ds-logo-position-controls .ds-logo-position-button:hover:not([aria-pressed="true"]),
+.editor-panel #articleImportField .import-row #importArticle:hover:not(:disabled),
+.editor-panel .theme-swatch:hover,
+.editor-panel .texture-option:hover .texture-number{
+ background-color:var(--ds-control-hover)!important;
+}
+.editor-panel #photoLayoutOptions .photo-layout-option:hover .photo-layout-thumbnail,
+.editor-panel .ds-variant-option:hover .ds-variant-preview{
+ filter:none!important;
+}
+/* Las miniaturas son composiciones: evitar reemplazar sus colores o imágenes. */
+.editor-panel #photoLayoutOptions .photo-layout-option:hover .photo-layout-thumbnail{
+ border-color:#565a63;
+}
+/* Mantener el contorno blanco de la carga de fotografías en hover. */
+.editor-panel .ds-photo-picker .ds-photo-picker-surface:hover,
+.editor-panel .ds-photo-picker.is-drag-over .ds-photo-picker-surface{
+ border-color:#fff!important;
+}
+
+
+/* Valor animado en blanco; interacción neutra localizada solo en el thumb. */
+.editor-panel .ds-texts-group .ds-inline-type-size output{
+ display:inline-block;transform-origin:100% 50%;
+ color:#fff!important;font-weight:600;
+ transition:transform .14s ease,font-weight .14s ease;
+ will-change:transform;
+}
+.editor-panel .ds-texts-group .ds-inline-type-size.is-adjusting output{
+ color:#fff!important;font-weight:800;transform:scale(1.22);
+}
+.editor-panel .ds-texts-group .ds-inline-type-size:not(.is-adjusting) output{
+ color:#fff!important;transform:scale(1);
+}
+.editor-panel .ds-texts-group .ds-inline-type-size .ds-size-unit,
+.editor-panel .ds-texts-group .ds-inline-type-size.is-adjusting .ds-size-unit{
+ color:#fff!important;
+}
+/* Anular hover general de la pista: un clic fuera de la bolita no la activa. */
+.editor-panel .ds-texts-group .ds-inline-type-size input[type="range"]::-webkit-slider-thumb,
+.editor-panel .ds-texts-group .ds-inline-type-size input[type="range"]:hover::-webkit-slider-thumb,
+.editor-panel .ds-texts-group .ds-inline-type-size input[type="range"]:active::-webkit-slider-thumb{
+ background:#292c32!important;border-color:#f4f4f4!important;box-shadow:none!important;
+}
+.editor-panel .ds-texts-group .ds-inline-type-size input[type="range"]::-moz-range-thumb,
+.editor-panel .ds-texts-group .ds-inline-type-size input[type="range"]:hover::-moz-range-thumb,
+.editor-panel .ds-texts-group .ds-inline-type-size input[type="range"]:active::-moz-range-thumb{
+ background:#292c32!important;border-color:#f4f4f4!important;box-shadow:none!important;
+}
+.editor-panel .ds-texts-group .ds-inline-type-size.is-thumb-hover input[type="range"]::-webkit-slider-thumb,
+.editor-panel .ds-texts-group .ds-inline-type-size.is-thumb-engaged input[type="range"]::-webkit-slider-thumb,
+.editor-panel .ds-texts-group .ds-inline-type-size.is-thumb-hover input[type="range"]:hover::-webkit-slider-thumb,
+.editor-panel .ds-texts-group .ds-inline-type-size.is-thumb-engaged input[type="range"]:active::-webkit-slider-thumb{
+ background:#9297a1!important;border-color:#fff!important;box-shadow:none!important;
+}
+.editor-panel .ds-texts-group .ds-inline-type-size.is-thumb-hover input[type="range"]::-moz-range-thumb,
+.editor-panel .ds-texts-group .ds-inline-type-size.is-thumb-engaged input[type="range"]::-moz-range-thumb,
+.editor-panel .ds-texts-group .ds-inline-type-size.is-thumb-hover input[type="range"]:hover::-moz-range-thumb,
+.editor-panel .ds-texts-group .ds-inline-type-size.is-thumb-engaged input[type="range"]:active::-moz-range-thumb{
+ background:#9297a1!important;border-color:#fff!important;box-shadow:none!important;
+}
+@media(prefers-reduced-motion:reduce){
+ .editor-panel .ds-texts-group .ds-inline-type-size output{
+  transition:none;will-change:auto;
+ }
+}
+
+
+/* Navegación mobile del editor: pestañas de texto con subrayado de marca.
+   Mismo patrón reutilizable para los demás generadores editoriales. */
+.ds-mobile-tabs{display:none}
+@media(max-width:700px){
+ main > .ds-mobile-tabs{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:0;align-items:stretch;
+  width:100%;min-width:0;
+  margin:0 0 16px;
+  border-bottom:1px solid #393d45;
+ }
+ main > .ds-mobile-tabs .ds-mobile-tab{
+  position:relative;display:flex;align-items:center;justify-content:center;
+  min-width:0;min-height:48px;
+  margin:0;padding:12px 10px;
+  border:0;border-radius:0;
+  background:transparent;color:#aeb4bf;
+  font:600 14px/20px system-ui,Arial,sans-serif;
+  cursor:pointer;
+  transition:color .15s ease,background-color .15s ease;
+ }
+ main > .ds-mobile-tabs .ds-mobile-tab:hover{
+  color:#f4f4f4;background:#24262c;
+ }
+ main > .ds-mobile-tabs .ds-mobile-tab[aria-selected="true"]{
+  color:#fff;background:transparent;
+ }
+ main > .ds-mobile-tabs .ds-mobile-tab[aria-selected="true"]::after{
+  content:"";position:absolute;bottom:-1px;left:0;right:0;
+  height:3px;border-radius:3px 3px 0 0;
+  background:var(--ds-tabs-accent,#e6008d);
+ }
+ main > .ds-mobile-tabs .ds-mobile-tab:focus-visible{
+  outline:2px solid #fff;outline-offset:-4px;z-index:1;
+ }
+ /* Las dos pantallas permanecen montadas una al lado de la otra. */
+ main > .ds-mobile-viewport{
+  display:block;position:relative;min-width:0;width:100%;
+  overflow:hidden;
+  transition:height 240ms cubic-bezier(.22,.7,.25,1);
+ }
+ .ds-mobile-viewport > .ds-mobile-track{
+  display:flex;align-items:flex-start;
+  width:200%;min-width:0;
+  transform:translate3d(0,0,0);
+  transition:transform 240ms cubic-bezier(.22,.7,.25,1);
+  will-change:transform;
+ }
+ main[data-mobile-tab="controls"] .ds-mobile-track{
+  transform:translate3d(-50%,0,0);
+ }
+ .ds-mobile-track > #dsMobilePreviewPanel,
+ .ds-mobile-track > #dsMobileControlsPanel{
+  display:block!important;
+  box-sizing:border-box;
+  flex:0 0 50%;width:50%;max-width:50%;min-width:0;
+  margin:0;
+ }
+ .ds-mobile-track > #dsMobilePreviewPanel{
+  order:0;display:flex!important;
+  align-items:center;
+ }
+ .ds-mobile-track > #dsMobileControlsPanel{order:1}
+
+}
+@media(prefers-reduced-motion:reduce){
+ main > .ds-mobile-tabs .ds-mobile-tab,
+ main > .ds-mobile-viewport,
+ .ds-mobile-viewport > .ds-mobile-track{transition:none!important}
+}
+@media(min-width:701px){
+ main > .ds-mobile-viewport,
+ .ds-mobile-viewport > .ds-mobile-track{display:contents}
+}
+
+
+/* Editor de Textos duplicado solo en la vista previa mobile. */
+.ds-mobile-text-editor{display:none!important}
+.ds-zoom-label-mobile{display:none}
+@media(max-width:700px){
+ .ds-mobile-track > .preview .preview-toolbar{
+  width:100%;min-height:0;
+  flex-direction:column;align-items:stretch;gap:10px;
+  padding:12px 14px;
+ }
+ .ds-mobile-track > .preview .preview-zoom{
+  width:100%;min-width:0;flex:none;
+  display:grid;grid-template-columns:minmax(0,1fr) auto;
+  align-items:center;gap:8px 8px;
+ }
+ .ds-mobile-track > .preview .preview-zoom label{
+  grid-column:1/-1;
+  font:600 13px/19px system-ui,Arial,sans-serif;color:#f4f4f4;
+ }
+ .ds-mobile-track > .preview .preview-zoom .ds-zoom-label-desktop{display:none}
+ .ds-mobile-track > .preview .preview-zoom .ds-zoom-label-mobile{display:inline}
+ .ds-mobile-track > .preview .preview-zoom input[type="range"]{
+  grid-column:1;display:block;width:100%;min-width:0;
+  height:22px;margin:0;padding:0!important;
+  -webkit-appearance:none;appearance:none;
+  border:0!important;background:transparent!important;cursor:pointer;
+ }
+ .ds-mobile-track > .preview .preview-zoom input[type="range"]::-webkit-slider-runnable-track{
+  height:3px;border:0;border-radius:99px;
+  background:linear-gradient(to right,#f4f4f4 0%,#f4f4f4 var(--ds-zoom-progress,0%),#484c55 var(--ds-zoom-progress,0%),#484c55 100%);
+ }
+ .ds-mobile-track > .preview .preview-zoom input[type="range"]::-moz-range-track{
+  height:3px;border:0;border-radius:99px;background:#484c55;
+ }
+ .ds-mobile-track > .preview .preview-zoom input[type="range"]::-moz-range-progress{
+  height:3px;border:0;border-radius:99px;background:#f4f4f4;
+ }
+ .ds-mobile-track > .preview .preview-zoom input[type="range"]::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;
+  width:15px;height:15px;box-sizing:border-box;margin-top:-6px;
+  background:#292c32;border:2px solid #f4f4f4;border-radius:50%;
+  box-shadow:none;transition:background-color .12s;
+ }
+ .ds-mobile-track > .preview .preview-zoom input[type="range"]::-moz-range-thumb{
+  width:15px;height:15px;box-sizing:border-box;
+  background:#292c32;border:2px solid #f4f4f4;border-radius:50%;
+  box-shadow:none;transition:background-color .12s;
+ }
+ .ds-mobile-track > .preview .preview-zoom.is-thumb-hover input[type="range"]::-webkit-slider-thumb,
+ .ds-mobile-track > .preview .preview-zoom.is-thumb-engaged input[type="range"]::-webkit-slider-thumb,
+ .ds-mobile-track > .preview .preview-zoom.is-thumb-hover input[type="range"]::-moz-range-thumb,
+ .ds-mobile-track > .preview .preview-zoom.is-thumb-engaged input[type="range"]::-moz-range-thumb{
+  background:#9297a1;
+ }
+ .ds-mobile-track > .preview .preview-zoom input[type="range"]:focus-visible{
+  outline:2px solid #fff;outline-offset:4px;border-radius:4px;
+ }
+ .ds-mobile-track > .preview .preview-zoom output{
+  grid-column:2;min-width:48px;text-align:right;
+  color:#fff;font:600 12px/18px system-ui,Arial,sans-serif;
+  font-variant-numeric:tabular-nums;transform-origin:100% 50%;
+  transition:transform .14s ease;
+ }
+ .ds-mobile-track > .preview .preview-zoom.is-adjusting output{
+  color:#fff;font-weight:800;transform:scale(1.22);
+ }
+ .ds-mobile-track > .preview .preview-instructions{
+  flex:none;flex-basis:auto;width:100%;
+  margin:0!important;text-align:center;
+ }
+ .ds-mobile-track > .preview > .ds-mobile-text-editor{
+  display:block!important;
+  width:100%;min-width:0;max-width:540px;
+  background:transparent!important;border:0;border-radius:0;
+  box-shadow:none;padding:0!important;
+ }
+ .ds-mobile-track > .preview > .ds-mobile-text-editor > .ds-control-card{
+  display:block;width:100%;margin:0;
+ }
+}
+@media(prefers-reduced-motion:reduce){
+ .ds-mobile-track > .preview .preview-zoom output,
+ .ds-mobile-track > .preview .preview-zoom input[type="range"]::-webkit-slider-thumb,
+ .ds-mobile-track > .preview .preview-zoom input[type="range"]::-moz-range-thumb{transition:none}
+}
+
+/* Textos se muestra siempre en Vista previa, contraído inicialmente. */
+
+
+/* Mobile: calle de gestos ampliada en un 50 % (50 px => 75 px por lado). */
+@media(max-width:700px){
+ .ds-mobile-track > .preview .canvas-stage{
+  width:min(540px,calc(100vw - 150px))!important;
+  max-width:100%;
+  margin-inline:auto;
+ }
+ /* Zoom identificado por icono; el slider sigue ocupando todo el ancho restante. */
+ .ds-mobile-track > .preview .preview-zoom{
+  grid-template-columns:24px minmax(0,1fr) auto!important;
+  column-gap:10px;
+ }
+ .ds-mobile-track > .preview .preview-zoom label{
+  grid-column:1!important;grid-row:1;
+  display:flex;align-items:center;justify-content:center;
+  margin:0!important;
+ }
+ .ds-mobile-track > .preview .preview-zoom .ds-zoom-label-mobile{
+  display:inline-flex;align-items:center;justify-content:center;
+  font:normal 21px/1 'Material Icons';
+  color:#f4f4f4;
+ }
+ .ds-mobile-track > .preview .preview-zoom input[type="range"]{
+  grid-column:2!important;grid-row:1;width:100%;min-width:0;
+ }
+ .ds-mobile-track > .preview .preview-zoom output{
+  grid-column:3!important;grid-row:1;
+ }
+}
+/* Token compartido: bolita blanca + halo blanco al presionar, sin acento de marca.
+   Se aplica al Zoom mobile y a los tamaños de texto en ambas pestañas. */
+.editor-panel,
+.ds-mobile-track > .preview{
+ --ds-range-thumb-pressed:#fff;
+ --ds-range-halo:rgba(255,255,255,.48);
+ --ds-range-halo-soft:rgba(255,255,255,.27);
+}
+.editor-panel .ds-texts-group .ds-inline-type-size.is-thumb-engaged input[type="range"]::-webkit-slider-thumb,
+.editor-panel .ds-texts-group .ds-inline-type-size.is-thumb-engaged input[type="range"]:active::-webkit-slider-thumb{
+ background:var(--ds-range-thumb-pressed)!important;
+ border-color:#fff!important;
+ box-shadow:0 0 0 3px var(--ds-range-halo-soft),0 0 10px 3px var(--ds-range-halo)!important;
+}
+.editor-panel .ds-texts-group .ds-inline-type-size.is-thumb-engaged input[type="range"]::-moz-range-thumb,
+.editor-panel .ds-texts-group .ds-inline-type-size.is-thumb-engaged input[type="range"]:active::-moz-range-thumb{
+ background:var(--ds-range-thumb-pressed)!important;
+ border-color:#fff!important;
+ box-shadow:0 0 0 3px var(--ds-range-halo-soft),0 0 10px 3px var(--ds-range-halo)!important;
+}
+@media(max-width:700px){
+ .ds-mobile-track > .preview .preview-zoom.is-thumb-engaged input[type="range"]::-webkit-slider-thumb{
+  background:var(--ds-range-thumb-pressed)!important;
+  border-color:#fff!important;
+  box-shadow:0 0 0 3px var(--ds-range-halo-soft),0 0 10px 3px var(--ds-range-halo)!important;
+ }
+ .ds-mobile-track > .preview .preview-zoom.is-thumb-engaged input[type="range"]::-moz-range-thumb{
+  background:var(--ds-range-thumb-pressed)!important;
+  border-color:#fff!important;
+  box-shadow:0 0 0 3px var(--ds-range-halo-soft),0 0 10px 3px var(--ds-range-halo)!important;
+ }
+}
+@media(prefers-reduced-motion:reduce){
+ .editor-panel .ds-texts-group .ds-inline-type-size input[type="range"]::-webkit-slider-thumb,
+ .editor-panel .ds-texts-group .ds-inline-type-size input[type="range"]::-moz-range-thumb{
+  transition:none!important;
+ }
+}
+
+
+/* La copia mobile usa IDs con sufijo Mobile. Reproducir los mismos estilos
+   de los botones individuales del módulo Textos original de Formato. */
+@media(max-width:700px){
+ .ds-mobile-text-editor .ds-texts-group .typography-row .format-buttons #formatUppercaseMobile,
+ .ds-mobile-text-editor .ds-texts-group .typography-row .format-buttons #formatClearMobile{
+  position:static;
+  box-sizing:border-box;
+  display:flex;align-items:center;justify-content:center;
+  flex:0 0 43px!important;
+  width:43px!important;min-width:43px!important;height:43px!important;
+  margin-left:7px!important;
+  border:1px solid #4a4e56!important;
+  border-radius:7px!important;
+ }
+ .ds-mobile-text-editor .ds-texts-group .typography-row #formatUppercaseMobile[aria-pressed="true"]{
+  background:#e6008d;border-color:#e6008d!important;color:#fff;
+ }
+ .ds-mobile-text-editor .ds-texts-group .typography-row #formatUppercaseMobile .material-symbols-outlined{
+  font-family:'Material Symbols Outlined';font-weight:normal;font-style:normal;
+  font-size:22px;line-height:1;letter-spacing:normal;text-transform:none;
+  white-space:nowrap;direction:ltr;font-feature-settings:'liga';
+  font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;display:inline-block;
+ }
+ .ds-mobile-text-editor #headlineMobile.uppercase-preview{text-transform:uppercase}
+ .ds-mobile-text-editor .ds-texts-group .typography-row .format-buttons #formatUppercaseMobile:hover:not([aria-pressed="true"]),
+ .ds-mobile-text-editor .ds-texts-group .typography-row .format-buttons #formatClearMobile:hover{
+  background:var(--ds-control-hover,#393d45)!important;
+ }
+ /* 16 px evita el zoom involuntario de Safari al mostrar el teclado. */
+ .ds-mobile-text-editor #headlineMobile,
+ .ds-mobile-text-editor #quoteAuthorMobile{font-size:16px}
+}
+
+
+/* Zoom lateral mobile: la placa conserva exactamente su centro.
+   El riel vive en el gutter izquierdo y se limita al alto de la fotografía. */
+@media(max-width:700px){
+ .ds-mobile-track > .preview .preview-toolbar{
+  display:block;width:100%;
+  min-height:0;margin:0;padding:0!important;
+  border:0!important;border-radius:0!important;
+  background:transparent!important;box-shadow:none!important;
+ }
+ .ds-mobile-track > .preview .preview-instructions{
+  width:100%;margin:0!important;padding:2px 0 0;
+  text-align:center!important;line-height:1.5;
+ }
+ .ds-mobile-track > .preview .canvas-stage{
+  position:relative;
+  overflow:visible;
+ }
+ .ds-mobile-track > .preview .canvas-stage > #dsPhotoZoomControl{
+  position:absolute;z-index:6;
+  top:0;left:auto;right:calc(100% + 5px);
+  width:36px;max-width:36px;
+  height:var(--photo-height);min-height:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:stretch;
+  gap:8px;margin:0;padding:0;
+  background:transparent;border:0;box-shadow:none;
+  touch-action:pan-y;
+ }
+ .ds-mobile-track > .preview .canvas-stage > #dsPhotoZoomControl label{
+  display:flex;align-items:center;justify-content:center;
+  flex:0 0 23px;width:100%;margin:0;padding:0;
+  color:#f4f4f4;
+ }
+ .ds-mobile-track > .preview .canvas-stage > #dsPhotoZoomControl .ds-zoom-label-desktop{display:none}
+ .ds-mobile-track > .preview .canvas-stage > #dsPhotoZoomControl .ds-zoom-label-mobile{
+  display:inline-flex;align-items:center;justify-content:center;
+  font:normal 20px/1 'Material Icons';color:#f4f4f4;
+ }
+ .ds-mobile-track > .preview .canvas-stage > #dsPhotoZoomControl #photoZoom{
+  flex:1 1 auto;display:block;
+  width:26px!important;min-width:26px!important;
+  height:0;min-height:36px;
+  margin:0!important;padding:0!important;
+  writing-mode:vertical-lr;direction:rtl;
+  -webkit-appearance:none;appearance:none;
+  background:transparent!important;border:0!important;
+  border-radius:0;cursor:pointer;touch-action:none;
+ }
+ .ds-mobile-track > .preview .canvas-stage > #dsPhotoZoomControl #photoZoom::-webkit-slider-runnable-track{
+  width:3px;height:100%;border:0;border-radius:99px;
+  background:linear-gradient(to top,#f4f4f4 0%,#f4f4f4 var(--ds-zoom-progress,0%),#484c55 var(--ds-zoom-progress,0%),#484c55 100%);
+ }
+ .ds-mobile-track > .preview .canvas-stage > #dsPhotoZoomControl #photoZoom::-moz-range-track{
+  width:3px;height:100%;border:0;border-radius:99px;background:#484c55;
+ }
+ .ds-mobile-track > .preview .canvas-stage > #dsPhotoZoomControl #photoZoom::-moz-range-progress{
+  width:3px;border:0;border-radius:99px;background:#f4f4f4;
+ }
+ .ds-mobile-track > .preview .canvas-stage > #dsPhotoZoomControl #photoZoom::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;
+  box-sizing:border-box;width:15px;height:15px;
+  margin:0 0 0 -6px;
+  border:2px solid #f4f4f4;border-radius:50%;
+  background:#292c32;box-shadow:none;
+ }
+ .ds-mobile-track > .preview .canvas-stage > #dsPhotoZoomControl #photoZoom::-moz-range-thumb{
+  box-sizing:border-box;width:15px;height:15px;
+  border:2px solid #f4f4f4;border-radius:50%;
+  background:#292c32;box-shadow:none;
+ }
+ .ds-mobile-track > .preview .canvas-stage > #dsPhotoZoomControl.is-thumb-hover #photoZoom::-webkit-slider-thumb,
+ .ds-mobile-track > .preview .canvas-stage > #dsPhotoZoomControl.is-thumb-hover #photoZoom::-moz-range-thumb{
+  background:#9297a1;
+ }
+ .ds-mobile-track > .preview .canvas-stage > #dsPhotoZoomControl.is-thumb-engaged #photoZoom::-webkit-slider-thumb,
+ .ds-mobile-track > .preview .canvas-stage > #dsPhotoZoomControl.is-thumb-engaged #photoZoom::-moz-range-thumb{
+  background:#fff!important;border-color:#fff!important;
+  box-shadow:0 0 0 3px rgba(255,255,255,.27),0 0 10px 3px rgba(255,255,255,.48)!important;
+ }
+ .ds-mobile-track > .preview .canvas-stage > #dsPhotoZoomControl #zoomLabel{
+  flex:0 0 24px;width:100%;min-width:0;
+  padding:0;margin:0;text-align:center;
+  font:600 10px/20px system-ui,Arial,sans-serif;
+  color:#fff;white-space:nowrap;transform-origin:50% 50%;
+ }
+ .ds-mobile-track > .preview .canvas-stage > #dsPhotoZoomControl.is-adjusting #zoomLabel{
+  font-weight:800;transform:scale(1.14);
+ }
+ /* Evita los reajustes de anclaje que movían el encabezado al abrir Textos. */
+ main > .ds-mobile-viewport{overflow-anchor:none}
+ .ds-mobile-track > .preview{overflow-anchor:none}
+}
+
+
+@media(max-width:700px){
+ main > .ds-mobile-viewport.is-focusing-text{
+  transition:none!important;
+ }
+ .ds-mobile-track > .preview #headlineMobile{
+  scroll-margin-top:20px;
+  scroll-margin-bottom:22px;
+ }
+}
+
+
+/* Cinco módulos separados con 16px en mobile:
+   pestañas, placa con ayuda y zoom, Textos, acciones y firma. */
+@media(max-width:700px){
+ main:has(> .ds-mobile-tabs){row-gap:0!important;column-gap:0!important;padding-top:8px!important}
+ main > .ds-mobile-tabs{margin-bottom:16px!important}
+ .ds-mobile-track > #dsMobilePreviewPanel{gap:16px!important}
+ .ds-mobile-track > #dsMobileControlsPanel{margin-top:0!important}
+ .ds-mobile-track > .preview .preview-toolbar{margin:0!important;padding:0!important}
+ .ds-mobile-track > .preview .preview-instructions{padding:0!important}
+ .ds-mobile-track > .preview > .ds-mobile-text-editor{margin:0!important}
+ .ds-mobile-track > .preview > .preview-actions{margin:0!important}
+ .ds-mobile-track > .preview > .bae-credits{margin:0 0 16px!important}
+}
+
+
+
+
+/* Placeholders de fotografía dividida: jerarquía más próxima a foto única.
+   Solo afecta las dos zonas de carga de la preview, sin cambiar la foto única. */
+.preview .canvas-stage.split-mode .split-photo-zone{
+ gap:9px;
+ padding-inline:6px;
+}
+.preview .canvas-stage.split-mode .split-photo-zone .material-icons{
+ font-size:38px;line-height:1;
+}
+.preview .canvas-stage.split-mode .split-photo-zone-title{
+ font-size:17px;line-height:1.22;
+ overflow-wrap:normal;
+}
+.preview .canvas-stage.split-mode .split-photo-zone-description{
+ font-size:13px;line-height:1.35;
+ max-width:100%;
+}
+@media(max-width:700px){
+ .preview .canvas-stage.split-mode .split-photo-zone{
+  gap:5px;padding-inline:3px;
+ }
+ .preview .canvas-stage.split-mode .split-photo-zone .material-icons{
+  font-size:clamp(23px,7vw,32px);
+ }
+ .preview .canvas-stage.split-mode .split-photo-zone-title{
+  font-size:clamp(12px,3.6vw,15px);
+  line-height:1.2;
+ }
+ .preview .canvas-stage.split-mode .split-photo-zone-description{
+  font-size:clamp(10px,3vw,12px);
+  line-height:1.3;
+  overflow-wrap:break-word;
+ }
+}
+
+
+/* Cada mitad reserva 12 px desde la línea punteada incluso sin hover.
+   El título se mantiene siempre en un renglón; la descripción puede envolver. */
+.preview .canvas-stage.split-mode .split-photo-zone{
+ box-sizing:border-box;
+ padding:calc(var(--hover-inset) + 12px)!important;
+ min-width:0;
+}
+.preview .canvas-stage.split-mode .split-photo-zone-title{
+ max-width:none;
+ white-space:nowrap;
+ overflow-wrap:normal;
+ text-wrap:nowrap;
+ letter-spacing:-.3px;
+}
+.preview .canvas-stage.split-mode .split-photo-zone-description{
+ max-width:100%;
+ min-width:0;
+ overflow-wrap:break-word;
+ text-wrap:balance;
+}
+@media(max-width:700px){
+ /* Preservar el título completo en cada media foto de la placa reducida. */
+ .preview .canvas-stage.split-mode .split-photo-zone-title{
+  font-size:clamp(7px,1.9vw,15px);
+ }
+}
+
+
+/* Mobile: pestañas adheridas al borde SUPERIOR del viewport.
+   La línea activa queda bajo el texto de la pestaña; los 24px están
+   DEBAJO de esa línea y empujan el contenido desde su posición inicial. */
+@media(max-width:700px){
+ main:has(> .ds-mobile-tabs){overflow:visible!important}
+ main > .ds-mobile-tabs{
+  position:sticky;
+  top:0;
+  z-index:80;
+  align-self:start;
+  isolation:isolate;
+  box-sizing:border-box;
+  margin:0!important;
+  padding:0 0 24px;
+  border-bottom:0;
+  background:#101114;
+ }
+ main > .ds-mobile-tabs .ds-mobile-tab[aria-selected="true"]::after{
+  bottom:0;
+ }
+}
+
+
+/* Botones táctiles invisibles, siempre interactivos y delante de adjuntar.
+   Mantener tamaño y ubicación sin pintar ni hover ni borde, incluso enfocados. */
+.preview #photoStage>.ds-preview-hit-button{
+ position:absolute!important;
+ display:block!important;
+ z-index:9999!important;
+ box-sizing:border-box;
+ min-width:0;min-height:0;
+ border:0!important;
+ border-radius:0!important;
+ background:transparent!important;
+ outline:0!important;
+ box-shadow:none!important;
+ padding:0!important;margin:0!important;
+ opacity:1!important;visibility:visible!important;
+ cursor:pointer!important;
+ pointer-events:auto!important;
+ touch-action:pan-y;
+ -webkit-tap-highlight-color:transparent;
+}
+.preview #photoStage>.ds-preview-hit-button:hover,
+.preview #photoStage>.ds-preview-hit-button:focus-visible,
+.preview #photoStage>.ds-preview-hit-button:active{
+ background:transparent!important;
+ border:0!important;
+ outline:0!important;
+ box-shadow:none!important;
+}
+.preview #photoStage>#dsLogoHitButton{z-index:10001!important}
+.preview #photoStage>#dsHeadlineHitButton{z-index:10000!important}
+.ds-mobile-content-editor{display:none!important}
+@media(max-width:700px){
+ .ds-mobile-track>.preview>.ds-mobile-content-editor{
+  display:block!important;
+  width:100%;min-width:0;max-width:540px;
+  background:transparent!important;border:0;border-radius:0;
+  box-shadow:none;padding:0!important;margin:0!important;
+ }
+ .ds-mobile-track>.preview>.ds-mobile-content-editor>.ds-control-card{
+  display:block;width:100%;margin:0;
+ }
+ .ds-mobile-track>.preview>.ds-mobile-content-editor[hidden],
+ .ds-mobile-track>.preview>.ds-mobile-text-editor[hidden]{
+  display:none!important;
+ }
+}
+
+/* Desktop conserva la misma pista vertical de Zoom que mobile.
+   La barra Vista previa queda sola y centrada encima del canvas. */
+@media(min-width:701px){
+ /* Mismo mensaje liviano que mobile: sin caja, fondo, borde ni sombra. */
+ .preview .preview-toolbar{
+  display:block!important;
+  justify-content:center!important;
+  text-align:center;
+  width:min(100%,540px);
+  min-height:0!important;
+  margin:0!important;
+  padding:0!important;
+  background:transparent!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+ }
+ .preview .preview-toolbar .preview-instructions{
+  display:block;
+  width:100%;
+  flex:none;
+  margin:0!important;
+  padding:0!important;
+  text-align:center!important;
+  line-height:1.5;
+ }
+ .preview .canvas-stage{overflow:visible!important}
+ .preview .canvas-stage > #dsPhotoZoomControl{
+  position:absolute;z-index:6;
+  top:0;left:auto;right:calc(100% + 5px);
+  width:36px;max-width:36px;
+  height:var(--photo-height);min-height:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:stretch;
+  gap:8px;margin:0;padding:0;
+  background:transparent;border:0;box-shadow:none;
+  touch-action:pan-y;
+ }
+ .preview .canvas-stage > #dsPhotoZoomControl label{
+  display:flex;align-items:center;justify-content:center;
+  flex:0 0 23px;width:100%;margin:0;padding:0;
+  color:#f4f4f4;
+ }
+ .preview .canvas-stage > #dsPhotoZoomControl .ds-zoom-label-desktop{display:none}
+ .preview .canvas-stage > #dsPhotoZoomControl .ds-zoom-label-mobile{
+  display:inline-flex;align-items:center;justify-content:center;
+  font:normal 20px/1 'Material Icons';color:#f4f4f4;
+ }
+ .preview .canvas-stage > #dsPhotoZoomControl #photoZoom{
+  flex:1 1 auto;display:block;
+  width:26px!important;min-width:26px!important;
+  height:0;min-height:36px;
+  margin:0!important;padding:0!important;
+  writing-mode:vertical-lr;direction:rtl;
+  -webkit-appearance:none;appearance:none;
+  background:transparent!important;border:0!important;
+  border-radius:0;cursor:pointer;touch-action:none;
+ }
+ .preview .canvas-stage > #dsPhotoZoomControl #photoZoom::-webkit-slider-runnable-track{
+  width:3px;height:100%;border:0;border-radius:99px;
+  background:linear-gradient(to top,#f4f4f4 0%,#f4f4f4 var(--ds-zoom-progress,0%),#484c55 var(--ds-zoom-progress,0%),#484c55 100%);
+ }
+ .preview .canvas-stage > #dsPhotoZoomControl #photoZoom::-moz-range-track{
+  width:3px;height:100%;border:0;border-radius:99px;background:#484c55;
+ }
+ .preview .canvas-stage > #dsPhotoZoomControl #photoZoom::-moz-range-progress{
+  width:3px;border:0;border-radius:99px;background:#f4f4f4;
+ }
+ .preview .canvas-stage > #dsPhotoZoomControl #photoZoom::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;
+  box-sizing:border-box;width:15px;height:15px;
+  margin:0 0 0 -6px;
+  border:2px solid #f4f4f4;border-radius:50%;
+  background:#292c32;box-shadow:none;
+ }
+ .preview .canvas-stage > #dsPhotoZoomControl #photoZoom::-moz-range-thumb{
+  box-sizing:border-box;width:15px;height:15px;
+  border:2px solid #f4f4f4;border-radius:50%;
+  background:#292c32;box-shadow:none;
+ }
+ .preview .canvas-stage > #dsPhotoZoomControl.is-thumb-hover #photoZoom::-webkit-slider-thumb,
+ .preview .canvas-stage > #dsPhotoZoomControl.is-thumb-hover #photoZoom::-moz-range-thumb{
+  background:#9297a1;
+ }
+ .preview .canvas-stage > #dsPhotoZoomControl.is-thumb-engaged #photoZoom::-webkit-slider-thumb,
+ .preview .canvas-stage > #dsPhotoZoomControl.is-thumb-engaged #photoZoom::-moz-range-thumb{
+  background:#fff!important;border-color:#fff!important;
+  box-shadow:0 0 0 3px rgba(255,255,255,.27),0 0 10px 3px rgba(255,255,255,.48)!important;
+ }
+ .preview .canvas-stage > #dsPhotoZoomControl #zoomLabel{
+  flex:0 0 24px;width:100%;min-width:0;
+  padding:0;margin:0;text-align:center;
+  font:600 10px/20px system-ui,Arial,sans-serif;
+  color:#fff;white-space:nowrap;transform-origin:50% 50%;
+ }
+ .preview .canvas-stage > #dsPhotoZoomControl.is-adjusting #zoomLabel{
+  font-weight:800;transform:scale(1.14);
+ }
+
+}
+@media(max-width:700px){
+ .ds-mobile-track>.preview>.ds-mobile-text-editor,
+ .ds-mobile-track>.preview>.ds-mobile-content-editor,
+ .ds-mobile-track>.preview{overflow-anchor:none}
+}
+/* El desplazamiento programático usa alturas estables, sin anclaje lateral. */
+main:has(#dsMobileViewport){overflow-anchor:none}
+
+/* El borde de la zona táctil queda visible solo mientras está seleccionada.
+   No altera la foto ni se exporta al PNG. El fondo sigue transparente. */
+.preview #photoStage>.ds-preview-hit-button.is-hotspot-selected,
+.preview #photoStage>.ds-preview-hit-button.is-hotspot-selected:hover,
+.preview #photoStage>.ds-preview-hit-button.is-hotspot-selected:focus-visible,
+.preview #photoStage>.ds-preview-hit-button.is-hotspot-selected:active{
+ border:2px dashed #e6008d!important;
+ border-radius:6px!important;
+ background:transparent!important;
+ outline:0!important;
+ box-shadow:none!important;
+}
+/* Pulso uniforme de 2px: 1px del borde original + 1px de anillo exterior.
+   Ningún cambio de grosor del borde en el box model: el interior no se mueve.
+   Se ilumina de inmediato, permanece 0,9s y se apaga en 0,15s. */
+@keyframes ds-context-card-flash{
+ 0%,85%{border-color:#e6008d;box-shadow:0 0 0 1px #e6008d}
+ 100%{border-color:#383d46;box-shadow:0 0 0 0 transparent}
+}
+.editor-panel .ds-control-card.is-preview-context-target{
+ animation:ds-context-card-flash 1.05s linear both;
+ position:relative;
+ z-index:3;
+}
+@media(prefers-reduced-motion:reduce){
+ .editor-panel .ds-control-card.is-preview-context-target{
+  animation-duration:.01ms;
+ }
 }
