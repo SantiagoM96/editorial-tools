@@ -28,6 +28,6 @@
 
 ## Validaciones
 
-El PR debe pasar `npm run check` y `npm run test:e2e` en GitHub Actions. Registrar resultados del CI antes de integrar. Pendiente revisión visual manual frente a `bae-dev` en escritorio/mobile, porque el shell general de destino aún es distinto.
+**CI aprobado:** [ejecución 43064646031](https://github.com/SantiagoM96/editorial-tools/actions/runs/43064646031), jobs `quality` (TypeScript, lint, Vitest, integridad y build Pages) y `browser-qa` (Playwright, **39 pruebas aprobadas**). Se corrigió en la prueba mobile la navegación a la pestaña Vista previa de Diario Show, que por defecto abre Formato y oculta su Canvas. La revisión visual manual frente a la versión nueva de `bae-dev` sigue pendiente: el shell general de destino aún es distinto. Un CI exitoso no implica paridad pixel-perfect.
 
 No modificar `mlz`, no hacer merge automático y no desplegar.
