@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { CollapsiblePanel } from './CollapsiblePanel';
 import {
   currentPageLabel,
   initialCarousel,
@@ -17,9 +18,8 @@ export function CarouselControls() {
 
   return (
     <>
-      <section className="panel-group carousel-panel" aria-label="Páginas del carrusel">
+      <CollapsiblePanel title="Páginas" className="carousel-panel">
         <div className="carousel-heading">
-          <h2>Páginas</h2>
           <span id="pageIndicator" className="carousel-current" role="status" aria-live="polite">
             {currentPageLabel(carousel)}
           </span>
@@ -66,12 +66,8 @@ export function CarouselControls() {
             </button>
           </div>
         </div>
-      </section>
-      <section
-        className="panel-group cronica-variant-panel"
-        aria-label="Elegir variante de la página"
-      >
-        <h2>Variantes</h2>
+      </CollapsiblePanel>
+      <CollapsiblePanel title="Diseño de placas" className="cronica-variant-panel">
         <div
           className="cronica-variant-options"
           role="group"
@@ -106,7 +102,7 @@ export function CarouselControls() {
             <span>Interior</span>
           </button>
         </div>
-      </section>
+      </CollapsiblePanel>
     </>
   );
 }

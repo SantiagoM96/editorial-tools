@@ -94,3 +94,52 @@
 @media (prefers-reduced-motion: reduce) {
   #cronica-media-root .cronica-photo-surface { transition: none; }
 }
+
+/* Sincronización selectiva Crónica: acordeones de MLZ construidos en React.
+   Conservan anchos, espacios internos, IDs, eventos y motor Canvas preexistentes. */
+.editor-panel .modern-card {
+  padding: 0 0 17px !important;
+  margin: 0 0 17px !important;
+  border: 0;
+  border-bottom: 1px solid #373b43;
+  border-radius: 0;
+  background: transparent;
+  min-width: 0;
+}
+.editor-panel .modern-card .modern-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: 45px;
+  margin: 0 0 12px;
+  padding: 11px 14px !important;
+  border: 1px solid #383d46 !important;
+  border-radius: 9px;
+  background: #2b2e35 !important;
+  color: #f4f4f5;
+  font-weight: 700;
+  text-align: left;
+}
+.editor-panel .modern-card .modern-toggle:hover { background: #33363e !important; }
+.editor-panel .modern-card .modern-toggle:focus-visible { outline: 2px solid #ed0000; outline-offset: 2px; }
+.editor-panel .modern-card .modern-chevron {
+  flex: none;
+  font-size: 21px;
+  line-height: 1;
+  color: #c7c9d0;
+  transition: transform 150ms ease;
+}
+.editor-panel .modern-card .modern-toggle[aria-expanded="false"] { margin-bottom: 0; }
+.editor-panel .modern-card .modern-toggle[aria-expanded="false"] .modern-chevron { transform: rotate(180deg); }
+.editor-panel .modern-card .modern-body { min-width: 0; }
+.editor-panel .modern-card .modern-body[hidden] { display: none !important; }
+.editor-panel .modern-card .modern-body > .control-field:first-child { margin-top: 0; }
+.editor-panel .modern-card .modern-body > .control-field > label { margin-top: 0; }
+.editor-panel .modern-card.carousel-panel .carousel-heading { justify-content: flex-end; }
+#cronica-content-root .modern-body > .control-field:first-child { margin-top: 12px; }
+#cronica-controls-root > .cronica-variant-panel:last-child { padding-bottom: 17px !important; margin-bottom: 17px !important; }
+@media (prefers-reduced-motion: reduce) {
+  .editor-panel .modern-card .modern-chevron { transition: none; }
+}

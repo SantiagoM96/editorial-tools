@@ -94,7 +94,10 @@ for (const width of [1440, 390]) {
     const updated = await capture('http://127.0.0.1:4173/cronica/');
     expect(updated.strapStyle, 'El CSS de borde/fondo/texto debe ser idéntico').toEqual(old.strapStyle);
     expect(updated.strapSize, 'El campo debe mantener las dimensiones').toEqual(old.strapSize);
-    expect(updated.photoGap, 'El espaciado fotografía/contenidos debe ser idéntico').toBe(old.photoGap);
+    // Cambio deliberado: Diseño y Textos son ahora paneles independientes,
+    // separados por encabezados plegables. El espacio ya no equivale al legado.
+    expect(updated.photoGap, 'Paneles separados con encabezados visibles').toBeGreaterThan(old.photoGap);
+    expect(updated.photoGap, 'La separación entre controles no debe crecer sin límite').toBeLessThan(180);
     expect(updated.screenshots.length).toBe(old.screenshots.length);
 
     for (let i = 0; i < old.screenshots.length; i++) {
