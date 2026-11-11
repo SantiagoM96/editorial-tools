@@ -20,7 +20,7 @@ import { createRenderScheduler } from './render-scheduler';
 'use strict';
 
 const el=id=>document.getElementById(id),canvas=el('art'),ctx=canvas.getContext('2d'),W=CANVAS_WIDTH,H=CANVAS_HEIGHT;
-let image=null,photoName=null,zoom=1,offsetX=0,offsetY=0,dragging=false,lastX=0,lastY=0,photoBottom=820,textAlignment='center',forceUppercase=false,selectedLogo='primary',photoHover=false,pageVariant='cover';
+let image=null,photoName=null,zoom=1,offsetX=0,offsetY=0,dragging=false,lastX=0,lastY=0,photoBottom=820,textAlignment='center',forceUppercase=false,selectedLogo='primary',photoHover=false,pageVariant='cover',photoDecodeFailed=false;
 const documentContent=createCoverContent();
 function emitContentState(){
  window.dispatchEvent(new CustomEvent('editorial:cronica:content-state',{detail:{...documentContent}}));
@@ -106,7 +106,7 @@ function render(includeHover=true){
   if(cover)drawCoverFooterLayer(ctx,W,H,EDGE);
   updatePhotoDropzone();
   emitMediaState();
-  el('status').textContent=size<requestedSize?'Texto largo: tamaño ajustado para respetar los márgenes.':'Vista previa activa · Arrastrá la foto para reencuadrarla.';
+  if(!photoDecodeFailed)el('status').textContent=size<requestedSize?'Texto largo: tamaño ajustado para respetar los márgenes.':'Vista previa activa · Arrastrá la foto para reencuadrarla.';
  }catch(error){el('status').textContent='Error de vista previa: '+error.message;console.error(error)}
 }
 /* Única fuente de verdad de páginas; los campos activos siguen como proyección Canvas. */
@@ -120,6 +120,7 @@ function readCurrentPage(){
 function saveActivePage(){carouselStore.saveActive(readCurrentPage())}
 // Los controles React consumen snapshots del store, no guardan fotografías.
 function loadPage(page){
+ photoDecodeFailed=false;
  pageVariant=page.variant==='cover'?'cover':'internal';
  documentContent.headline=String(page.headline||'');
  documentContent.strapText=String(page.strapText||'').toLocaleUpperCase('es-AR');
@@ -218,6 +219,7 @@ function updatePhotoDropzone(){
 }
 function loadPhoto(file){
  if(!file)return;
+ photoDecodeFailed=false;
  setPhotoHover(false);
  if(!file.type.startsWith('image/')){el('status').textContent='Seleccioná un archivo de imagen válido.';return}
  const pageId=carouselStore.activePageId;
@@ -229,7 +231,8 @@ function loadPhoto(file){
   const target=carouselStore.getPageById(pageId);
   if(!target)return;
   if(pageId===carouselStore.activePageId){
-   image=img;photoName=file.name;zoom=1;offsetX=0;offsetY=0;render();
+    photoDecodeFailed=false;
+    image=img;photoName=file.name;zoom=1;offsetX=0;offsetY=0;render();
   }else{
    target.image=img;target.photoName=file.name;target.zoom=1;target.offsetX=0;target.offsetY=0;
   }
@@ -239,7 +242,8 @@ function loadPhoto(file){
   if(!photoLoads.isCurrent(pageId,signal))return;
   if(error?.name==='AbortError')return;
   if(pageId===carouselStore.activePageId){
-   el('status').textContent='No se pudo abrir esta fotografía';
+    photoDecodeFailed=true;
+    el('status').textContent='No se pudo abrir esta fotografía';
   }
   console.error('Error al decodificar fotografía:',error);
  }).finally(()=>photoLoads.finish(pageId,signal));
