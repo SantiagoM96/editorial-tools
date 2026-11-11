@@ -5,15 +5,15 @@
  const mq=window.matchMedia('(min-width:701px)');
  // QA y vista convencional pueden desactivar el recorrido con ?onboarding=off.
  if(new URLSearchParams(location.search).get('onboarding')==='off')return;
- const storageKey='ds-editor-tour-desktop-v2';
+ const storageKey='ds-editor-tour-desktop-v3';
  const qs=s=>document.querySelector(s);
  const steps=[
-  {selector:'#dsMobileControlsPanel .ds-plate-design-group',title:'Elegí el diseño de tu placa',description:'Seleccioná una de las cuatro variantes disponibles para definir el estilo de la publicación.'},
+  {selector:'#dsMobileControlsPanel .ds-plate-design-group',title:'Elegí el diseño de tu placa',description:'Seleccioná una de las opciones disponibles para definir el estilo de la publicación.'},
   {selector:'#dsMobileControlsPanel .ds-photo-layout-group',title:'Definí la distribución fotográfica',description:'Elegí Simple para usar una fotografía o Compartida para trabajar con dos imágenes.'},
-  {selector:'#dsMobileControlsPanel .ds-content-group',title:'Importá el contenido',description:'Pegá el enlace de una noticia para importar sus datos. También podés cambiar el logo y su posición.'},
+  {selector:'#photoUploadArea',title:'Agregá tus fotografías',description:'Seleccioná una o más fotografías según la distribución elegida. Arrastralas en la vista previa para ajustar el encuadre y utilizá el zoom.'},
+  {selector:'#dsMobileControlsPanel .ds-import-group',title:'Importá y personalizá tu placa',description:'Pegá el enlace de una noticia para importar su contenido. También podés configurar el logo y elegir el estilo de la firma inferior.'},
   {selector:'#dsMobileControlsPanel .ds-texts-group',title:'Editá los textos',description:'Escribí o ajustá el titular, aplicá formato y elegí la alineación del texto.'},
-  {selector:'#photoUploadArea',title:'Agregá una fotografía',description:'Seleccioná una imagen, arrastrala en la vista previa para reencuadrarla y utilizá el zoom lateral.'},
-  {selector:'#photoStage',title:'Editá desde la vista previa',description:'Hacé clic en el logo para abrir Contenido o en el titular para abrir Textos. El editor te lleva al módulo correspondiente.'},
+  {selector:'#photoStage',title:'Editá desde la vista previa',description:'Hacé clic en el logo para abrir Identidad gráfica o en el titular para abrir Textos. El editor te lleva al módulo correspondiente.'},
   {selector:'body',title:'¿Poco espacio?',description:'Probá el zoom del navegador al 90% u 80% para aprovechar mejor el espacio de trabajo.',fullScreen:true,showZoomDemo:true}
  ];
  let index=-1,active=false,layer=null,card=null,highlight=null;
