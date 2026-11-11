@@ -12,14 +12,16 @@ Los tres generadores están en `cronica/`, `bae/` y `diarioshow/` debajo de **ca
 1. Andy plantea un cambio por voz y se identifica el generador y el alcance.
 2. Crear `feat/descripcion` a partir de `dev` (nunca de `main`).
 3. Abrir PR `feat/* → dev`. La CI comprueba TypeScript, ESLint, Vitest, enlaces, compilación y Playwright, incluyendo Canvas/PNG/paridad.
-4. Integrar el PR sólo si pasa CI. El push a `dev` ejecuta el workflow de Pages y publica DEV.
+4. Integrar el PR sólo si pasa CI. El push a `dev` dispara `Solicitar publicación DEV`. Su finalización activa `Publicar Editorial Tools · DEV y PROD` desde `main`, que publica DEV.
 5. Andy revisa en DEV, en desktop y mobile, la interfaz y sus PNG; si requiere correcciones, repetir con otra `feat/*`.
 6. Con aprobación explícita, abrir y fusionar PR `dev → main`. La nueva publicación incorpora el `main` aprobado, manteniendo el `dev` en paralelo.
 
 **Los cambios funcionales no pasan a producción por el simple hecho de llegar a DEV.**
 
 ## Cómo funciona la publicación
-GitHub Pages publica **un único artefacto** por repositorio. El workflow `pages.yml` responde a pushes en ambas ramas, pero en cada ejecución realiza checkout separado de los HEAD de `main` y `dev`, valida y compila cada uno con sus propios valores:
+GitHub Pages publica **un único artefacto** por repositorio. El workflow `pages.yml` se ejecuta en `main` por push a producción, manualmente o por `workflow_run` tras el aviso de una actualización de DEV. Esto evita depender de que el ambiente GitHub Pages autorice despliegues originados en `dev`.
+
+En cada ejecución realiza checkouts separados de los HEAD de `main` y `dev`, valida y compila cada uno con sus propios valores:
 
 - PROD: `EDITORIAL_BASE=/editorial-tools/`, `VITE_EDITORIAL_ENV=production`.
 - DEV: `EDITORIAL_BASE=/editorial-tools/dev/`, `VITE_EDITORIAL_ENV=development`.
@@ -27,7 +29,9 @@ GitHub Pages publica **un único artefacto** por repositorio. El workflow `pages
 
 `prepare-pages.mjs` deja las páginas y assets del build con sus metadatos de revisión; `compose-pages.mjs` combina PROD en raíz y DEV en `dev/`, y rechaza artefactos de ambiente equivocado. `validate-pages.mjs` verifica las referencias reales de ambos builds. Playwright abre el artefacto final bajo `/editorial-tools/` y comprueba navegación, Canvas, PNG y móviles antes de subirlo.
 
-El grupo de concurrencia `editorial-tools-pages` serializa las publicaciones con `cancel-in-progress: false`. Cada ejecución toma los commits vigentes al comenzar el trabajo y genera ambos ambientes de cero. El despliegue sólo ocurre cuando todos los pasos anteriores terminan con éxito. Ninguna ejecución toma el último `dist` generado por otra rama.
+El grupo de concurrencia `editorial-tools-pages` serializa las publicaciones con `cancel-in-progress: false`. Cada ejecución toma los commits vigentes al comenzar el trabajo y genera ambos ambientes de cero. Ninguna ejecución toma el último `dist` generado por otra rama.
+
+**Privilegios mínimos:** los builds y el aviso DEV tienen `contents: read`; la publicación en un job separado, que no ejecuta código de DEV, tiene `pages: write` e `id-token: write`. El despliegue sólo ocurre tras el éxito de todas las verificaciones.
 
 ## Identificación, seguridad y límites
 - DEV tiene una marca discreta `ENTORNO DE DESARROLLO` en el documento HTML, que nunca entra en el Canvas. Los PNG mantienen 1080 × 1440.

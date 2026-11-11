@@ -2,27 +2,28 @@ name: Publicar Editorial Tools · DEV y PROD
 
 on:
   push:
-    branches: [main, dev]
+    branches: [main]
+  workflow_run:
+    workflows: ['Solicitar publicación DEV']
+    branches: [dev]
+    types: [completed]
   workflow_dispatch:
 
+# No hay token de despliegue durante builds que ejecutan código de DEV.
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
-# Un solo deployment por repositorio. Cada ejecución recompila AMBAS ramas;
-# ningún push puede reemplazar solamente una de las versiones.
 concurrency:
   group: editorial-tools-pages
   cancel-in-progress: false
 
 jobs:
-  publish:
+  build:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-24.04
     timeout-minutes: 35
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      contents: read
     steps:
       - name: Obtener la versión exacta de PROD (main)
         uses: actions/checkout@v4
@@ -90,12 +91,23 @@ jobs:
             production/playwright-report/
             production/test-results/
           if-no-files-found: ignore
-      - name: Configurar GitHub Pages
-        uses: actions/configure-pages@v5
-      - name: Subir artefacto completo validado
+      - name: Subir artefacto completo y validado
         uses: actions/upload-pages-artifact@v3
         with:
           path: dist-pages
-      - name: Publicar una única versión atómica
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publicar artefacto atómico
         id: deployment
         uses: actions/deploy-pages@v4

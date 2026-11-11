@@ -17,12 +17,13 @@
 - `scripts/prepare-pages.mjs` inyecta metadatos y la identificación visual **sólo** en HTML de DEV, no en Canvas ni exportaciones.
 - `scripts/validate-pages.mjs` falla ante assets ausentes, base incorrecta o contaminación entre ambientes.
 - `scripts/compose-pages.mjs` ensambla dos builds ya validados, preservando su commit de origen.
-- `.github/workflows/pages.yml` serializa las publicaciones y vuelve a compilar las dos ramas en cada disparo.
+- `.github/workflows/dev-publish.yml` avisa los pushes a DEV. `pages.yml` responde desde `main` al aviso o a cambios de PROD, serializa publicaciones y recompila ambos commits.
+- Build y QA tienen permisos de sólo lectura; deploy-pages tiene permisos de publicación en un job separado.
 
 ## Compatibilidad y calidad
 - Mantener CSS existente sin habilitar Preflight global ni rediseñar módulos.
 - Mantener exportaciones PNG, capas Canvas, importadores, fotografías, zoom y edición mobile.
-- Las pruebas originales de paridad siguen vigentes. En el dashboard se compara pixel-perfect el área de tarjetas, excluyendo sólo copys y aviso de ambiente aprobados.
+- Las pruebas originales de paridad siguen vigentes. En el dashboard se compara pixel-perfect el área de tarjetas en desktop y la geometría/estilos en mobile, por los copys de ambiente aprobados.
 - Los PRs a `dev` y `main` corren CI. El workflow de Pages agrega smoke tests del artefacto final con las rutas reales DEV/PROD.
 - El despliegue de Pages es único por repositorio; no crear despliegues parciales.
 
