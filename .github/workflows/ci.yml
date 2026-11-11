@@ -33,6 +33,12 @@ jobs:
           ref: 13032f9ab2ea8b81f3d46c81ca36f4e0b4e211b7
           path: reference
           persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: SantiagoM96/mlz
+          ref: ef57c6ba9204e5665b42d31cfcd076b229ef6597
+          path: reference-latest
+          persist-credentials: false
       - run: npm ci --no-audit --no-fund
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e

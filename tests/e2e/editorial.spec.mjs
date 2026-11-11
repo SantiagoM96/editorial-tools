@@ -143,7 +143,7 @@ test('Vistas móviles 390px: apertura y capturas visuales sin errores JavaScript
     const errors = await loadPage(page, product.route);
     // Diario Show abre el panel Formato por defecto: mostrar su pestaña de vista previa.
     if (product.route === '/diarioshow/') {
-      await page.locator('.ds-mobile-tabs [data-tab="preview"]').click();
+      await page.locator('#dsMobilePreviewTab').click();
     }
     await expect(page.locator('#art')).toBeVisible();
     await page.screenshot({ path: 'tests/artifacts/' + product.route.replaceAll('/', '') + '-mobile.png', fullPage: true, animations: 'disabled' });
