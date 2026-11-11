@@ -62,6 +62,22 @@ describe('Controles React de fotografía y logo', () => {
     }
   });
 
+  it('muestra el archivo confirmado por Canvas y lo restablece al limpiar la página', () => {
+    render(<MediaControls />);
+    expect(screen.getByText('Seleccioná')).toBeTruthy();
+    expect(screen.getByText('una fotografía')).toBeTruthy();
+    fireEvent(window, new CustomEvent('editorial:cronica:media-state', {
+      detail: { logo: 'primary', zoomPercent: 100, hasImage: true, photoName: 'portada.png' },
+    }));
+    expect(screen.getByText('Cambiar')).toBeTruthy();
+    expect(screen.getByText('portada.png')).toBeTruthy();
+    fireEvent(window, new CustomEvent('editorial:cronica:media-state', {
+      detail: { logo: 'primary', zoomPercent: 100, hasImage: false, photoName: null },
+    }));
+    expect(screen.getByText('Seleccioná')).toBeTruthy();
+    expect(screen.getByText('una fotografía')).toBeTruthy();
+  });
+
   it('sincroniza zoom y su etiqueta a partir del estado del Canvas', () => {
     const commands: unknown[] = [];
     const onCommand = (event: Event) => {
