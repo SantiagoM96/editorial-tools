@@ -48,7 +48,7 @@ export function MediaControls() {
         </div>
       </div>
       <div className="control-field cronica-photo-field">
-        <span className="cronica-photo-heading">Fotografía</span>
+        <label htmlFor="file" className="cronica-photo-heading">Fotografía</label>
         <div className="cronica-photo-picker">
           <input
             id="file"
@@ -69,7 +69,7 @@ export function MediaControls() {
               add_photo_alternate
             </span>
             <span className="cronica-photo-copy">
-              <strong>{media.hasImage ? 'Cambiar' : 'Seleccioná'}</strong>
+              <strong>{media.hasImage ? 'Cambiar' : 'Seleccioná'}</strong>{' '}
               <span className="cronica-photo-name" title={media.photoName ?? undefined}>
                 {media.hasImage && media.photoName ? media.photoName : 'una fotografía'}
               </span>
