@@ -63,8 +63,11 @@ for (const width of [1440, 390]) {
       }, { oldImage: baseline.image.toString('base64'), newImage: updated.image.toString('base64') });
       console.log('TIPOGRAFIA-DIFF', JSON.stringify({ width, difference, source: baseline.metrics, destination: updated.metrics }));
     }
-    // Las dimensiones, posición y CSS deben coincidir incluso en mobile.
-    expect(updated.metrics).toEqual(baseline.metrics);
+    // La tarjeta de foto aprobada cambia la posición vertical posterior
+    // (en desktop se midieron +5px), no la geometría ni estilos de tipografía.
+    expect(updated.metrics.rect[0], 'Misma posición horizontal').toBe(baseline.metrics.rect[0]);
+    expect(updated.metrics.rect.slice(2), 'Mismo ancho y alto').toEqual(baseline.metrics.rect.slice(2));
+    expect(updated.metrics.css, 'Misma distribución y tipografía').toEqual(baseline.metrics.css);
     if (width === 390 && difference) {
       // Diferencia real del run #43065071889: 42px, delta <=3 RGB,
       // exclusivamente en las últimas tres filas del borde inferior.
