@@ -92,10 +92,18 @@ test('BAE: variantes, carga de imagen y exportación PNG', async ({ page }) => {
   await page.locator('#headline').fill('Prueba editorial BAE');
   await page.locator('button[data-theme="white"]').click();
   await expect(page.locator('button[data-theme="white"]')).toHaveAttribute('aria-pressed', 'true');
+  const chooser = page.waitForEvent('filechooser');
+  await page.locator('.bae-photo-surface').click();
+  expect(await (await chooser).element().getAttribute('id')).toBe('file');
   await uploadSyntheticImage(page);
+  await expect(page.locator('#baePhotoAction')).toHaveText('Cambiar');
+  await expect(page.locator('#baePhotoCaption')).toHaveText('qa-imagen.png');
   const download = page.waitForEvent('download', { timeout: 30000 });
   await page.locator('#download').click();
   await verifyPng(await download);
+  await page.locator('#clearAll').click();
+  await expect(page.locator('#baePhotoAction')).toHaveText('Seleccioná');
+  await expect(page.locator('#baePhotoCaption')).toHaveText('una fotografía');
   expect(errors).toEqual([]);
 });
 
