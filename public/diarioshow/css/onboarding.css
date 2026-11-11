@@ -1,0 +1,43 @@
+
+/* Recorrido interactivo; disponible solo en escritorio para no bloquear edición móvil. */
+.ds-onboarding-trigger { display:none; }
+.ds-tour-layer[hidden]{display:none!important}
+@media(min-width:701px){
+.ds-onboarding-trigger{
+ position:fixed;right:0;top:52%;z-index:90;display:flex;gap:6px;align-items:center;
+ padding:11px 13px;background:#e6008d;color:#fff;border:1px solid #e6008d;
+ border-radius:9px 0 0 9px;cursor:pointer;font:700 13px Inter,system-ui,sans-serif;
+ box-shadow:0 6px 20px #0004;
+}
+.ds-onboarding-trigger:hover{background:#bb0073}
+.ds-onboarding-trigger:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.ds-onboarding-trigger .material-icons{font-size:19px}
+.ds-tour-layer{position:fixed;inset:0;z-index:2000;pointer-events:auto;font-family:Inter,system-ui,sans-serif}
+.ds-tour-target{
+ position:fixed;pointer-events:none;box-shadow:0 0 0 100vmax rgba(6,7,10,.78);
+ border-radius:9px;outline:2px solid #e6008d;outline-offset:0;transition:all 150ms ease;
+}
+.ds-tour-fullscreen .ds-tour-target{outline:0;background:rgba(5,6,12,.78);box-shadow:none}
+.ds-tour-dialog{
+ position:fixed;max-width:calc(100vw - 32px);max-height:calc(100vh - 24px);overflow:auto;
+ padding:18px;background:rgba(25,24,34,.96);color:#fff;border:1px solid #e6008d;
+ border-radius:12px;box-shadow:0 16px 44px #0009;pointer-events:auto;
+}
+.ds-tour-top,.ds-tour-footer,.ds-tour-actions{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ds-tour-top{margin-bottom:14px}
+.ds-tour-progress{background:#e6008d;color:white;padding:6px 10px;font-size:12px;font-weight:700;border-radius:999px}
+.ds-tour-dialog h2{margin:0 0 10px;font-size:21px;line-height:1.25}
+.ds-tour-dialog p{margin:0 0 18px;color:#e4dfea;font-size:13px;line-height:1.55}
+.ds-tour-dots{display:flex;gap:6px;margin-bottom:17px}
+.ds-tour-dots span{width:7px;height:7px;border-radius:9px;background:#7f7a89}
+.ds-tour-dots span.is-active{width:22px;background:#e6008d}
+.ds-tour-dialog button{min-height:36px;padding:7px 11px;border-radius:7px;font-size:12px;font-weight:650;cursor:pointer}
+.ds-tour-dialog button:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.ds-tour-close{border:0!important;background:transparent!important;color:white;font-size:24px!important}
+.ds-tour-skip{background:transparent!important;color:#ddd8e4;border:0!important;text-decoration:underline}
+.ds-tour-back{background:#3b3944!important;color:white;border:1px solid #696574!important}
+.ds-tour-next{background:#e6008d!important;border:1px solid #e6008d!important;color:white!important}
+.ds-tour-dialog button:disabled{opacity:.35;cursor:not-allowed}
+}
+@media(max-width:700px){.ds-onboarding-trigger,.ds-tour-layer{display:none!important}}
+@media(prefers-reduced-motion:reduce){.ds-tour-target{transition:none}}
