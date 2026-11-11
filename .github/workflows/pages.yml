@@ -70,8 +70,8 @@ jobs:
           DEV_SHA: ${{ steps.revision.outputs.dev }}
         run: |
           node production/scripts/compose-pages.mjs production/dist-pages development/dist-pages dist-pages
-          PAGES_ROOT=../dist-pages EDITORIAL_BASE=/editorial-tools/ VITE_EDITORIAL_ENV=production VITE_EDITORIAL_SHA="$PROD_SHA" node production/scripts/validate-pages.mjs
-          PAGES_ROOT=../dist-pages/dev EDITORIAL_BASE=/editorial-tools/dev/ VITE_EDITORIAL_ENV=development VITE_EDITORIAL_SHA="$DEV_SHA" node production/scripts/validate-pages.mjs
+          PAGES_ROOT=dist-pages EDITORIAL_BASE=/editorial-tools/ VITE_EDITORIAL_ENV=production VITE_EDITORIAL_SHA="$PROD_SHA" node production/scripts/validate-pages.mjs
+          PAGES_ROOT=dist-pages/dev EDITORIAL_BASE=/editorial-tools/dev/ VITE_EDITORIAL_ENV=development VITE_EDITORIAL_SHA="$DEV_SHA" node production/scripts/validate-pages.mjs
       - name: Instalar Chromium para pruebas del artefacto
         working-directory: production
         run: npx playwright install --with-deps chromium

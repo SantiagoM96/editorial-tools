@@ -23,7 +23,7 @@ export const editorialTools = [
   {
     id: 'diarioshow',
     title: 'Diario Show',
-    description: 'Generador de placas para Instagram.',
+    description: 'Generador de placas para Instagram. Versión inicial en preparación.',
     href: './diarioshow/',
     logoPath: './diarioshow/logos/dashboard.svg',
     logoAlt: 'Diario Show',

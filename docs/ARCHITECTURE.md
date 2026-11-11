@@ -1,34 +1,29 @@
-# Arquitectura · Fase 1 (fundamentos)
+# Arquitectura de Editorial Tools
 
-## Decisión principal
-El dashboard pasa a React + TypeScript estrictamente tipado, Vite y Tailwind CSS v4. Las tres herramientas gráficas continúan siendo **documentos HTML/CSS/JS aislados** dentro de `public/`, publicados sin recompilación. No se fusionan motores Canvas ni se cambia su comportamiento.
+## Estado real de modernización
+- Dashboard: React 19 + TypeScript strict, Vite y Tailwind CSS v4.
+- Crónica: controles React y módulos modernos integrados con su motor gráfico Canvas existente.
+- BAE y Diario Show: editores HTML/CSS/JavaScript progresivamente modernizados en UI, sin migración ficticia a React.
+- `src/domain/`: catálogo de productos y contratos tipados.
+- `src/features/dashboard/`: componentes, pruebas unitarias y dashboard.
+- `src/features/cronica/`: componentes y motor de Crónica.
+- `public/`: recursos, editores legados, logotipos, texturas y tipografías.
+- `scripts/`: verificaciones, compilaciones Pages y servidor de QA.
+- `tests/e2e/`: navegación, Canvas, PNG, mobile y paridad visual.
 
-## Carpetas
+## Aislamiento de ambientes
+- `main` → `/editorial-tools/` (PROD); `dev` → `/editorial-tools/dev/` (DEV).
+- Vite toma `EDITORIAL_BASE` por build. Los enlaces locales y recursos heredados mantienen sus rutas relativas.
+- `scripts/prepare-pages.mjs` inyecta metadatos y la identificación visual **sólo** en HTML de DEV, no en Canvas ni exportaciones.
+- `scripts/validate-pages.mjs` falla ante assets ausentes, base incorrecta o contaminación entre ambientes.
+- `scripts/compose-pages.mjs` ensambla dos builds ya validados, preservando su commit de origen.
+- `.github/workflows/pages.yml` serializa las publicaciones y vuelve a compilar las dos ramas en cada disparo.
 
-- `src/domain/`: contratos y catálogo tipado de productos editoriales.
-- `src/features/dashboard/`: componentes y pruebas unitarias del dashboard.
-- `src/styles/dashboard.css`: Tailwind v4 sin Preflight + CSS original del dashboard, conservado para paridad.
-- `public/cronica/`, `public/bae/`, `public/diarioshow/`: herramientas heredadas autónomas.
-- `public/og-image.png`: recurso social de la portada.
-- `tests/e2e/`: navegación, renderizado Canvas, PNG, carruseles, móvil y paridad con origen.
-- `scripts/`: validaciones estáticas, builder del artefacto Pages y servidor de referencia.
-- `dist/`: resultado Vite; `dist-pages/`: entrega GitHub Pages, ambos ignorados.
+## Compatibilidad y calidad
+- Mantener CSS existente sin habilitar Preflight global ni rediseñar módulos.
+- Mantener exportaciones PNG, capas Canvas, importadores, fotografías, zoom y edición mobile.
+- Las pruebas originales de paridad siguen vigentes. En el dashboard se compara pixel-perfect el área de tarjetas, excluyendo sólo copys y aviso de ambiente aprobados.
+- Los PRs a `dev` y `main` corren CI. El workflow de Pages agrega smoke tests del artefacto final con las rutas reales DEV/PROD.
+- El despliegue de Pages es único por repositorio; no crear despliegues parciales.
 
-## Compromisos de compatibilidad
-
-1. El Vite dev server usa la raíz `/`; el artefacto de producción usa `/editorial-tools/`.
-2. `public/` se copia sin transformaciones y conserva las rutas de los generadores.
-3. Se mantiene la CSS original del dashboard en una hoja exclusiva, sin Preflight, para evitar desajustes de píxeles. Tailwind se incorpora con tokens para futuros componentes, **sin forzar refactors visuales en esta fase**.
-4. El sitio de GitHub Pages solo se actualiza tras un merge autorizado a `main`; el PR no activa despliegues.
-5. Crónica, BAE y Diario Show mantienen los archivos JS originales; no se realiza una migración ficticia a TypeScript.
-
-## Condiciones para el siguiente PR
-
-- Modelar el documento editorial y sus variantes, partiendo de Crónica.
-- Tests sobre cada edición, imagen y exportación antes de reemplazar componentes o Canvas.
-- Desacoplar lógica gráfica de React, sin imponer un renderer común prematuramente.
-- Revisar seguridad de importación mediante URL antes de migrar los importadores.
-- Mantener el mismo control de paridad con los artefactos fijados del origen.
-
-## Calidad
-`npm run check` ejecuta typecheck, ESLint, unit tests, integridad estática y producción. `npm run test:e2e` corre Playwright; los tests de paridad del origen se habilitan en CI con un checkout inmutable.
+Véase [operación DEV/PROD](ENVIRONMENTS.md) y [AGENTS.md](../AGENTS.md).
