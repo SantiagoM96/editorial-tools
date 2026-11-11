@@ -47,3 +47,17 @@ main[data-bae-mobile-tab=preview]>.preview{display:grid!important;grid-template-
 .preview .bae-text-hit:focus-visible{opacity:1;outline:2px dashed #d82626}
 }
 @media(prefers-reduced-motion:reduce){.editor-panel .bae-card-toggle .material-icons{transition:none}}
+
+/* Paridad de controles de Andy: tarjetas con cuerpo separado y campos iOS a
+   16 px para evitar el zoom automático al escribir en una vista de 390/375 px. */
+.editor-panel .bae-card-toggle:hover { background:#33363e; }
+.editor-panel .bae-card-body { background:#202228;border-radius:0 0 9px 9px; }
+@media(max-width:700px) {
+  .bae-preview-text-editor textarea,
+  .editor-panel textarea,
+  .editor-panel input[type="text"],
+  .editor-panel input[type="url"] { font-size:16px; }
+  .bae-preview-text-editor .bae-mobile-format button:focus-visible {
+    outline:2px solid #d82626;outline-offset:2px;
+  }
+}
