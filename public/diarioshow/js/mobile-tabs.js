@@ -30,7 +30,7 @@
     hit.className='ds-preview-logo-hit';
     hit.setAttribute('aria-label','Abrir contenido desde el logo de Diario Show');
     hit.title='Abrir contenido';
-    Object.assign(hit.style,{position:'absolute',zIndex:'20',background:'transparent',border:'0',padding:'0',cursor:'pointer',display:'none',touchAction:'manipulation'});
+    Object.assign(hit.style,{position:'absolute',zIndex:'9999',background:'transparent',border:'0',padding:'0',cursor:'pointer',display:'none',touchAction:'manipulation'});
     stage.append(hit);
     const place=()=>{
       const mobile=window.matchMedia('(max-width: 767px)').matches;
@@ -48,11 +48,11 @@
       hit.style.width=((logoWidth+2*extra)*scale)+'px';
       hit.style.height=((logoHeight+2*extra)*scale)+'px';
     };
-    hit.addEventListener('click',()=>{
+    const openLogoContent=(event)=>{\n      event?.preventDefault();\n      event?.stopImmediatePropagation();\n      event?.stopPropagation();\n      setTab('format');\n      document.querySelector('.editor-panel .panel-group')?.scrollIntoView({behavior:'smooth',block:'start'});\n    };\n    hit.addEventListener('pointerdown',event=>{event.stopPropagation();});\n    hit.addEventListener('click',openLogoContent);\n    const dropzone=document.getElementById('photoDropzone');\n    dropzone?.addEventListener('click',event=>{\n      if(hit.style.display==='none')return;\n      const bounds=hit.getBoundingClientRect();\n      if(event.clientX>=bounds.left && event.clientX<=bounds.right && event.clientY>=bounds.top && event.clientY<=bounds.bottom)openLogoContent(event);\n    },true);\n    /* previous handler removed */\n    /*
       setTab('format');
       document.querySelector('.editor-panel .panel-group')?.scrollIntoView({behavior:'smooth',block:'start'});
     });
-    buttons.forEach(b=>b.addEventListener('click',()=>requestAnimationFrame(place)));
+    */\n    buttons.forEach(b=>b.addEventListener('click',()=>requestAnimationFrame(place)));
     window.addEventListener('resize',place);
     new ResizeObserver(place).observe(canvas);
     requestAnimationFrame(place);
