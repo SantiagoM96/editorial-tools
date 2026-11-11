@@ -26,6 +26,10 @@ export default defineConfig({
           command: 'SERVE_ROOT=reference/public PORT=4174 node scripts/serve.mjs',
           url: 'http://127.0.0.1:4174/dev/',
           timeout: 30_000,
+        }, {
+          command: 'SERVE_ROOT=reference-latest/public PORT=4175 node scripts/serve.mjs',
+          url: 'http://127.0.0.1:4175/dev/',
+          timeout: 30_000,
         }]
       : []),
   ],
