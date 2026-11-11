@@ -47,6 +47,12 @@ for (const file of pages) {
     html = html.replace('</head>', metadata + '<meta name="robots" content="noindex, nofollow">' + badgeStyle + '</head>');
     html = html.replace('</body>', badge + '</body>');
   } else {
+    // Producción nunca debe identificarse como un dashboard de desarrollo,
+    // tampoco en el título, metadatos sociales o etiquetas accesibles.
+    html = html.replaceAll('Dashboard de desarrollo', 'Dashboard editorial')
+      .replaceAll('dashboard de desarrollo', 'dashboard editorial')
+      .replace('<title>Editorial Tools · Vista previa</title>',
+        '<title>Herramientas editoriales</title>');
     html = html.replace('</head>', metadata + '</head>');
   }
   writeFileSync(path, html);
