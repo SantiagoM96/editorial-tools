@@ -12,6 +12,14 @@
     buttons.forEach(b=>b.setAttribute('aria-selected',String(b.dataset.tab===tab)));
   };
   buttons.forEach(b=>b.addEventListener('click',()=>setTab(b.dataset.tab)));
+  const logo=document.querySelector('.header-logo-link');
+  logo?.addEventListener('click',(event)=>{
+    if(!window.matchMedia('(max-width: 767px)').matches || document.body.dataset.dsMobileTab!=='preview') return;
+    event.preventDefault();
+    setTab('format');
+    const content=document.querySelector('.editor-panel .panel-group');
+    if(content) requestAnimationFrame(()=>content.scrollIntoView({behavior:'smooth',block:'start'}));
+  });
   setTab('format');
   document.body.classList.add('ds-mobile-ready');
 })();
