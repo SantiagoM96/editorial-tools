@@ -2,7 +2,7 @@
  * Modelo de documento Crónica desacoplado de React, formularios y Canvas.
  * Estos valores conservan los defaults de la versión editorial original.
  */
-export type EditorialVariant = 'cover' | 'internal';
+export type EditorialVariant = 'blank' | 'cover' | 'internal';
 export type EditorialLogo = 'none' | 'primary' | 'secondary' | 'white';
 export type EditorialAlignment = 'left' | 'center';
 
