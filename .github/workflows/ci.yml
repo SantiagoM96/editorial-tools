@@ -19,6 +19,12 @@ jobs:
       - run: npm run test:unit
       - run: npm test
       - run: npm run build:pages
+      - name: Validar CSS/JS cache-busting del artefacto DEV
+        env:
+          VITE_EDITORIAL_ENV: development
+          EDITORIAL_BASE: /editorial-tools/dev/
+          VITE_EDITORIAL_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: npm run build:pages
   browser-qa:
     runs-on: ubuntu-24.04
     timeout-minutes: 18

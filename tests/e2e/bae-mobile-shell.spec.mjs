@@ -72,3 +72,26 @@ test('BAE: cada diapositiva conserva su estado y puede seleccionarse', async ({ 
   await page.evaluate(() => window.EditorialSlides.select(1));
   await expect.poll(() => page.evaluate(() => window.EditorialSlides.active())).toBe(1);
 });
+
+test('BAE: onboarding original aparece en la primera visita y se puede finalizar', async ({ page }) => {
+  await page.goto('/bae/', { waitUntil: 'load' });
+  await expect(page.getByRole('dialog', { name: 'Organizá las diapositivas' })).toBeVisible();
+  await expect(page.locator('#dsTourProgress')).toContainText('1 de ');
+  await page.getByRole('button', { name: 'Omitir' }).click();
+  await expect(page.locator('#dsOnboardingLayer')).toBeHidden();
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('bae-dev-tour-desktop-v1'))).toBe('complete');
+  await page.reload({ waitUntil: 'load' });
+  await expect(page.locator('#dsOnboardingLayer')).toHaveCount(0);
+  await page.locator('#dsOnboardingTrigger').click();
+  await expect(page.getByRole('dialog', { name: 'Organizá las diapositivas' })).toBeVisible();
+});
+
+test('BAE: la exportación puede probarse con onboarding desactivado sin eliminar la guía', async ({ page }) => {
+  await page.goto('/bae/?onboarding=off', { waitUntil: 'load' });
+  await expect(page.locator('#dsOnboardingLayer')).toHaveCount(0);
+  await expect(page.locator('#art')).toBeVisible();
+  const promise = page.waitForEvent('download');
+  await page.locator('#download').click();
+  const download = await promise;
+  expect(download.suggestedFilename()).toMatch(/\.png$/i);
+});

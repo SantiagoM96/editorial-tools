@@ -31,6 +31,15 @@ for (const file of pages) {
   const metadata = '<meta name="editorial-environment" content="' + environment + '">' +
     '<meta name="editorial-commit" content="' + sha + '">';
   if (environment === 'development') {
+    // Los editores HTML incluyen CSS/JS estáticos con queries heredadas de MLZ.
+    // Incorporar el SHA de DEV evita cargar una versión anterior desde caché.
+    const assetVersion = encodeURIComponent(sha.slice(0, 12));
+    html = html.replace(
+      /(<(?:script|link)\b[^>]*\b(?:src|href)=["'])(\.\/(?:js|css)\/[^"']+)(["'])/gi,
+      (_match, prefix, asset, suffix) =>
+        prefix + asset + (asset.includes('?') ? '&' : '?') +
+        'editorial_dev_sha=' + assetVersion + suffix,
+    );
     // El aviso se agrega al DOM del sitio, nunca al Canvas ni a las exportaciones.
     const badgeStyle = '<style id="editorial-dev-badge-style">' +
       '#editorial-dev-badge{position:fixed;right:12px;bottom:12px;z-index:2147483647;' +

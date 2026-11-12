@@ -195,9 +195,7 @@
  window.addEventListener('scroll',schedule,{passive:true});
  const trigger=qs('#dsOnboardingTrigger');
  if(trigger)trigger.addEventListener('click',start);
- // La guía completa permanece disponible desde el botón de ayuda.
- // No se inicia automáticamente para no bloquear edición o descarga PNG.
- if(mq.matches&&new URLSearchParams(location.search).get('onboarding')==='force'){
+ if(mq.matches&&(!completed() || new URLSearchParams(location.search).get('onboarding')==='force')){
   // Después de que el editor termine su primera renderización.
   window.addEventListener('load',()=>requestAnimationFrame(()=>requestAnimationFrame(start)),{once:true});
  }
