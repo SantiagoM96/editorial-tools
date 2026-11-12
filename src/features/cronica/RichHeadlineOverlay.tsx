@@ -111,7 +111,7 @@ export function RichHeadlineOverlay(){
      sel.removeAllRanges();sel.addRange(range);commit(event.currentTarget);
     }}
     onBeforeInput={event=>{
-     if(event.nativeEvent.inputType!=='insertParagraph')return;
+     if((event.nativeEvent as InputEvent).inputType!=='insertParagraph')return;
      event.preventDefault();const sel=window.getSelection();if(!sel?.rangeCount)return;
      const range=sel.getRangeAt(0);range.deleteContents();
      const node=document.createTextNode('\n');range.insertNode(node);range.setStartAfter(node);range.collapse(true);

@@ -13,7 +13,7 @@ test('Crónica: onboarding contextual de ocho pasos, reinicio y persistencia',as
  await page.getByRole('button',{name:'Finalizar'}).click();
  await expect(page.locator('#dsOnboardingLayer')).toHaveCount(0);
  await expect.poll(()=>page.evaluate(()=>localStorage.getItem('cronica-dev-tour-desktop-v1'))).toBe('complete');
- await page.reload({waitUntil:'load'});
+ await page.goto('/cronica/',{waitUntil:'load'});
  await expect(page.locator('#dsOnboardingLayer')).toHaveCount(0);
  await page.getByRole('button',{name:'Abrir onboarding interactivo'}).click();
  await expect(page.locator('#dsTourProgress')).toHaveText('1 de 8');

@@ -6,7 +6,7 @@ test('Crónica: paneles plegables conservan estado editorial y navegación', asy
   await page.getByRole('tab', { name: 'Formato' }).click();
   const labels = ['Diseño de placas', 'Fotografía', 'Textos'];
   for (const label of labels) {
-    const control = page.getByRole('button', { name: label, exact: true });
+    const control = page.locator('.modern-toggle').filter({ hasText: label }).first();
     await expect(control).toHaveAttribute('aria-expanded', 'true');
   }
 

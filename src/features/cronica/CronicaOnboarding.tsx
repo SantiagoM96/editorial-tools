@@ -97,13 +97,13 @@ export function CronicaOnboarding() {
  },[active]);
  useLayoutEffect(()=>{
   if(!active)return;
-  const step=steps[index],target=document.querySelector<HTMLElement>(step.selector);
+  const step=steps[index]!,target=document.querySelector<HTMLElement>(step.selector);
   const card=cardRef.current;
   if(!target||!card)return;
   const accordion=target.closest('.modern-card');
   const toggle=accordion?.querySelector<HTMLButtonElement>('.modern-toggle');
   if(toggle?.getAttribute('aria-expanded')==='false')toggle.click();
-  if(!step.fullscreen)target.scrollIntoView({block:'center',inline:'nearest',behavior:'instant'});
+  if(!('fullscreen' in step))target.scrollIntoView({block:'center',inline:'nearest',behavior:'instant'});
   const update=()=>setPlacement(geometry(target,card,'fullscreen' in step));
   update();
   const raf=requestAnimationFrame(()=>{update();nextRef.current?.focus({preventScroll:true})});
@@ -112,7 +112,7 @@ export function CronicaOnboarding() {
   return ()=>{cancelAnimationFrame(raf);window.removeEventListener('resize',update);window.removeEventListener('scroll',update,true)};
  },[active,index]);
  if(disabled)return null;
- const step=steps[index],last=index===steps.length-1;
+ const step=steps[index]!,last=index===steps.length-1;
  const hole=placement?.hole,viewport=placement?.viewport;
  const shades:ReadonlyArray<CSSProperties>=hole&&viewport?
  [
