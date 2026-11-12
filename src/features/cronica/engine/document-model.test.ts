@@ -23,6 +23,12 @@ describe('modelo de documento Crónica', () => {
     });
   });
 
+  it('la variante Sin diseño es neutra y mantiene el contrato de página', () => {
+    const blank = createDefaultPage('blank');
+    expect(blank).toMatchObject({ variant: 'blank', image: null, showStrap: false, logo: 'primary' });
+    expect(blank.headline).toBe(INTERNAL_HEADLINE);
+  });
+
   it('no comparte objetos entre páginas y respeta el origen de Limpiar', () => {
     const one = createDefaultPage('internal'), two = createDefaultPage('internal');
     one.headline = 'Modificado';

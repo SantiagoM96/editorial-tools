@@ -12,13 +12,14 @@ test('Crónica: pestañas y edición contextual mobile conservan estado por pág
   await page.getByRole('tab', { name: 'Formato' }).click();
   await expect(page.locator('#headline')).toBeVisible();
   await expect(page.locator('#headline')).toHaveValue('Texto editado desde la vista previa');
+  // El paginador fijo de Andy está en la pestaña Vista previa.
+  await page.getByRole('tab', { name: 'Vista previa' }).click();
   await page.locator('#addPage').click();
+  await page.getByRole('tab', { name: 'Formato' }).click();
   await page.locator('#headline').fill('Texto de página dos');
   await page.getByRole('tab', { name: 'Vista previa' }).click();
   await expect(page.locator('#headlineMobile')).toHaveValue('Texto de página dos');
-  await page.getByRole('tab', { name: 'Formato' }).click();
   await page.getByRole('button', { name: 'Página 1, portada' }).click();
-  await page.getByRole('tab', { name: 'Vista previa' }).click();
   await expect(page.locator('#headlineMobile')).toHaveValue('Texto editado desde la vista previa');
   await expect(page.locator('#photoZoom')).toHaveAttribute('min', '100');
   await expect(page.locator('#photoZoom')).toHaveAttribute('max', '300');

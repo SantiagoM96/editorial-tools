@@ -1,0 +1,1137 @@
+/* Shared editor shell from Diario Show DEV. Brand set by --editor-accent. */
+:root{--editor-accent:#d82626}
+body[data-editor-brand="cronica"]{--editor-accent:#ed0000}
+body[data-editor-brand="bae"]{--editor-accent:#d82626}
+.modern-mobile-tabs{display:none}
+.modern-shell,.modern-track{display:contents}
+.modern-track>.editor-panel{min-width:0}
+.modern-track>.preview{min-width:0}
+.editor-panel .modern-card{
+ display:block;margin:0 0 12px!important;padding:0!important;
+ border:1px solid #383d46;border-radius:10px;background:#24262c;overflow:visible;
+}
+.editor-panel .modern-card .modern-toggle{
+ display:flex;align-items:center;justify-content:space-between;gap:12px;
+ width:100%;min-height:45px;margin:0;padding:11px 14px!important;
+ border:0!important;border-radius:9px 9px 0 0;background:#2b2e35!important;
+ color:#f1f2f6;font:600 13px/20px system-ui,Arial,sans-serif;
+ text-align:left;cursor:pointer;
+}
+.editor-panel .modern-card .modern-toggle:hover{background:#33363e!important;filter:none}
+.editor-panel .modern-card .modern-toggle[aria-expanded=false]{border-radius:9px}
+/* Foco accesible únicamente para teclado. Shift no debe convertir un
+   foco originado por mouse en un segundo recuadro sobre la cabecera. */
+.editor-panel .modern-card .modern-toggle:focus-visible:not([data-pointer-origin]){
+ outline:2px solid var(--editor-accent);outline-offset:2px;
+}
+.editor-panel .modern-card .modern-toggle[data-pointer-origin]:focus-visible{
+ outline:0!important;outline-offset:0!important;
+}
+.editor-panel .modern-card .modern-chevron{font-size:21px;line-height:1;flex:none;color:#c7c9d0;transition:transform .15s}
+.editor-panel .modern-card .modern-toggle[aria-expanded=false] .modern-chevron{transform:rotate(180deg)}
+.editor-panel .modern-card .modern-body{
+ min-width:0;padding:18px 14px;background:#202228;border-radius:0 0 9px 9px;
+}
+.editor-panel .modern-card .modern-body[hidden]{display:none!important}
+.editor-panel .modern-card .modern-body>.control-field:first-child{margin-top:0}
+.editor-panel .modern-card .modern-body>.control-field+.control-field{margin-top:16px}
+.editor-panel .modern-card .modern-body>.control-field>label{margin-top:0}
+.editor-panel .modern-card h2{display:none}
+.editor-panel .modern-text-card .typography-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;margin:0 0 16px;align-items:start}
+.editor-panel .modern-text-card .typography-row .format-field{min-width:0}
+.editor-panel .modern-text-card .typography-row .format-buttons{display:flex;flex-wrap:nowrap;gap:0!important;width:max-content}
+.editor-panel .modern-text-card .typography-row .format-buttons button{
+ box-sizing:border-box;display:flex;align-items:center;justify-content:center;
+ flex:0 0 39px;width:39px;min-width:39px;height:41px;padding:0!important;
+}
+.editor-panel .modern-text-card .typography-row .format-buttons .modern-independent{
+ margin-left:7px!important;border:1px solid #4a4e56!important;border-radius:7px!important;
+}
+.editor-panel .modern-text-card .typography-row .format-buttons .modern-independent[aria-pressed=true]{
+ background:var(--editor-accent)!important;border-color:var(--editor-accent)!important;color:white;
+}
+.editor-panel .modern-text-card .typography-row .align-field{justify-self:end}
+.editor-panel .modern-text-card .typography-row .align-buttons{justify-content:flex-end;gap:0}
+.editor-panel .modern-text-card .typography-row .align-buttons button{height:41px}
+.editor-panel .modern-text-card .modern-headline-field{margin-top:14px}
+.editor-panel .modern-text-card .modern-size-field{display:flex;align-items:center;gap:10px;margin-top:12px!important}
+.editor-panel .modern-text-card .modern-size-field>label{display:none!important}
+.editor-panel .modern-text-card .modern-size-field input[type=range]{flex:1;min-width:0;width:100%}
+.editor-panel .modern-text-card .modern-size-field output{min-width:27px;color:#fff;font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+.editor-panel .modern-text-card .modern-size-field.is-adjusting output{transform:scale(1.18)}
+.editor-panel .modern-text-card .modern-size-field output{transition:transform .14s}
+.editor-panel .modern-text-card .modern-size-field input[type=range]{
+ appearance:none;-webkit-appearance:none;height:22px;background:transparent!important;border:0!important;cursor:pointer;
+}
+.editor-panel .modern-text-card .modern-size-field input[type=range]::-webkit-slider-runnable-track{
+ height:3px;border-radius:99px;background:linear-gradient(to right,#f4f4f4 0%,#f4f4f4 var(--modern-progress,50%),#484c55 var(--modern-progress,50%),#484c55 100%);
+}
+.editor-panel .modern-text-card .modern-size-field input[type=range]::-moz-range-track{height:3px;border-radius:99px;background:#484c55}
+.editor-panel .modern-text-card .modern-size-field input[type=range]::-moz-range-progress{height:3px;border-radius:99px;background:#f4f4f4}
+.editor-panel .modern-text-card .modern-size-field input[type=range]::-webkit-slider-thumb{
+ -webkit-appearance:none;appearance:none;width:15px;height:15px;margin-top:-6px;
+ border:2px solid #f4f4f4;border-radius:50%;background:#292c32;box-sizing:border-box;
+}
+.editor-panel .modern-text-card .modern-size-field input[type=range]::-moz-range-thumb{
+ width:15px;height:15px;border:2px solid #f4f4f4;border-radius:50%;background:#292c32;box-sizing:border-box;
+}
+.editor-panel .modern-text-card .modern-size-field.is-thumb-engaged input[type=range]::-webkit-slider-thumb,
+.editor-panel .modern-text-card .modern-size-field.is-thumb-engaged input[type=range]::-moz-range-thumb{
+ background:#fff!important;box-shadow:0 0 0 3px rgba(255,255,255,.27),0 0 10px 3px rgba(255,255,255,.48)!important;
+}
+.preview .modern-preview-text-editor{display:none!important}
+@media(max-width:420px){
+ .editor-panel .modern-text-card .typography-row{grid-template-columns:minmax(0,1fr)}
+ .editor-panel .modern-text-card .typography-row .align-field{justify-self:end}
+}
+@media(max-width:700px){
+ main:has(>.modern-mobile-tabs){display:block!important;max-width:720px!important;padding:8px 0 16px!important}
+ main>.modern-mobile-tabs{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%;
+  margin:0 0 16px;border-bottom:1px solid #393d45;
+ }
+ .modern-mobile-tabs button{
+  display:flex;align-items:center;justify-content:center;position:relative;
+  min-height:48px;border:0!important;border-radius:0!important;
+  margin:0;padding:12px 10px!important;background:transparent!important;
+  font:600 14px/20px system-ui,Arial,sans-serif;color:#aeb4bf!important;
+ }
+ .modern-mobile-tabs button[aria-selected=true]{color:#fff!important}
+ .modern-mobile-tabs button[aria-selected=true]:after{
+  content:"";position:absolute;bottom:-1px;left:0;right:0;height:3px;
+  border-radius:3px 3px 0 0;background:var(--editor-accent);
+ }
+ main>.modern-shell{display:block;overflow:hidden;width:100%;height:auto;overflow-anchor:none}
+ .modern-shell>.modern-track{
+  display:flex;align-items:flex-start;width:200%;
+  transition:transform 240ms cubic-bezier(.22,.7,.25,1);
+  transform:translate3d(0,0,0);
+ }
+ main[data-mobile-tab="controls"] .modern-track{transform:translate3d(-50%,0,0)}
+ .modern-track>.editor-panel,.modern-track>.preview{
+  box-sizing:border-box;display:block!important;flex:0 0 50%;width:50%;max-width:50%;min-width:0;margin:0;
+ }
+ .modern-track>.preview{order:0;display:flex!important;align-items:center;gap:16px}
+ .modern-track>.editor-panel{order:1}
+ .modern-track>.editor-panel .modern-card .modern-toggle{min-height:43px;padding:10px 12px!important}
+ .modern-track>.editor-panel .modern-card .modern-body{padding:15px 12px}
+ .modern-track>.preview .preview-toolbar{
+  width:100%;display:block!important;min-height:0;margin:0!important;
+  padding:0!important;border:0!important;border-radius:0!important;
+  background:transparent!important;box-shadow:none!important;
+ }
+ .modern-track>.preview .preview-toolbar .preview-instructions{
+  width:100%;margin:0!important;padding:0!important;text-align:center!important;flex:none;
+ }
+ .modern-track>.preview .canvas-stage{
+  width:min(540px,calc(100vw - 150px))!important;max-width:100%;
+  margin-inline:auto;position:relative;overflow:visible;
+ }
+ .modern-track>.preview>.modern-preview-text-editor{
+  display:block!important;width:100%;max-width:540px;padding:0!important;
+  margin:0!important;background:transparent!important;border:0!important;box-shadow:none!important;
+ }
+ .modern-track>.preview>.preview-actions,.modern-track>.preview>.bae-credits{margin:0!important}
+ .modern-track>.preview>.bae-credits{margin-bottom:16px!important}
+ .modern-track>.preview .canvas-stage>.modern-photo-zoom{
+  position:absolute;z-index:6;top:0;right:calc(100% + 5px);left:auto;
+  width:36px;height:var(--photo-height,60%);min-height:0;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  padding:0!important;margin:0!important;background:transparent!important;
+  border:0!important;box-shadow:none!important;
+ }
+ .modern-track>.preview .canvas-stage>.modern-photo-zoom label{
+  width:100%;flex:0 0 23px;margin:0;padding:0;display:flex;justify-content:center;
+  align-items:center;color:#f4f4f4;
+ }
+ .modern-track>.preview .modern-photo-zoom .modern-zoom-desktop{display:none!important}
+ .modern-track>.preview .modern-photo-zoom .modern-zoom-icon{
+  display:inline-flex!important;font:normal 20px/1 'Material Icons';color:#f4f4f4;
+ }
+ .modern-track>.preview .modern-photo-zoom input[type=range]{
+  display:block;flex:1 1 auto;min-height:36px;height:0!important;
+  width:26px!important;min-width:26px!important;margin:0!important;padding:0!important;
+  writing-mode:vertical-lr;direction:rtl;appearance:none;-webkit-appearance:none;
+  background:transparent!important;border:0!important;border-radius:0!important;touch-action:none;
+ }
+ .modern-track>.preview .modern-photo-zoom input[type=range]::-webkit-slider-runnable-track{
+  width:3px;height:100%;border-radius:99px;
+  background:linear-gradient(to top,#f4f4f4 0%,#f4f4f4 var(--modern-progress,0%),#484c55 var(--modern-progress,0%),#484c55 100%);
+ }
+ .modern-track>.preview .modern-photo-zoom input[type=range]::-moz-range-track{width:3px;height:100%;background:#484c55}
+ .modern-track>.preview .modern-photo-zoom input[type=range]::-moz-range-progress{width:3px;background:#f4f4f4}
+ .modern-track>.preview .modern-photo-zoom input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;width:15px;height:15px;
+  border:2px solid #f4f4f4;border-radius:50%;margin:0 0 0 -6px;
+  background:#292c32;box-sizing:border-box;
+ }
+ .modern-track>.preview .modern-photo-zoom input[type=range]::-moz-range-thumb{
+  width:15px;height:15px;border:2px solid #f4f4f4;border-radius:50%;
+  background:#292c32;box-sizing:border-box;
+ }
+ .modern-track>.preview .modern-photo-zoom.is-thumb-engaged input[type=range]::-webkit-slider-thumb,
+ .modern-track>.preview .modern-photo-zoom.is-thumb-engaged input[type=range]::-moz-range-thumb{
+  background:white!important;box-shadow:0 0 0 3px rgba(255,255,255,.27),0 0 10px 3px rgba(255,255,255,.48)!important;
+ }
+ .modern-track>.preview .modern-photo-zoom output{
+  flex:0 0 24px;min-width:0;width:100%;padding:0;margin:0;
+  color:white;font:600 10px/20px system-ui,Arial,sans-serif;text-align:center;
+ }
+ .modern-track>.preview .modern-photo-zoom.is-adjusting output{transform:scale(1.14)}
+ .modern-track>.preview .browser-zoom-tip{display:none!important}
+ .modern-track>.editor-panel{border-radius:10px}
+}
+.modern-photo-zoom .modern-zoom-icon{display:none}
+@media(min-width:701px){.modern-shell,.modern-track{display:contents!important}}
+@media(prefers-reduced-motion:reduce){
+ .modern-shell,.modern-track,.modern-card .modern-chevron{transition:none!important}
+}
+
+
+/* Same photo picker and miniature hierarchy as Diario Show DEV. */
+.editor-panel .modern-photo-picker{position:relative;margin-top:10px;width:100%;min-width:0}
+.editor-panel .modern-photo-picker .modern-photo-input{
+ position:absolute!important;width:1px!important;height:1px!important;
+ left:0;top:0;opacity:0;pointer-events:none;overflow:hidden;
+}
+.editor-panel .modern-photo-picker .modern-photo-surface{
+ display:flex;align-items:center;gap:10px;min-height:56px;width:100%;
+ margin:0;padding:12px 14px;border:1px dashed #555b65;border-radius:8px;
+ background:#292c32;color:#f1f2f6;cursor:pointer;transition:background-color .15s,border-color .15s;
+}
+.editor-panel .modern-photo-picker .modern-photo-surface:hover{background:#353941;border-color:#8c939d}
+.editor-panel .modern-photo-picker .modern-photo-input:focus-visible+.modern-photo-surface{
+ outline:2px solid var(--editor-accent);outline-offset:2px;
+}
+.editor-panel .modern-photo-picker .modern-photo-icon{
+ font:normal 25px/1 'Material Symbols Outlined';flex:none;color:#eceef2;
+}
+.editor-panel .modern-photo-picker .modern-photo-text{min-width:0;overflow-wrap:anywhere;font-size:13px;line-height:1.4}
+.editor-panel .modern-photo-picker .modern-photo-action{font-weight:700}
+.editor-panel .modern-photo-picker .modern-photo-caption{color:#c7cad2}
+.editor-panel .modern-card .theme-swatches,
+.editor-panel .modern-card .cronica-variant-options{align-items:flex-start;gap:10px;flex-wrap:wrap}
+.editor-panel .modern-card .theme-swatch,
+.editor-panel .modern-card .cronica-variant-option{
+ border:0!important;background:transparent!important;filter:none;
+ border-radius:0!important;padding:0!important;
+ color:#d5d8de;gap:9px;text-align:center;
+}
+.editor-panel .modern-card .theme-swatch:active,
+.editor-panel .modern-card .cronica-variant-option:active{transform:none}
+.editor-panel .modern-card .theme-swatch .theme-swatch-thumb,
+.editor-panel .modern-card .cronica-variant-thumbnail{outline-offset:2px}
+.editor-panel .modern-card .theme-swatch[aria-pressed=true] .theme-swatch-thumb,
+.editor-panel .modern-card .cronica-variant-option[aria-pressed=true] .cronica-variant-thumbnail{
+ outline:2px solid var(--editor-accent)!important;border-color:var(--editor-accent)!important;
+}
+.editor-panel .modern-card .theme-swatch:hover .theme-swatch-thumb,
+.editor-panel .modern-card .cronica-variant-option:hover .cronica-variant-thumbnail{filter:brightness(1.08)}
+.editor-panel .modern-card .modern-body>.control-field:first-child>label{margin-top:0}
+@media(max-width:700px){
+ .editor-panel .modern-photo-picker .modern-photo-surface{min-height:52px}
+ .modern-track>.editor-panel .modern-card{margin-bottom:12px!important}
+}
+
+
+/* Shared range-track and pressed thumb for every additional editorial slider. */
+.editor-panel .modern-card .modern-body #dots{
+ appearance:none;-webkit-appearance:none;display:block;width:100%;
+ height:22px;margin-top:10px!important;padding:0!important;
+ background:transparent!important;border:0!important;
+}
+.editor-panel .modern-card .modern-body #dots::-webkit-slider-runnable-track{
+ height:3px;border-radius:99px;background:linear-gradient(to right,#f4f4f4 0%,#f4f4f4 var(--modern-progress,0%),#484c55 var(--modern-progress,0%),#484c55 100%);
+}
+.editor-panel .modern-card .modern-body #dots::-moz-range-track{height:3px;border-radius:99px;background:#484c55}
+.editor-panel .modern-card .modern-body #dots::-moz-range-progress{height:3px;border-radius:99px;background:#f4f4f4}
+.editor-panel .modern-card .modern-body #dots::-webkit-slider-thumb{
+ -webkit-appearance:none;appearance:none;width:15px;height:15px;
+ margin-top:-6px;border:2px solid #f4f4f4;border-radius:50%;background:#292c32;
+}
+.editor-panel .modern-card .modern-body #dots::-moz-range-thumb{
+ width:15px;height:15px;border:2px solid #f4f4f4;border-radius:50%;background:#292c32;
+}
+.editor-panel .modern-card .modern-body .is-thumb-engaged #dots::-webkit-slider-thumb,
+.editor-panel .modern-card .modern-body .is-thumb-engaged #dots::-moz-range-thumb{
+ background:#fff!important;box-shadow:0 0 0 3px rgba(255,255,255,.27),0 0 10px 3px rgba(255,255,255,.48)!important;
+}
+
+
+/* Text-only touch surface: scrollable without affecting the photo drag area. */
+.preview .canvas-stage>.modern-text-hit{display:none}
+@media(max-width:700px){
+ .modern-track>.preview .canvas-stage>.modern-text-hit{
+  display:block;position:absolute;left:0;right:0;top:var(--photo-height,60%);bottom:0;
+  z-index:4;background:transparent;cursor:text;touch-action:pan-y;
+  -webkit-tap-highlight-color:transparent;
+ }
+ .modern-track>.preview .canvas-stage>.modern-text-hit:focus-visible{
+  outline:2px solid var(--editor-accent);outline-offset:3px;
+ }
+}
+
+
+/* iOS: text focus must not enlarge the page or disturb the keyboard. */
+@media(max-width:700px){
+ .modern-track>.preview .modern-preview-text-editor #headlineMobile,
+ .modern-track>.preview .modern-preview-text-editor #quoteMobile{
+  font-size:16px!important;
+ }
+ .modern-track>.preview .modern-preview-text-editor textarea{
+  scroll-margin-top:16px;scroll-margin-bottom:24px;
+ }
+}
+
+
+/* Identidad editorial, iconos, tooltips y edición contextual compartida. */
+.editor-panel .modern-toggle .modern-section-icon{
+ flex:0 0 20px;font:normal 20px/20px "Material Symbols Outlined";color:#e4e5eb;
+}
+.editor-panel .modern-toggle>span:nth-child(2){flex:1;min-width:0}
+.editor-panel .modern-context-target{
+ animation:modern-editor-focus 2.3s ease-out 1;
+}
+@keyframes modern-editor-focus{
+ 0%,20%{box-shadow:0 0 0 2px var(--editor-accent)}
+ 100%{box-shadow:none}
+}
+.editor-panel .modern-footer-field{margin-top:17px}
+.editor-panel .modern-footer-field>label{display:block;margin-bottom:8px;font-size:13px;font-weight:600}
+.editor-panel .modern-footer-options{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.editor-panel .modern-footer-options button{
+ border:1px solid #4a4e56;border-radius:7px;background:#292c32;
+ color:#f5f5f7;min-height:43px;padding:8px;font:600 13px/18px system-ui;cursor:pointer
+}
+.editor-panel .modern-footer-options button[aria-pressed=true]{border-color:var(--editor-accent);box-shadow:inset 0 0 0 1px var(--editor-accent)}
+.editor-panel .modern-footer-options button:hover{background:#393c45}
+.editor-panel .help-tooltip{box-sizing:border-box;min-width:160px;max-width:calc(100vw - 32px);width:240px;word-break:normal;overflow-wrap:normal;z-index:300}
+.editor-panel .help-tooltip.modern-tip-left::before{left:auto;right:-5px}
+.preview .canvas-stage>.modern-logo-hit{
+ position:absolute;z-index:15;top:4%;right:4%;width:19%;height:12%;padding:0;
+ border:2px dashed transparent;border-radius:8px;outline:0;background:transparent;
+ cursor:pointer;touch-action:manipulation
+}
+.preview .canvas-stage>.modern-logo-hit:hover,.preview .canvas-stage>.modern-logo-hit:focus-visible{border-color:var(--editor-accent)}
+.preview .canvas-stage>.modern-text-hit{
+ display:block;position:absolute;left:0;right:0;top:var(--photo-height,60%);bottom:0;
+ z-index:8;background:transparent;cursor:text;touch-action:pan-y;
+ -webkit-tap-highlight-color:transparent;border:2px dashed transparent;border-radius:7px
+}
+.preview .canvas-stage>.modern-text-hit:hover,.preview .canvas-stage>.modern-text-hit:focus-visible{border-color:var(--editor-accent)}
+.preview .modern-preview-text-editor[hidden],.preview .modern-preview-identity-editor[hidden]{display:none!important}
+.preview .modern-preview-identity-editor{display:none!important}
+@media(max-width:700px){
+ .modern-track>.preview>.modern-preview-identity-editor{
+  display:block!important;width:100%;max-width:540px;padding:0!important;margin:0!important;
+  background:transparent!important;border:0!important;box-shadow:none!important
+ }
+ .modern-track>.preview>.modern-preview-text-editor[hidden],
+ .modern-track>.preview>.modern-preview-identity-editor[hidden]{display:none!important}
+ .modern-track>.preview .canvas-stage>.modern-text-hit{
+  display:block;z-index:8;top:var(--photo-height,60%);bottom:0
+ }
+}
+
+/* Selección persistente hasta elegir otra zona en la vista previa. */
+.preview .canvas-stage>.modern-logo-hit.is-hotspot-selected,
+.preview .canvas-stage>.modern-text-hit.is-hotspot-selected{
+ border-color:var(--editor-accent)!important;
+ box-shadow:0 0 0 1px rgba(255,255,255,.28);
+}
+
+/* Paridad con Diario Show: panel sin caja contenedora exterior. */
+main .modern-track>.editor-panel:not(.modern-preview-text-editor):not(.modern-preview-identity-editor){
+ background:transparent!important;border:0!important;box-shadow:none!important;
+ padding:0!important;border-radius:0!important;
+}
+.editor-panel>.modern-card{
+ margin:0 0 12px!important;padding:0!important;border:1px solid #383d46!important;
+ border-radius:10px!important;box-shadow:none;
+}
+/* Cabeceras con geometría fija: evitar saltos al abrir/cerrar. */
+.editor-panel .modern-card>.modern-toggle{
+ box-sizing:border-box!important;display:flex!important;align-items:center!important;
+ justify-content:flex-start!important;gap:12px!important;
+ height:46px!important;min-height:46px!important;max-height:46px!important;
+ padding:0 14px!important;margin:0!important;border:0!important;
+ font:600 13px/20px system-ui,Arial,sans-serif!important;
+ letter-spacing:normal!important;transform:none!important;transition:background-color .15s!important;
+}
+.editor-panel .modern-card>.modern-toggle[aria-expanded="true"]{border-radius:9px 9px 0 0!important}
+.editor-panel .modern-card>.modern-toggle[aria-expanded="false"]{border-radius:9px!important}
+.editor-panel .modern-card>.modern-toggle>.modern-section-icon{
+ flex:0 0 20px!important;width:20px;height:20px;line-height:20px!important;
+ font-size:20px!important;transform:none!important;
+}
+.editor-panel .modern-card>.modern-toggle>span:nth-child(2){
+ display:block;align-self:center;flex:1;line-height:20px!important;
+ padding:0!important;margin:0!important;transform:none!important;
+}
+.editor-panel .modern-card>.modern-toggle>.modern-chevron{
+ width:21px;height:21px;line-height:21px!important;flex:0 0 21px;
+ transform:none!important;transition:none!important;
+}
+.editor-panel .modern-card>.modern-toggle[aria-expanded="false"]>.modern-chevron{
+ transform:rotate(180deg)!important;
+}
+/* Resplandor de un anillo de 2px: el borde del control no cambia de ancho. */
+@keyframes modern-card-flash{
+ 0%,85%{border-color:var(--editor-accent);box-shadow:0 0 0 1px var(--editor-accent)}
+ 100%{border-color:#383d46;box-shadow:0 0 0 0 transparent}
+}
+.editor-panel>.modern-card.modern-card-flash{
+ animation:modern-card-flash 1.05s linear both;position:relative;z-index:3;
+}
+@media(prefers-reduced-motion:reduce){
+ .editor-panel>.modern-card.modern-card-flash{animation-duration:.01ms}
+}
+@media(max-width:700px){
+ .modern-track>.editor-panel .modern-card>.modern-toggle{
+  height:44px!important;min-height:44px!important;max-height:44px!important;
+  padding:0 12px!important;
+ }
+}
+/* Zoom lateral a la izquierda de la fotografía también en desktop. */
+.preview>.browser-zoom-tip{display:none!important}
+.preview .canvas-stage{overflow:visible!important}
+.preview .canvas-stage>.modern-photo-zoom{
+ position:absolute!important;z-index:6;
+ top:0!important;right:calc(100% + 5px)!important;left:auto!important;
+ width:36px!important;max-width:36px!important;
+ height:var(--photo-height,60%)!important;min-height:0!important;
+ display:flex!important;flex-direction:column!important;
+ align-items:center!important;gap:8px!important;
+ margin:0!important;padding:0!important;
+ background:transparent!important;border:0!important;box-shadow:none!important;
+}
+.preview .canvas-stage>.modern-photo-zoom label{
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ width:100%!important;flex:0 0 23px!important;margin:0!important;padding:0!important;
+}
+.preview .canvas-stage>.modern-photo-zoom .modern-zoom-desktop{display:none!important}
+.preview .canvas-stage>.modern-photo-zoom .modern-zoom-icon{
+ display:inline-flex!important;font:normal 20px/1 'Material Icons'!important;
+ color:#f4f4f4!important;
+}
+.preview .canvas-stage>.modern-photo-zoom input[type=range]{
+ display:block!important;flex:1 1 auto!important;width:26px!important;
+ min-width:26px!important;height:0!important;min-height:36px!important;
+ margin:0!important;padding:0!important;
+ writing-mode:vertical-lr!important;direction:rtl!important;
+ appearance:none!important;-webkit-appearance:none!important;
+ background:transparent!important;border:0!important;border-radius:0!important;
+ touch-action:none!important;
+}
+.preview .canvas-stage>.modern-photo-zoom input[type=range]::-webkit-slider-runnable-track{
+ width:3px;height:100%;border-radius:99px;
+ background:linear-gradient(to top,#f4f4f4 0%,#f4f4f4 var(--modern-progress,0%),#484c55 var(--modern-progress,0%),#484c55 100%);
+}
+.preview .canvas-stage>.modern-photo-zoom input[type=range]::-moz-range-track{
+ width:3px;height:100%;border-radius:99px;background:#484c55;
+}
+.preview .canvas-stage>.modern-photo-zoom input[type=range]::-moz-range-progress{
+ width:3px;background:#f4f4f4;
+}
+.preview .canvas-stage>.modern-photo-zoom input[type=range]::-webkit-slider-thumb{
+ -webkit-appearance:none;appearance:none;width:15px;height:15px;
+ margin:0 0 0 -6px;border:2px solid #f4f4f4;border-radius:50%;background:#292c32;
+}
+.preview .canvas-stage>.modern-photo-zoom input[type=range]::-moz-range-thumb{
+ width:15px;height:15px;border:2px solid #f4f4f4;border-radius:50%;background:#292c32;
+}
+.preview .canvas-stage>.modern-photo-zoom output{
+ flex:0 0 24px;width:100%;min-width:0;
+ color:#fff;font:600 10px/20px system-ui,Arial,sans-serif;text-align:center;
+}
+
+
+/* Hotspots: misma caja punteada de Diario Show, 2px, radio 6px,
+   rosa uniforme y cero desplazamiento del contenido del Canvas. */
+.preview .canvas-stage>.modern-logo-hit,
+.preview .canvas-stage>.modern-text-hit{
+ box-sizing:border-box!important;
+ border:2px dashed transparent!important;border-radius:6px!important;
+ background:transparent!important;box-shadow:none!important;outline:0!important;
+ transition:none!important;
+}
+.preview .canvas-stage>.modern-logo-hit:hover,
+.preview .canvas-stage>.modern-logo-hit:focus-visible,
+.preview .canvas-stage>.modern-logo-hit.is-hotspot-selected,
+.preview .canvas-stage>.modern-text-hit:hover,
+.preview .canvas-stage>.modern-text-hit:focus-visible,
+.preview .canvas-stage>.modern-text-hit.is-hotspot-selected{
+ border:2px dashed #e6008d!important;border-radius:6px!important;
+ box-shadow:none!important;background:transparent!important;
+}
+/* El pulso de Diario Show: borde de 1px que NO cambia de tamaño
+   más anillo exterior de 1px, durante 1.05s (0.9s + fade .15s). */
+@keyframes editorial-card-pulse {
+ 0%,85%{border-color:var(--editor-accent);box-shadow:0 0 0 1px var(--editor-accent)}
+ 100%{border-color:#383d46;box-shadow:0 0 0 0 transparent}
+}
+.editor-panel>.modern-card.modern-card-flash,
+.editor-panel .modern-card.modern-context-target{
+ animation:editorial-card-pulse 1.05s linear both!important;
+ border-width:1px!important;box-sizing:border-box!important;
+ position:relative;z-index:3;
+}
+@media(prefers-reduced-motion:reduce){
+ .editor-panel>.modern-card.modern-card-flash,
+ .editor-panel .modern-card.modern-context-target{animation-duration:.01ms!important}
+}
+
+
+/* Mismo pulso que Diario Show: borde fijo de 1px + halo externo de 2px.
+   El box model permanece idéntico tanto al abrir como al cerrar. */
+@keyframes editorial-card-pulse{
+ 0%,85%{border-color:var(--editor-accent);box-shadow:0 0 0 2px var(--editor-accent)}
+ 100%{border-color:#383d46;box-shadow:0 0 0 0 transparent}
+}
+.editor-panel>.modern-card.modern-card-flash,
+.editor-panel .modern-card.modern-context-target{
+ border-width:1px!important;box-sizing:border-box!important;
+ animation:editorial-card-pulse 1.05s linear both!important;
+}
+
+
+/* Bordes de selección en el color de marca y cursor de acción, nunca de texto. */
+.preview .canvas-stage>.modern-logo-hit,
+.preview .canvas-stage>.modern-text-hit{cursor:pointer!important}
+.preview .canvas-stage>.modern-logo-hit:hover,
+.preview .canvas-stage>.modern-logo-hit:focus-visible,
+.preview .canvas-stage>.modern-logo-hit.is-hotspot-selected,
+.preview .canvas-stage>.modern-text-hit:hover,
+.preview .canvas-stage>.modern-text-hit:focus-visible,
+.preview .canvas-stage>.modern-text-hit.is-hotspot-selected{
+ border:2px dashed var(--editor-accent)!important;
+ border-radius:6px!important;background:transparent!important;
+ box-shadow:none!important;outline:0!important;
+}
+
+
+/* Sin estado blanco de transición: desde el primer frame, color institucional. */
+.preview .canvas-stage>.modern-logo-hit,
+.preview .canvas-stage>.modern-text-hit{
+ border:2px dashed transparent!important;border-radius:6px!important;
+ transition:none!important;animation:none!important;cursor:pointer!important;
+}
+.preview .canvas-stage>.modern-logo-hit:hover,
+.preview .canvas-stage>.modern-logo-hit:focus-visible,
+.preview .canvas-stage>.modern-logo-hit.is-hotspot-selected,
+.preview .canvas-stage>.modern-text-hit:hover,
+.preview .canvas-stage>.modern-text-hit:focus-visible,
+.preview .canvas-stage>.modern-text-hit.is-hotspot-selected{
+ border:2px dashed var(--editor-accent)!important;
+ transition:none!important;animation:none!important;
+}
+.preview .canvas-stage:has(>.modern-logo-hit:hover) .photo-hover-border,
+.preview .canvas-stage:has(>.modern-text-hit:hover) .photo-hover-border{
+ opacity:0!important;transition:none!important;
+}
+
+
+/* Subcontroles del diseño: patrón Diario Show (tarjetas independientes).
+   Conserva la jerarquía: variantes -> logo/ubicación -> firma. */
+.editor-panel .modern-design-group .modern-body{
+ --internal-gap:16px;
+}
+.editor-panel .modern-design-group .modern-body>.control-field{
+ margin:0!important;
+}
+.editor-panel .modern-design-group .modern-body>.control-field+.control-field{
+ margin-top:var(--internal-gap)!important;
+}
+.editor-panel .modern-design-group .logo-control-field{
+ margin-top:var(--internal-gap)!important;
+}
+.editor-panel .modern-design-group .logo-choices{
+ margin-top:8px;gap:12px;
+}
+.editor-panel .modern-design-group .logo-choice-preview,
+.editor-panel .modern-design-group .theme-swatch-thumb,
+.editor-panel .modern-design-group .cronica-variant-thumbnail{
+ border-color:#565a63!important;
+}
+.editor-panel .modern-design-group .logo-choice[aria-pressed=true] .logo-choice-preview,
+.editor-panel .modern-design-group .theme-swatch[aria-pressed=true] .theme-swatch-thumb,
+.editor-panel .modern-design-group .cronica-variant-option[aria-pressed=true] .cronica-variant-thumbnail{
+ outline:2px solid var(--editor-accent)!important;
+ outline-offset:2px!important;
+ border-color:#565a63!important;
+ box-shadow:none!important;
+}
+.editor-panel .modern-design-group :is(.theme-swatches,.cronica-variant-options){
+ gap:12px!important;
+}
+.editor-panel .modern-footer-field{margin-top:16px!important}
+/* Fotografía: misma superficie compacta y proporciones de Diario Show. */
+.editor-panel .modern-photo-picker{margin-top:0!important}
+.editor-panel .modern-photo-picker .modern-photo-surface{
+ box-sizing:border-box;display:flex;align-items:center;justify-content:flex-start;
+ gap:6px;width:100%;min-height:44px!important;
+ padding:7px 12px!important;margin:0!important;
+ border:1.5px dashed #777c87!important;border-radius:10px!important;
+ background:#25272d!important;color:#adb1bb;
+ transition:background-color .15s,border-color .15s;
+}
+.editor-panel .modern-photo-picker .modern-photo-surface:hover,
+.editor-panel .modern-photo-picker .modern-photo-surface:focus-within{
+ background:#393d45!important;border-color:#fff!important;
+}
+.editor-panel .modern-photo-picker .modern-photo-clickable{
+ display:flex;flex:0 1 auto;align-items:center;gap:6px;
+ min-width:0;min-height:28px;margin:0;padding:0;cursor:pointer;
+ font:400 13px/20px system-ui,Arial,sans-serif;
+}
+.editor-panel .modern-photo-picker .modern-photo-icon{
+ font:normal 22px/1 'Material Symbols Outlined';
+ color:#fff;flex:none;
+}
+.editor-panel .modern-photo-picker .modern-photo-text{
+ white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.editor-panel .modern-photo-picker .modern-photo-action{color:#f1f2f6}
+.editor-panel .modern-photo-picker .modern-photo-caption{color:#adb1bb}
+.editor-panel .modern-photo-picker .modern-photo-help{
+ display:inline-flex;align-items:center;justify-content:center;
+ height:26px;min-width:22px;margin:0;
+}
+.editor-panel .modern-photo-picker .modern-photo-help .help-button{
+ display:inline-flex;align-items:center;justify-content:center;
+ margin:0;padding:0;transform:none;
+}
+.editor-panel .modern-photo-group .modern-body>.control-field>label[hidden],
+.editor-panel .modern-photo-group .modern-body>.control-field>.help-label-row[hidden]{
+ display:none!important;
+}
+/* URL de BAE: importador fusionado, sin doble borde entre input y botón. */
+.editor-panel .modern-import-group .import-row{
+ display:flex;align-items:stretch;flex-wrap:nowrap!important;gap:0!important;
+ width:100%;min-width:0;min-height:44px;overflow:hidden;
+ background:#292c32;border:1px solid #4a4e56;border-radius:9px;
+ transition:border-color .15s,background-color .15s;
+}
+.editor-panel .modern-import-group .import-row:hover{border-color:#858991}
+.editor-panel .modern-import-group .import-row:focus-within{
+ border-color:#f4f4f4;box-shadow:0 0 0 1px #f4f4f4;
+}
+.editor-panel .modern-import-group .import-row #articleUrl{
+ flex:1 1 auto;min-width:0!important;width:0!important;height:44px;
+ margin:0!important;padding:10px 12px!important;border:0!important;
+ border-radius:0!important;box-shadow:none!important;
+ background:transparent!important;color:#f4f4f4;font-size:12px;
+ outline:none!important;
+}
+.editor-panel .modern-import-group .import-row #importArticle{
+ flex:0 0 auto;min-width:84px;min-height:44px;margin:0;padding:0 14px;
+ border:0!important;border-left:1px solid #4a4e56!important;border-radius:0!important;
+ background:#383c45;color:#fff;font-size:12px;font-weight:650;
+}
+.editor-panel .modern-import-group .import-row #importArticle:hover:not(:disabled){
+ background:#393d45;
+}
+@media(max-width:480px){
+ .editor-panel .modern-import-group .import-row #importArticle{min-width:76px;padding:0 10px}
+}
+
+
+/* Preview contextual en mobile: misma tarjeta y mismo pulso que Formato desktop.
+   El margen de seguridad de 4 px mantiene el halo completo en ambos lados,
+   incluso dentro del carrusel que recorta su contenido. */
+@media(max-width:700px){
+ .modern-track>.preview>.modern-preview-text-editor,
+ .modern-track>.preview>.modern-preview-identity-editor{
+  box-sizing:border-box!important;
+  width:100%!important;max-width:540px!important;
+  padding:4px!important;margin:0!important;
+  background:transparent!important;border:0!important;
+  box-shadow:none!important;overflow:visible!important;
+ }
+ .modern-track>.preview>.modern-preview-text-editor>.modern-card,
+ .modern-track>.preview>.modern-preview-identity-editor>.modern-card{
+  box-sizing:border-box!important;width:100%!important;max-width:100%!important;
+  margin:0!important;border:1px solid #383d46!important;
+  border-radius:10px!important;overflow:visible!important;
+  background:#24262c!important;
+ }
+ .modern-track>.preview>.modern-preview-text-editor>.modern-card>.modern-toggle,
+ .modern-track>.preview>.modern-preview-identity-editor>.modern-card>.modern-toggle{
+  border-radius:9px 9px 0 0!important;
+ }
+ .modern-track>.preview>.modern-preview-text-editor>.modern-card>.modern-body,
+ .modern-track>.preview>.modern-preview-identity-editor>.modern-card>.modern-body{
+  border-radius:0 0 9px 9px!important;
+  background:#202228!important;
+ }
+}
+/* Tanto desktop como mobile usan exactamente 1,05 s y 2 px de halo.
+   Borde base gris constante: evita el doble trazo irregular en las esquinas. */
+@keyframes editorial-card-pulse{
+ 0%,85%{border-color:#383d46;box-shadow:0 0 0 2px var(--editor-accent)}
+ 100%{border-color:#383d46;box-shadow:0 0 0 0 transparent}
+}
+.editor-panel .modern-card.modern-context-target,
+.editor-panel .modern-card.modern-card-flash{
+ border:1px solid #383d46!important;border-radius:10px!important;
+ box-sizing:border-box!important;
+ animation:editorial-card-pulse 1.05s linear both!important;
+}
+@media(prefers-reduced-motion:reduce){
+ .editor-panel .modern-card.modern-context-target,
+ .editor-panel .modern-card.modern-card-flash{animation-duration:.01ms!important}
+}
+
+
+/* Paridad con Diario Show mobile: margen interior real para el halo de
+   los acordeones de Formato. La pista horizontal puede seguir recortando
+   al cambiar de pestaña sin cortar los cuatro lados del resplandor. */
+@media(max-width:700px){
+ main .modern-track > .editor-panel:not(.modern-preview-text-editor):not(.modern-preview-identity-editor){
+  box-sizing:border-box!important;
+  padding:6px 6px 10px!important;
+  background:transparent!important;border:0!important;
+  box-shadow:none!important;overflow:visible!important;
+ }
+ .modern-track > .editor-panel > .modern-card{
+  box-sizing:border-box!important;
+  width:100%!important;max-width:100%!important;
+  margin:0 0 12px!important;
+  border:1px solid #383d46!important;
+  border-radius:10px!important;
+  overflow:visible!important;
+  background:#24262c!important;
+ }
+ .modern-track>.preview>.modern-preview-text-editor,
+ .modern-track>.preview>.modern-preview-identity-editor{
+  padding:6px!important;
+ }
+}
+/* Plegado: cabecera con las cuatro esquinas redondeadas.
+   Desplegado: la cabecera redondea arriba y el cuerpo completa abajo. */
+.editor-panel .modern-card > .modern-toggle[aria-expanded="false"]{
+ border-radius:9px!important;
+}
+.editor-panel .modern-card > .modern-toggle[aria-expanded="true"]{
+ border-radius:9px 9px 0 0!important;
+}
+.editor-panel .modern-card > .modern-body:not([hidden]){
+ border-radius:0 0 9px 9px!important;
+ background:#202228!important;
+}
+@media(max-width:700px){
+ .modern-track>.preview>.modern-preview-text-editor>.modern-card>.modern-toggle[aria-expanded="false"],
+ .modern-track>.preview>.modern-preview-identity-editor>.modern-card>.modern-toggle[aria-expanded="false"]{
+  border-radius:9px!important;
+ }
+}
+
+
+/* PILOTO CRÓNICA 03: navegador horizontal de páginas sobre la preview.
+   Nodo original, fijo y sin acordeón; no crece verticalmente con más páginas. */
+.preview>.cronica-preview-pages{
+ box-sizing:border-box;display:block!important;
+ width:100%;max-width:540px;min-width:0;
+ margin:0 auto 16px!important;padding:12px 14px!important;
+ border:1px solid #383d46!important;border-radius:10px!important;
+ background:#24262c!important;color:#f1f2f6;
+ box-shadow:none!important;overflow:hidden;
+}
+.preview>.cronica-preview-pages .carousel-heading{
+ display:flex;align-items:center;justify-content:flex-start;
+ min-height:19px;margin:0 0 9px;padding:0;
+}
+.preview>.cronica-preview-pages #pageIndicator{
+ display:flex;align-items:center;gap:8px;margin:0;
+ font:600 12px/17px Inter,Arial,sans-serif;
+}
+.preview>.cronica-preview-pages .carousel-indicator-count{color:#c5cad2}
+.preview>.cronica-preview-pages .carousel-indicator-type{
+ padding:3px 8px;border-radius:5px;color:#fff;
+ background:#ed0000;font:700 11px/15px Inter,Arial,sans-serif;
+}
+.preview>.cronica-preview-pages .carousel-indicator-type.is-internal{
+ background:#4b505a;color:#f4f4f5;
+}
+.preview>.cronica-preview-pages .carousel-compact-row{
+ display:flex;align-items:center;gap:10px;min-width:0;
+}
+.preview>.cronica-preview-pages .carousel-pages{
+ display:flex;flex:1 1 auto;align-items:center;
+ flex-wrap:nowrap!important;gap:10px;min-width:0;min-height:70px;
+ margin:0;padding:4px 4px 5px;
+ overflow-x:auto;overflow-y:hidden;
+ overscroll-behavior-x:contain;scroll-behavior:smooth;
+ scrollbar-width:thin;scrollbar-color:#595e69 transparent;
+}
+.preview>.cronica-preview-pages .carousel-pages::-webkit-scrollbar{height:4px}
+.preview>.cronica-preview-pages .carousel-pages::-webkit-scrollbar-thumb{
+ background:#595e69;border-radius:20px;
+}
+.preview>.cronica-preview-pages .carousel-page-thumb{
+ --page-bg:#353941;--page-photo:#656a73;--page-panel:#41454e;
+ --page-strap:#777c85;--page-text:#8d929b;--page-accent:#aaaeb7;
+ --page-number-bg:#292d34;--page-number:#d0d3d9;
+ position:relative;isolation:isolate;display:block;flex:0 0 48px;
+ width:48px!important;height:64px!important;min-height:64px!important;
+ padding:0!important;border:1px solid #555a64!important;
+ border-radius:6px!important;box-sizing:border-box!important;
+ background:var(--page-bg);color:var(--page-number);
+ overflow:hidden;outline:0 solid transparent;outline-offset:2px;
+ cursor:pointer;transition:filter .15s;
+}
+.preview>.cronica-preview-pages .carousel-page-thumb[aria-current=page]{
+ --page-bg:#5e111a;--page-photo:#ab3b46;--page-panel:#761722;
+ --page-strap:#d85862;--page-text:#e97a83;--page-accent:#f2a0a6;
+ --page-number-bg:#820e1b;--page-number:#ffb4ba;
+ border-color:#555a64!important;
+ outline:2px solid #ed0000!important;
+}
+.preview>.cronica-preview-pages .carousel-page-thumb:hover{filter:brightness(1.12)}
+.preview>.cronica-preview-pages .carousel-page-thumb:focus-visible{
+ outline:2px solid #ed0000!important;
+}
+.preview>.cronica-preview-pages .carousel-page-art{
+ position:absolute;inset:0;display:flex;flex-direction:column;
+ overflow:hidden;pointer-events:none;
+}
+.preview>.cronica-preview-pages .carousel-page-photo{
+ display:block;flex:0 0 48%;min-height:0;background:var(--page-photo);
+}
+.preview>.cronica-preview-pages .carousel-page-content{
+ display:flex;flex:1;min-height:0;flex-direction:column;background:var(--page-panel);
+}
+.preview>.cronica-preview-pages .carousel-page-strap{
+ display:block;position:relative;flex:0 0 3px;background:var(--page-strap);
+}
+.preview>.cronica-preview-pages .carousel-page-thumb[data-variant=cover] .carousel-page-strap{flex-basis:9px}
+.preview>.cronica-preview-pages .carousel-page-thumb[data-variant=cover] .carousel-page-strap:after{
+ content:'';position:absolute;top:3px;left:25%;right:25%;
+ height:3px;border-radius:5px;background:var(--page-accent);
+}
+.preview>.cronica-preview-pages .carousel-page-lines{
+ display:flex;flex:1;min-height:0;flex-direction:column;
+ align-items:center;justify-content:center;gap:3px;
+}
+.preview>.cronica-preview-pages .carousel-page-lines i{
+ display:block;width:76%;height:3px;flex:0 0 3px;
+ border-radius:5px;background:var(--page-text);
+}
+.preview>.cronica-preview-pages .carousel-page-lines i:nth-child(2){
+ width:52%;background:var(--page-accent);
+}
+.preview>.cronica-preview-pages .carousel-page-number{
+ position:absolute;top:4px;left:50%;transform:translateX(-50%);
+ display:flex;align-items:center;justify-content:center;z-index:1;
+ min-width:15px;height:16px;padding:0 3px;border-radius:4px;
+ background:var(--page-number-bg);color:var(--page-number);
+ font:700 10px/1 Inter,Arial,sans-serif;
+}
+.preview>.cronica-preview-pages .carousel-actions{
+ display:flex;flex:0 0 30px;flex-direction:column;align-items:stretch;
+ justify-content:center;gap:5px;margin:0;
+}
+.preview>.cronica-preview-pages .carousel-actions button{
+ display:flex;align-items:center;justify-content:center;
+ flex:0 0 30px;width:30px;height:30px;min-height:30px;
+ padding:0;margin:0;border-radius:7px;cursor:pointer;
+}
+.preview>.cronica-preview-pages .carousel-actions button .material-icons{
+ font-size:19px;line-height:1;
+}
+.preview>.cronica-preview-pages .carousel-actions .remove-page{
+ background:#363a43;
+}
+.preview>.cronica-preview-pages .carousel-actions .remove-page:disabled{
+ opacity:.35;cursor:not-allowed;
+}
+/* La barra de instrucciones se elimina visualmente, pero se mantiene
+   el nodo #status para las actualizaciones del motor de exportación. */
+.preview>.preview-toolbar[hidden]{display:none!important}
+@media(max-width:700px){
+ .modern-track>.preview>.cronica-preview-pages{
+  width:100%!important;max-width:540px!important;min-width:0;
+  margin:0 0 16px!important;padding:10px 12px!important;
+ }
+ .modern-track>.preview>.cronica-preview-pages .carousel-pages{gap:8px}
+}
+
+/* Al entrar al primer paso del onboarding, también se destaca Páginas:
+   sin cabecera plegable, pero con el mismo pulso de las demás tarjetas. */
+.preview>.cronica-preview-pages.modern-card-flash{
+ animation:editorial-card-pulse 1.05s linear both!important;
+ border:1px solid #383d46!important;border-radius:10px!important;
+}
+@media(prefers-reduced-motion:reduce){
+ .preview>.cronica-preview-pages.modern-card-flash{animation-duration:.01ms!important}
+}
+
+
+/* CRÓNICA 04: jerarquía del título y navegación progresiva.
+   El botón punteado se desplaza junto con las páginas; el botón + fijo
+   se habilita cuando la fila necesita scroll horizontal. */
+.preview>.cronica-preview-pages .carousel-heading{
+ justify-content:space-between!important;gap:10px;
+ min-height:22px;margin-bottom:10px;
+}
+.preview>.cronica-preview-pages .carousel-heading>h2{
+ display:block!important;margin:0!important;padding:0!important;
+ color:#f5f5f7;font:700 13px/20px Inter,Arial,sans-serif!important;
+ white-space:nowrap;
+}
+.preview>.cronica-preview-pages #pageIndicator{
+ margin-left:auto!important;justify-content:flex-end!important;
+ flex:0 0 auto;white-space:nowrap;gap:7px;
+}
+.preview>.cronica-preview-pages .carousel-pages .carousel-add-placeholder{
+ box-sizing:border-box!important;
+ display:flex;align-items:center;justify-content:center;
+ position:relative;isolation:isolate;
+ flex:0 0 48px;width:48px!important;height:64px!important;
+ min-height:64px!important;
+ margin:0;padding:0!important;
+ border:2px dashed #777c87!important;border-radius:6px!important;
+ outline:none;background:rgba(255,255,255,.025)!important;
+ color:#c9cbd2!important;cursor:pointer;
+ transition:background-color .15s,border-color .15s,color .15s;
+}
+.preview>.cronica-preview-pages .carousel-pages .carousel-add-placeholder>.material-icons{
+ font-size:25px;line-height:1;color:inherit;
+}
+.preview>.cronica-preview-pages .carousel-pages .carousel-add-placeholder:hover{
+ border-color:#ed0000!important;background:rgba(237,0,0,.1)!important;
+ color:#fff!important;
+}
+.preview>.cronica-preview-pages .carousel-pages .carousel-add-placeholder:focus-visible{
+ outline:2px solid #ed0000!important;outline-offset:2px;
+}
+.preview>.cronica-preview-pages .carousel-actions #addPage{
+ display:none!important;
+}
+.preview>.cronica-preview-pages.carousel-is-overflowing .carousel-actions #addPage{
+ display:flex!important;
+}
+.preview>.cronica-preview-pages .carousel-actions{
+ position:relative;z-index:2;
+ background:#24262c;
+}
+@media(max-width:700px){
+ .modern-track>.preview>.cronica-preview-pages .carousel-heading>h2{
+  font-size:13px!important;
+ }
+ .modern-track>.preview>.cronica-preview-pages .carousel-pages .carousel-add-placeholder{
+  flex-basis:48px;width:48px!important;height:64px!important;min-height:64px!important;
+ }
+}
+
+
+/* CRÓNICA DEV — ajuste 05: controles estables, tipografía y espacio del scroll. */
+.preview>.cronica-preview-pages .carousel-heading>h2{
+ font:600 13px/20px system-ui,Arial,sans-serif!important;
+ letter-spacing:normal!important;text-transform:none!important;
+}
+.preview>.cronica-preview-pages .carousel-pages{
+ box-sizing:border-box;height:84px;min-height:84px;
+ padding:4px 4px 12px;
+}
+.preview>.cronica-preview-pages .carousel-actions{
+ box-sizing:border-box;height:84px;min-height:84px;
+ justify-content:flex-start!important;
+}
+.preview>.cronica-preview-pages .carousel-actions #addPage{
+ margin-top:0!important;
+ background:#ed0000;
+}
+.preview>.cronica-preview-pages .carousel-actions #removePage{
+ margin-top:auto!important;
+}
+
+
+/* CRÓNICA DEV — ajuste 06: anillo de selección completo y acciones compactas. */
+.preview>.cronica-preview-pages .carousel-pages{
+ height:96px;min-height:96px;
+ padding:10px 4px 14px;
+}
+.preview>.cronica-preview-pages .carousel-actions{
+ display:grid;grid-template-columns:30px;
+ grid-template-rows:30px 30px;
+ align-content:center;justify-content:center!important;
+ row-gap:6px;height:96px;min-height:96px;
+}
+.preview>.cronica-preview-pages .carousel-actions #addPage{
+ grid-row:1;grid-column:1;margin:0!important;
+}
+.preview>.cronica-preview-pages .carousel-actions #removePage{
+ grid-row:2;grid-column:1;margin:0!important;
+}
+
+
+/* CRÓNICA DEV — cambio 07: diseño neutro y pista desplazable sin barra. */
+.editor-panel .cronica-variant-thumbnail-blank{
+ background:#aeb4bc!important;border:2px solid #565a63!important;
+}
+.preview>.cronica-preview-pages .carousel-page-thumb[data-variant="blank"]{
+ --page-bg:#aeb4bc;--page-number-bg:#343a43;--page-number:#f1f2f6;
+ background:#aeb4bc!important;border-color:#565a63!important;
+}
+.preview>.cronica-preview-pages .carousel-page-thumb[data-variant="blank"] .carousel-page-art{
+ display:none!important;
+}
+.preview>.cronica-preview-pages .carousel-indicator-type.is-blank{
+ background:#555a64;color:#f4f4f5;
+}
+.preview>.cronica-preview-pages .carousel-pages{
+ scrollbar-width:none!important;
+ -ms-overflow-style:none;
+ cursor:grab;
+ touch-action:pan-x pan-y;
+}
+.preview>.cronica-preview-pages .carousel-pages::-webkit-scrollbar{
+ display:none!important;width:0!important;height:0!important;
+}
+.preview>.cronica-preview-pages .carousel-pages.is-dragging{
+ cursor:grabbing;scroll-behavior:auto!important;
+}
+.preview>.cronica-preview-pages .carousel-pages.is-dragging .carousel-page-thumb,
+.preview>.cronica-preview-pages .carousel-pages.is-dragging .carousel-add-placeholder{
+ pointer-events:none;
+}
+
+/* Sin barra visible, la pista no reserva espacio de más debajo de las placas. */
+.preview>.cronica-preview-pages .carousel-pages{
+ height:84px;min-height:84px;padding:10px 4px;
+}
+.preview>.cronica-preview-pages .carousel-actions{
+ height:84px;min-height:84px;
+}
+
+
+/* CRÓNICA DEV — cambio 08: controles visibles únicamente si el diseño los admite. */
+.editor-panel .modern-design-group .logo-control-field[hidden],
+.editor-panel .modern-design-group .modern-footer-field[hidden],
+.modern-preview-identity-editor .logo-control-field[hidden],
+.modern-preview-identity-editor .modern-footer-field[hidden],
+.editor-panel .modern-photo-group[hidden],
+.editor-panel .modern-text-card[hidden],
+.editor-panel .modern-preview-text-editor[hidden],
+.modern-preview-text-editor[hidden]{display:none!important;}
+
+
+/* CRÓNICA DEV — cambio 11: ningún control de volanta en «Sin diseño». */
+.editor-panel .modern-text-card[hidden],
+.editor-panel .modern-mirror-card[hidden],
+.editor-panel .modern-photo-group[hidden],
+.modern-preview-text-editor[hidden],
+.editor-panel .modern-text-card .control-field[hidden],
+.modern-preview-text-editor .control-field[hidden]{display:none!important}
+
+
+/* CRÓNICA DEV — cambio 12: fuente de verdad para visibilidad según variante.
+   Ocultamos tarjetas enteras y campos, incluso si otros estilos fuerzan display. */
+html[data-cronica-variant="blank"] .editor-panel .modern-text-card,
+html[data-cronica-variant="blank"] .editor-panel .modern-photo-group,
+html[data-cronica-variant="blank"] .editor-panel .modern-design-group .logo-control-field,
+html[data-cronica-variant="blank"] .editor-panel .modern-design-group .modern-footer-field,
+html[data-cronica-variant="blank"] .modern-preview-text-editor,
+html[data-cronica-variant="blank"] .modern-preview-identity-editor .logo-control-field,
+html[data-cronica-variant="blank"] .modern-preview-identity-editor .modern-footer-field,
+html[data-cronica-variant="blank"] #showStrap,
+html[data-cronica-variant="blank"] #strapField,
+html[data-cronica-variant="blank"] #showStrapMobile,
+html[data-cronica-variant="blank"] #strapFieldMobile{
+ display:none!important;
+}
+
+
+/* CRÓNICA DEV — Cambio 13: editor de texto enriquecido y control contextual. */
+.editor-panel textarea.cronica-rich-source,
+.modern-preview-text-editor textarea.cronica-rich-source{display:none!important;}
+.editor-panel .cronica-rich-headline{
+ box-sizing:border-box;display:block;width:100%;min-height:120px;max-height:240px;
+ overflow-x:hidden;overflow-y:auto;padding:12px 14px;
+ border:1px solid #4a4e56;border-radius:7px;background:#292c32;
+ color:#f2f2f5;font:400 14px/1.5 Inter,Arial,sans-serif;
+ white-space:pre-wrap;overflow-wrap:anywhere;outline:none;cursor:text;
+ scrollbar-width:thin;scrollbar-color:#686d76 transparent;
+}
+.editor-panel .cronica-rich-headline:focus-visible{
+ border-color:#ed0000;outline:1px solid #ed0000;
+}
+.editor-panel .cronica-rich-headline [data-accent="true"]{font-weight:800;}
+.editor-panel .cronica-rich-headline [data-italic="true"]{font-style:italic;}
+.editor-panel .cronica-rich-headline [data-strike="true"]{text-decoration:line-through;}
+.editor-panel .cronica-rich-headline::selection,
+.editor-panel .cronica-rich-headline *::selection{background:#b73140;color:white;}
+/* La volanta debe desaparecer como campo entero incluso si se encuentra
+   físicamente dentro de Diseño de placas (captura del usuario). */
+html[data-cronica-variant="blank"] .modern-design-group .control-field:has(#showStrap),
+html[data-cronica-variant="blank"] .modern-design-group .control-field:has(#strapText),
+html[data-cronica-variant="blank"] .modern-preview-identity-editor .control-field:has(#showStrapIdentityPreview),
+html[data-cronica-variant="blank"] .modern-preview-identity-editor .control-field:has(#strapTextIdentityPreview){display:none!important;}
+
+/* Cambio 14: la miniatura de Diapositivas es la del selector original. */
+.preview>.cronica-preview-pages .carousel-page-thumb,
+.preview>.cronica-preview-pages .carousel-page-thumb[aria-current=page]{
+ background:transparent!important;
+ border:0!important;
+ --page-number-bg:#292d34;--page-number:#d0d3d9;
+}
+.preview>.cronica-preview-pages .carousel-page-thumb[aria-current=page]{
+ outline:2px solid #ed0000!important;
+}
+.preview>.cronica-preview-pages .carousel-design-copy{
+ display:block;position:absolute;inset:0;pointer-events:none;
+ overflow:hidden;border-radius:6px;
+}
+.preview>.cronica-preview-pages .carousel-design-source{
+ display:block!important;width:60px;height:80px;
+ padding:0!important;margin:0!important;border:0!important;
+ transform:scale(.8);transform-origin:0 0;
+}
+.preview>.cronica-preview-pages .carousel-design-copy .cronica-variant-thumbnail{
+ display:flex!important;width:60px!important;height:80px!important;
+ aspect-ratio:3/4;border:2px solid #565a63!important;
+ border-radius:7px!important;outline:0!important;
+}
+.preview>.cronica-preview-pages .carousel-design-copy .cronica-variant-thumbnail-blank{
+ display:block!important;background:#aeb4bc!important;
+}
+.preview>.cronica-preview-pages .carousel-page-thumb .carousel-page-number{
+ background:#292d34!important;color:#f2f2f5!important;
+}
+.preview>.cronica-preview-pages .carousel-page-thumb[aria-current=page] .carousel-page-number{
+ background:#ed0000!important;color:white!important;
+}
+
+/* Cambio 15 — fijar 48 × 64: escala del thumbnail, sin wrappers flex.
+   El número es overlay absoluto, nunca forma parte del flujo. */
+.preview>.cronica-preview-pages .carousel-page-thumb{
+ position:relative!important;display:block!important;flex:0 0 48px!important;
+ width:48px!important;height:64px!important;min-width:48px!important;
+ min-height:64px!important;padding:0!important;overflow:hidden!important;
+}
+.preview>.cronica-preview-pages .carousel-page-thumb[aria-current=page]{
+ overflow:visible!important;
+}
+.preview>.cronica-preview-pages .carousel-design-copy{
+ position:absolute!important;inset:0!important;display:block!important;
+ width:48px!important;height:64px!important;overflow:hidden!important;
+ padding:0!important;margin:0!important;
+}
+.preview>.cronica-preview-pages .carousel-design-copy>.cronica-variant-thumbnail{
+ position:absolute!important;left:0!important;top:0!important;
+ display:flex!important;flex-direction:column!important;flex-shrink:0!important;
+ width:60px!important;height:80px!important;min-width:60px!important;
+ min-height:80px!important;max-width:none!important;
+ margin:0!important;padding:0!important;
+ transform:scale(.8)!important;transform-origin:top left!important;
+ box-sizing:border-box!important;outline:0!important;
+}
+.preview>.cronica-preview-pages .carousel-design-copy>.cronica-variant-thumbnail-blank{
+ display:block!important;background:#aeb4bc!important;
+}
+.preview>.cronica-preview-pages .carousel-page-thumb .carousel-page-number{
+ position:absolute!important;top:4px!important;left:50%!important;
+ transform:translateX(-50%)!important;z-index:4!important;
+ margin:0!important;pointer-events:none!important;
+}

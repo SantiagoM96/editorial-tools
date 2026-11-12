@@ -1,0 +1,109 @@
+/* Borde hover de 5 px de guion y 3 px de espacio, con grosor constante de 1 px. */
+.preview .canvas-stage{position:relative}
+.preview .photo-hover-border{
+ position:absolute;top:var(--hover-inset,18px);left:var(--hover-inset,18px);
+ right:var(--hover-inset,18px);
+ height:calc(var(--photo-height,60%) - 2 * var(--hover-inset,18px));
+ z-index:2;pointer-events:none;opacity:0;
+ border:0;
+ transition:opacity .15s ease;
+}
+.preview .photo-hover-outline{display:block;width:100%;height:100%;overflow:visible}
+.preview .photo-hover-outline-rect{
+ fill:none;stroke:#41464e;stroke-width:1;stroke-dasharray:5 3;
+ stroke-linecap:butt;vector-effect:non-scaling-stroke;
+ width:calc(100% - 1px);height:calc(100% - 1px);
+ rx:var(--hover-radius,6px);
+}
+.preview .canvas-stage:has(.photo-dropzone:hover) .photo-hover-border,
+.preview .canvas-stage:has(.photo-dropzone:focus-visible) .photo-hover-border,
+.preview .canvas-stage.is-drag-over:has(.photo-dropzone:not([hidden])) .photo-hover-border{opacity:1}
+.preview .photo-dropzone{
+ position:absolute;top:0;left:0;right:0;height:var(--photo-height,60%);
+ z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+ gap:10px;padding:20px;text-align:center;cursor:pointer;color:#41464e;
+ background:transparent;border:0;outline:0;box-shadow:none;
+}
+.preview .photo-dropzone[hidden]{display:none!important}
+.preview .photo-dropzone:focus-visible{outline:0}
+.preview .photo-dropzone .material-icons{font-size:42px;line-height:1;color:#41464e}
+.preview .photo-dropzone-title{font-family:Inter,Arial,sans-serif;font-size:20px;font-weight:700;line-height:1.3;color:#41464e}
+.preview .photo-dropzone-description{font-family:Inter,Arial,sans-serif;font-size:14px;line-height:1.5;color:#535862;opacity:1}
+.preview .canvas-stage.is-drag-over:has(.photo-dropzone[hidden])::after{
+ content:'Soltá la imagen para reemplazarla';position:absolute;
+ top:0;left:0;right:0;height:var(--photo-height,60%);z-index:2;
+ display:flex;align-items:center;justify-content:center;
+ background:rgba(0,0,0,.28);color:#fff;font:700 16px Inter,Arial,sans-serif;
+ pointer-events:none;
+}
+@media(max-width:480px){
+ .preview .photo-dropzone{gap:6px;padding:12px}
+ .preview .photo-dropzone .material-icons{font-size:32px}
+ .preview .photo-dropzone-title{font-size:16px}
+ .preview .photo-dropzone-description{font-size:12px}
+}
+
+/* Selector de logos compacto: mismo patrón visual que Texturas de BAE. */
+.editor-panel .logo-control-field{margin-top:0}
+.editor-panel .logo-choices{
+ display:flex;flex-wrap:wrap;justify-content:flex-start;align-items:flex-start;
+ gap:10px;width:max-content;max-width:100%;margin-top:8px;
+}
+.editor-panel .logo-choice{
+ display:flex;flex:0 0 56px;flex-direction:column;align-items:center;
+ justify-content:flex-start;gap:9px;min-width:0;width:56px;min-height:0;
+ padding:0!important;border:0!important;border-radius:0!important;
+ background:transparent!important;box-shadow:none!important;
+ color:#d5d8de;font:500 11px/16px system-ui,Arial,sans-serif;
+ cursor:pointer;text-align:center;
+}
+.editor-panel .logo-choice>span:last-child{white-space:nowrap}
+.editor-panel .logo-choice-preview{
+ display:flex;flex:0 0 43px;align-items:center;justify-content:center;
+ width:56px;height:43px;padding:3px;
+ border:2px solid #565a63;border-radius:8px;
+ background:#292c32;
+}
+.editor-panel .logo-choice-preview img{
+ display:block;width:24px;height:27px;max-width:100%;max-height:100%;object-fit:contain;
+}
+.editor-panel .logo-choice-preview.no-logo{background:#292c32}
+.editor-panel .logo-choice-preview .material-icons{font-size:23px;color:#aeb4bf}
+.editor-panel .logo-choice[aria-pressed="true"] .logo-choice-preview{
+ outline:2px solid #a5a8b0;outline-offset:2px;border-color:#9096a1;
+}
+.editor-panel .logo-choice:hover .logo-choice-preview{background:#393d45}
+.editor-panel .logo-choice:focus-visible{outline:2px solid #a5a8b0;outline-offset:3px;border-radius:5px}
+
+/* Confirmación de exportación por página o de todo el carrusel. */
+.export-dialog-backdrop[hidden],.export-dialog-feedback[hidden]{display:none!important}
+.export-dialog-backdrop{position:fixed;inset:0;z-index:1000;background:rgba(4,5,8,.76);display:flex;align-items:center;justify-content:center;padding:20px}
+.export-dialog{width:min(100%,440px);position:relative;background:#24262b;color:#f4f4f4;border:1px solid #454950;border-radius:14px;padding:25px;box-shadow:0 24px 65px rgba(0,0,0,.5);font-family:Inter,system-ui,sans-serif}
+.export-dialog-close{position:absolute;top:12px;right:12px;width:34px;height:34px;min-width:34px;padding:0;display:flex;align-items:center;justify-content:center;border-radius:8px;background:transparent;color:#aeb4bf}
+.export-dialog-close:hover{background:#34383e;color:#fff}
+.export-dialog-close .material-icons{font-size:20px}
+.export-dialog-icon{width:42px;height:42px;display:flex;align-items:center;justify-content:center;border-radius:10px;background:#3a282e;color:#ed0000;margin-bottom:15px}
+.export-dialog-icon .material-icons{font-size:24px}
+.export-dialog h2{margin:0 0 8px;font-size:19px;line-height:1.3}
+.export-dialog>p:not(.export-dialog-feedback){margin:0 0 20px;color:#adb1ba;font-size:13px;line-height:1.55}
+.export-dialog-options{display:grid;gap:9px}
+.export-dialog-option{display:flex;gap:12px;align-items:center;width:100%;min-height:69px;background:#2d3036;border:1px solid #494d55;border-radius:10px;text-align:left;color:#f4f4f4;padding:12px 13px}
+.export-dialog-option:hover,.export-dialog-option:focus-visible{background:#353941;border-color:#ed0000}
+.export-dialog-option>.material-icons:first-child{font-size:25px;color:#d6d7dc}
+.export-dialog-option>span:nth-child(2){display:flex;flex-direction:column;gap:5px;flex:1;min-width:0}
+.export-dialog-option strong{font-size:13px;font-weight:700}
+.export-dialog-option small{font-size:11px;color:#aeb4bf}
+.export-dialog-option .export-arrow{font-size:19px;color:#b5b9c1}
+.export-dialog-option:disabled{opacity:.45;cursor:wait}
+.export-dialog-feedback{margin:13px 0 0;color:#c3c6cd;font-size:12px;line-height:1.5}
+@media(max-width:420px){.export-dialog{padding:20px 16px}.export-dialog-option{padding:11px 10px}}
+
+/* Dev: el logo seleccionado mantiene su borde interior y destaca el anillo exterior. */
+.editor-panel .logo-choice[aria-pressed="true"] .logo-choice-preview{border-color:#565a63}
+
+.editor-panel .logo-choice[aria-pressed="true"] .logo-choice-preview{outline-color:#ed0000}
+
+/* Mobile: calle de scroll de 50 px por lado del canvas; no cambia toolbar ni botones. */
+@media (max-width:700px){
+ .preview .canvas-stage{width:min(540px,calc(100vw - 100px));max-width:100%;margin-inline:auto}
+}

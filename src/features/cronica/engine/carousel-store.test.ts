@@ -29,6 +29,15 @@ describe('Estado canónico del carrusel Crónica', () => {
     expect(store.getPage(2)?.headline).toBe('Tercera');
   });
 
+  it('conserva la variante Sin diseño al cambiar entre páginas', () => {
+    const store = new EditorialCarouselStore(createDefaultPage('cover'));
+    expect(store.setActiveVariant('blank', store.activePage)).toBe(true);
+    expect(store.snapshot.variant).toBe('blank');
+    store.insertAfterActive({ ...store.activePage, variant: 'blank' });
+    store.select(0, store.activePage);
+    expect(store.activePage.variant).toBe('blank');
+  });
+
   it('rechaza índices inválidos y no elimina la portada', () => {
     const store = new EditorialCarouselStore(createDefaultPage('cover'));
     expect(store.select(-1, store.activePage)).toBeNull();

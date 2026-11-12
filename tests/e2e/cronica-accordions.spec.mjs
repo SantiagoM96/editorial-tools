@@ -4,7 +4,7 @@ test('Crónica: paneles plegables conservan estado editorial y navegación', asy
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/cronica/', { waitUntil: 'load' });
   await page.getByRole('tab', { name: 'Formato' }).click();
-  const labels = ['Páginas', 'Diseño de placas', 'Diseño de la placa', 'Textos'];
+  const labels = ['Diseño de placas', 'Diseño de la placa', 'Textos'];
   for (const label of labels) {
     const control = page.getByRole('button', { name: label, exact: true });
     await expect(control).toHaveAttribute('aria-expanded', 'true');
@@ -19,12 +19,12 @@ test('Crónica: paneles plegables conservan estado editorial y navegación', asy
   await textToggle.click();
   await expect(heading).toHaveValue('Este texto debe sobrevivir al plegado');
 
-  const pagesToggle = page.getByRole('button', { name: 'Páginas', exact: true });
-  await pagesToggle.click();
-  await expect(page.locator('#addPage')).toBeHidden();
-  await pagesToggle.click();
+  // Andy trasladó el paginador fuera de los acordeones, arriba del Canvas.
+  await page.getByRole('tab', { name: 'Vista previa' }).click();
+  await expect(page.locator('#cronica-pages-root')).toBeVisible();
   await page.locator('#addPage').click();
   await expect(page.locator('#pageIndicator')).toHaveText('2 de 2 · Interior');
   await page.getByRole('button', { name: 'Página 1, portada' }).click();
+  await page.getByRole('tab', { name: 'Formato' }).click();
   await expect(heading).toHaveValue('Este texto debe sobrevivir al plegado');
 });

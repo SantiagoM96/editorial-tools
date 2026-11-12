@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { mkdir } from 'node:fs/promises';
 
-test.skip(!process.env.CI, 'Requiere checkout del commit de origen en reference/public');
+test.skip(!process.env.CI, 'Requiere los archivos fuente BAE y Diario Show del checkout fijado');
 
 async function stableCanvasFingerprint(page, url) {
   const response = await page.goto(url, { waitUntil: 'load' });
@@ -23,7 +23,6 @@ async function stableCanvasFingerprint(page, url) {
 }
 
 for (const product of [
-  { name: 'Crónica', original: 'cronica-dev', migrated: 'cronica' },
   { name: 'BAE', original: 'bae-dev', migrated: 'bae' },
   { name: 'Diario Show', original: 'diarioshow-dev', migrated: 'diarioshow' },
 ]) {

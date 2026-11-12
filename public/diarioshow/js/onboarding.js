@@ -5,7 +5,7 @@
  const mq=window.matchMedia('(min-width:701px)');
  // QA y vista convencional pueden desactivar el recorrido con ?onboarding=off.
  if(new URLSearchParams(location.search).get('onboarding')==='off')return;
- const storageKey='ds-editor-tour-desktop-v3';
+ const storageKey='ds-dev-tour-desktop-v3';
  const qs=s=>document.querySelector(s);
  const steps=[
   {selector:'#dsMobileControlsPanel .ds-plate-design-group',title:'Elegí el diseño de tu placa',description:'Seleccioná una de las opciones disponibles para definir el estilo de la publicación.'},
@@ -13,9 +13,11 @@
   {selector:'#photoUploadArea',title:'Agregá tus fotografías',description:'Seleccioná una o más fotografías según la distribución elegida. Arrastralas en la vista previa para ajustar el encuadre y utilizá el zoom.'},
   {selector:'#dsMobileControlsPanel .ds-import-group',title:'Importá y personalizá tu placa',description:'Pegá el enlace de una noticia para importar su contenido. También podés configurar el logo y elegir el estilo de la firma inferior.'},
   {selector:'#dsMobileControlsPanel .ds-texts-group',title:'Editá los textos',description:'Escribí o ajustá el titular, aplicá formato y elegí la alineación del texto.'},
-  {selector:'#photoStage',title:'Editá desde la vista previa',description:'Hacé clic en el logo para abrir Identidad gráfica o en el titular para abrir Textos. El editor te lleva al módulo correspondiente.'},
+  {selector:'#photoStage',title:'Editá desde la vista previa',description:'Hacé clic en el logo para abrir Diseño de placas o en el titular para abrir Textos. El editor te lleva al módulo correspondiente.'},
   {selector:'body',title:'¿Poco espacio?',description:'Probá el zoom del navegador al 90% u 80% para aprovechar mejor el espacio de trabajo.',fullScreen:true,showZoomDemo:true}
  ];
+ // La navegación multipágina es ahora el primer paso del recorrido.
+ steps.unshift({selector:'.editor-slide-nav',title:'Organizá las diapositivas',description:'Agregá, seleccioná y eliminá diapositivas. Arrastrá la fila para desplazarte. Cada placa conserva su propio diseño y puede estar Sin diseño.'});
  let index=-1,active=false,layer=null,card=null,highlight=null;
  let shadows=[],lastFocus=null,scheduled=0;
  function completed(){try{return localStorage.getItem(storageKey)==='complete'}catch(e){return false}}

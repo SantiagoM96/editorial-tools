@@ -4,7 +4,7 @@ import './engine/legacy-engine.js';
 
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { CarouselControls } from './CarouselControls';
+import { PageNavigator, VariantControls } from './CarouselControls';
 import { CollapsiblePanel } from './CollapsiblePanel';
 import { MobileEditorTabs } from './MobileEditorTabs';
 import { MobilePreviewTextEditor } from './MobilePreviewTextEditor';
@@ -17,7 +17,7 @@ if (!mount) throw new Error('No se encontró el contenedor de controles de Crón
 
 createRoot(mount).render(
   <StrictMode>
-    <CarouselControls />
+    <VariantControls />
   </StrictMode>,
 );
 
@@ -59,3 +59,7 @@ createRoot(tabsRoot).render(<StrictMode><MobileEditorTabs /></StrictMode>);
 const previewTextRoot = document.getElementById('cronica-preview-text-root');
 if (!previewTextRoot) throw new Error('Falta editor rápido móvil de Crónica.');
 createRoot(previewTextRoot).render(<StrictMode><MobilePreviewTextEditor /></StrictMode>);
+
+const pageNavigationMount = document.getElementById('cronica-pages-root');
+if (!pageNavigationMount) throw new Error('Falta el navegador de páginas sobre vista previa.');
+createRoot(pageNavigationMount).render(<StrictMode><PageNavigator /></StrictMode>);

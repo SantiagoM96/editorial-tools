@@ -35,7 +35,7 @@ describe('composición editorial pura', () => {
       showStrap: false, variant: 'internal',
     }, fixedWidth);
     expect(cover.cover).toBe(true);
-    expect(cover.barY).toBe(cover.panelTop - 26);
+    expect(cover.barY).toBe(cover.panelTop - 34);
     expect(cover.imageBottom).toBe(cover.panelTop);
     expect(interior.cover).toBe(false);
     expect(interior.barY).toBe(interior.panelTop);

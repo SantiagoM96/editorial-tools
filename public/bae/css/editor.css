@@ -197,62 +197,476 @@
 .editor-panel .theme-swatch-caption{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 .editor-panel .theme-swatch[aria-pressed="true"]{outline:2px solid #d82626;outline-offset:2px;border-color:#565a63}
 
-/* Selector fotográfico de BAE: aspecto inspirado en MLZ, sin reemplazar el loader. */
-.panel-group .bae-photo-picker { position: relative; min-width: 0; }
-.panel-group input[type=file]#file.bae-photo-input {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  min-height: 0;
-  margin: -1px;
-  padding: 0;
-  overflow: hidden;
-  clip-path: inset(50%);
-  border: 0;
+/* Aviso flotante: tercera columna visual, FUERA del módulo de zoom.
+   El módulo de zoom y el canvas mantienen el ancho y su alineación originales. */
+/* Misma grilla de dos columnas y 1200px que BAE y Crónica.
+   El aviso flota a la derecha de la preview sin ocupar otra columna. */
+.preview{position:relative}
+.preview .browser-zoom-tip{
+ position:absolute;top:0;left:calc(50% + 282px);z-index:4;
+ width:210px;display:flex;flex-direction:column;align-items:stretch;gap:9px;
+ padding:10px;border:1px solid #55505a;border-radius:9px;
+ background:#302b36;box-shadow:0 8px 24px rgba(0,0,0,.2);
+ color:#efedf3;font:500 11px/1.45 Inter,Arial,sans-serif
 }
-.panel-group .bae-photo-surface {
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-width: 0;
-  min-height: 56px;
-  margin: 0;
-  padding: 12px 14px;
-  border: 1px dashed #555b65;
-  border-radius: 8px;
-  background: #292c32;
-  color: #f4f4f5;
-  cursor: pointer;
-  transition: background-color 150ms ease, border-color 150ms ease;
+.preview .browser-zoom-tip[hidden]{display:none!important}
+.preview .browser-zoom-tip-head{display:flex;align-items:flex-start;gap:8px}
+.preview .browser-zoom-tip-copy{display:flex;flex:1;min-width:0;flex-direction:column;align-items:flex-start;gap:3px;text-align:left}
+.preview .browser-zoom-tip-title{font-size:12px;line-height:1.3;font-weight:700;color:#fff}
+.preview .browser-zoom-tip-description{font-size:11px;line-height:1.45;font-weight:500;color:#efedf3}
+.preview .browser-zoom-demo{display:block;width:100%}
+.preview .browser-zoom-demo-viewport{
+ position:relative;width:100%;aspect-ratio:108/68;display:block;
+ border:1px solid #65616a;border-radius:6px;overflow:hidden;background:#f1f2f4
 }
-.panel-group .bae-photo-surface:hover { background: #353941; border-color: #8c939d; }
-.panel-group input[type=file]#file.bae-photo-input:focus-visible + .bae-photo-surface {
-  outline: 2px solid #d82626;
-  outline-offset: 2px;
+.preview .browser-zoom-demo-page{width:100%;height:100%;position:relative;background:#f1f2f4;overflow:hidden}
+.preview .browser-zoom-demo-header{height:10px;background:#e6008d}
+.preview .browser-zoom-demo-stage{height:calc(100% - 10px);position:relative;overflow:hidden;background:#f1f2f4}
+.preview .browser-zoom-demo-content{
+ position:absolute;inset:6px;display:flex;align-items:stretch;gap:6px;
+ transform-origin:center center;animation:ds-browser-zoom-content 6s ease-in-out infinite
 }
-.panel-group .bae-photo-icon {
-  flex: none;
-  font-size: 25px;
-  line-height: 1;
+.preview .browser-zoom-demo-stage{background:#ededf0}
+.preview .browser-zoom-demo-content{gap:5px}
+.preview .browser-zoom-demo-controls{
+ display:flex;flex-direction:column;gap:5px;width:31%;flex:0 0 31%;
+ padding:7px 5px;background:#24262b;border-radius:3px
 }
-.panel-group .bae-photo-copy {
-  flex: 1;
-  min-width: 0;
-  overflow-wrap: anywhere;
-  font-size: 13px;
-  line-height: 1.4;
-  text-align: left;
+.preview .browser-zoom-demo-control-title{display:block;width:70%;height:3px;border-radius:2px;background:#d6d8df}
+.preview .browser-zoom-demo-controls i{
+ display:block;width:100%;height:7px;flex:0 0 7px;background:#3b4049;border-radius:2px;
+ border:1px solid #505560
 }
-.panel-group .bae-photo-copy strong { font-size: 13px; font-weight: 700; }
-.panel-group .bae-photo-caption {
-  color: #c7cad2;
-  font-size: 13px;
-  font-weight: 400;
+.preview .browser-zoom-demo-controls i:nth-of-type(2){width:80%;height:3px;flex-basis:3px;background:linear-gradient(90deg,#e6008d 45%,#70747e 45%);border:0}
+.preview .browser-zoom-demo-controls i:nth-of-type(4){width:75%;height:3px;flex-basis:3px;background:#6d727c;border:0}
+.preview .browser-zoom-demo-workspace{
+ display:flex;flex:1;min-width:0;flex-direction:column;align-items:center;gap:4px
 }
-@media (max-width: 700px) {
-  .panel-group .bae-photo-surface { min-height: 52px; }
+.preview .browser-zoom-demo-toolbar{
+ display:block;width:100%;height:9px;flex:0 0 9px;background:#24262b;border-radius:2px
 }
-@media (prefers-reduced-motion: reduce) {
-  .panel-group .bae-photo-surface { transition: none; }
+.preview .browser-zoom-demo-preview{
+ position:relative;display:flex;flex-direction:column;width:54%;max-width:65px;flex:1;
+ min-height:0;background:#9ba2ad;border-radius:2px;overflow:hidden;
+ box-shadow:0 2px 7px rgba(0,0,0,.2)
+}
+.preview .browser-zoom-demo-photo{
+ flex:1;min-height:0;background:
+ linear-gradient(145deg,transparent 44%,rgba(45,56,74,.37) 45%,rgba(45,56,74,.37) 65%,transparent 66%),
+ linear-gradient(155deg,#c6cbd2,#88929f)
+}
+.preview .browser-zoom-demo-headline{
+ height:36%;min-height:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+ border-top:3px solid #e6008d;background:#fff
+}
+.preview .browser-zoom-demo-headline i{display:block;width:77%;height:3px;background:#7749a6;border-radius:1px}
+.preview .browser-zoom-demo-headline i:nth-child(2){width:61%;background:#e6008d}
+.preview .browser-zoom-demo-headline i:nth-child(3){width:43%}
+.preview .browser-zoom-demo-export{
+ display:block;width:65%;height:5px;flex:0 0 5px;background:#e6008d;border-radius:2px
+}
+.preview .browser-zoom-demo-percent{
+ position:absolute;right:5px;top:15px;min-width:44px;height:20px;z-index:2;
+ border-radius:4px;background:#E6008D;box-shadow:0 1px 4px rgba(0,0,0,.12)
+}
+.preview .browser-zoom-demo-percent span{
+ position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+ white-space:nowrap;font:700 11px/1 Inter,Arial,sans-serif;color:#FFFFFF;opacity:0
+}
+.preview .browser-zoom-demo-percent span:nth-child(1){animation:ds-browser-zoom-number-100 6s linear infinite}
+.preview .browser-zoom-demo-percent span:nth-child(2){animation:ds-browser-zoom-number-90 6s linear infinite}
+.preview .browser-zoom-demo-percent span:nth-child(3){animation:ds-browser-zoom-number-80 6s linear infinite}
+@keyframes ds-browser-zoom-content{
+ 0%,24%{transform:scale(1)}
+ 37%,55%{transform:scale(.9)}
+ 69%,87%{transform:scale(.8)}
+ 100%{transform:scale(1)}
+}
+@keyframes ds-browser-zoom-number-100{0%,24%,92%,100%{opacity:1}26%,90%{opacity:0}}
+@keyframes ds-browser-zoom-number-90{0%,29%,61%,100%{opacity:0}37%,55%{opacity:1}}
+@keyframes ds-browser-zoom-number-80{0%,61%,92%,100%{opacity:0}69%,87%{opacity:1}}
+@media(prefers-reduced-motion:reduce){
+ .preview .browser-zoom-demo-content{animation:none;transform:scale(.8)}
+ .preview .browser-zoom-demo-percent span{animation:none;opacity:0}
+ .preview .browser-zoom-demo-percent span:nth-child(3){opacity:1}
+}
+
+.preview .browser-zoom-tip-close{
+ display:inline-flex;align-items:center;justify-content:center;
+ flex:0 0 22px;width:22px;height:22px;padding:0;
+ color:#d6d2db;background:transparent;border:0;border-radius:5px;cursor:pointer
+}
+.preview .browser-zoom-tip-close .material-icons{font-size:16px}
+.preview .browser-zoom-tip-close:hover{background:#4a424f;color:#fff}
+.preview .browser-zoom-tip-close:focus-visible{outline:2px solid #E6008D;outline-offset:2px}
+/* Cuando la tercera columna no cabe, conservar el aviso separado
+   del zoom y en el flujo del editor, sin crear scroll horizontal. */
+
+/* Miniatura del zoom: versión oscura, ilustrativa y de bajo contraste.
+   Se mantienen las dimensiones, el marco fijo y el porcentaje destacado. */
+.preview .browser-zoom-demo-viewport{
+ border-color:#393b42;background:#17191e
+}
+.preview .browser-zoom-demo-page{background:#17191e}
+.preview .browser-zoom-demo-header{
+ background:#22242a;border-bottom:1px solid #343740
+}
+.preview .browser-zoom-demo-stage{background:#191b20}
+.preview .browser-zoom-demo-controls{background:#24262b}
+.preview .browser-zoom-demo-control-title{background:#626773}
+.preview .browser-zoom-demo-controls i{
+ background:#30343c;border-color:#3c414a
+}
+.preview .browser-zoom-demo-controls i:nth-of-type(2){
+ background:linear-gradient(90deg,#84526f 45%,#474b55 45%);border:0
+}
+.preview .browser-zoom-demo-controls i:nth-of-type(4){background:#555a65}
+.preview .browser-zoom-demo-toolbar{background:#282b32}
+.preview .browser-zoom-demo-preview{
+ background:#343943;box-shadow:0 2px 6px rgba(0,0,0,.16)
+}
+.preview .browser-zoom-demo-photo{
+ background:
+ linear-gradient(145deg,transparent 44%,rgba(21,26,34,.33) 45%,rgba(21,26,34,.33) 65%,transparent 66%),
+ linear-gradient(155deg,#565d68,#343a44)
+}
+.preview .browser-zoom-demo-headline{
+ border-top-color:#79506a;background:#33353d
+}
+.preview .browser-zoom-demo-headline i{background:#686074}
+.preview .browser-zoom-demo-headline i:nth-child(2){background:#8b5372}
+.preview .browser-zoom-demo-export{background:#87516e}
+/* El indicador mantiene el contraste institucional intencionalmente. */
+.preview .browser-zoom-demo-percent{background:#E6008D}
+.preview .browser-zoom-demo-percent span{color:#fff}
+
+/* Ejemplo realista y esquemático de Diario Show, Variante 1.
+   La UI circundante es oscura; la placa mantiene exactamente sus
+   colores editoriales: fotografía gris, caja blanca, franja fucsia-violeta,
+   titulares violetas y acento fucsia. */
+.preview .browser-zoom-demo-stage{background:#191b20}
+.preview .browser-zoom-demo-controls{background:#1e2025}
+.preview .browser-zoom-demo-control-title{background:#aeb4c0}
+.preview .browser-zoom-demo-controls i{background:#292c32;border-color:#4a4e56}
+.preview .browser-zoom-demo-toolbar{background:#1e2025}
+.preview .browser-zoom-demo-photo{
+ background:
+ linear-gradient(145deg,transparent 40%,rgba(91,100,113,.24) 41%,rgba(91,100,113,.24) 68%,transparent 69%),
+ linear-gradient(155deg,#c4c8cf,#aeb4bc)
+}
+.preview .browser-zoom-demo-preview{
+ background:#aeb4bc;
+ box-shadow:0 2px 7px rgba(0,0,0,.22)
+}
+.preview .browser-zoom-demo-headline{
+ height:43%;min-height:21px;gap:3px;
+ border-top:0;background:#fff;
+ position:relative;padding-top:5px;padding-bottom:6px
+}
+.preview .browser-zoom-demo-headline::before{
+ content:'';position:absolute;top:0;left:0;right:0;height:4px;
+ background:linear-gradient(90deg,#E6008D,#7749A6)
+}
+.preview .browser-zoom-demo-headline i{background:#7749A6}
+.preview .browser-zoom-demo-headline i:nth-child(2){background:#E6008D}
+.preview .browser-zoom-demo-headline i:nth-child(3){background:#7749A6}
+.preview .browser-zoom-demo-signature{
+ position:absolute;bottom:3px;left:50%;transform:translateX(-50%);
+ width:40%;height:2px;background:#7749A6;border-radius:1px;opacity:.75
+}
+.preview .browser-zoom-demo-export{background:#E6008D}
+
+/* Icono Google Material Icons: misma lupa de zoom en los tres generadores. */
+.preview .browser-zoom-demo-percent{min-width:67px;height:23px}
+.preview .browser-zoom-demo-percent span{gap:3px;font-size:11px}
+.preview .browser-zoom-demo-percent .material-icons{
+ font-family:"Material Icons";font-size:14px;font-weight:normal;line-height:1;
+ display:inline-block;flex:none;letter-spacing:normal;font-feature-settings:"liga";
+}
+
+/* Adaptación editorial de bae-dev: miniatura primera variante. */
+.preview .browser-zoom-tip{background:#24262b;border-color:#464b54}
+.preview .browser-zoom-demo-percent{background:#D82626}
+.preview .browser-zoom-demo-percent span{color:#fff}
+.preview .browser-zoom-demo-controls i:nth-of-type(2){background:linear-gradient(90deg,#D82626 45%,#70747e 45%)}
+.preview .browser-zoom-demo-export{background:#D82626}
+.preview .browser-zoom-demo-headline::before{background:#D82626}
+.preview .browser-zoom-demo-headline i:nth-child(2){background:#D82626}
+.preview .browser-zoom-demo-photo{background:linear-gradient(145deg,transparent 38%,rgba(25,30,37,.3) 39%,rgba(25,30,37,.3) 70%,transparent 71%),linear-gradient(155deg,#858b97,#515764)}
+.preview .browser-zoom-demo-headline{background:#171717;border:0}
+.preview .browser-zoom-demo-headline::before{background:#fff;height:2px}
+.preview .browser-zoom-demo-headline i{background:#fff}
+.preview .browser-zoom-demo-headline i:nth-child(2){background:#D82626}
+.preview .browser-zoom-demo-headline i:nth-child(3){background:#fff}
+.preview .browser-zoom-demo-signature{background:#fff}
+@media(max-width:700px){.preview .browser-zoom-tip{display:none!important}}
+
+/* Variantes de BAE: mismo selector vertical 3:4 que Crónica.
+   Foto superior esquemática + módulo tipográfico inferior de cada color. */
+.editor-panel .theme-swatches{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.editor-panel .theme-swatch{
+ position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+ width:60px;min-width:60px;flex:0 0 60px;height:auto;min-height:0;gap:8px;
+ padding:0;border:0;border-radius:0;background:transparent!important;
+ font:500 11px/16px Inter,Arial,sans-serif;color:#d8dce4;overflow:visible
+}
+.editor-panel .theme-swatch-thumb{
+ position:relative;display:block;box-sizing:border-box;overflow:hidden;
+ width:60px;aspect-ratio:3/4;height:auto;border:2px solid #565a63;border-radius:7px;
+ background:linear-gradient(to bottom,transparent 52%,var(--thumb-panel) 52%),
+ linear-gradient(145deg,#a8b0b9 0%,#606b7a 48%,#3e4754 100%);
+ --thumb-panel:#171717;--thumb-ink:#fff;--thumb-accent:#d82626;
+}
+.editor-panel .theme-swatch.white .theme-swatch-thumb{
+ --thumb-panel:#fff;--thumb-ink:#171717;--thumb-accent:#d82626;
+}
+.editor-panel .theme-swatch.red .theme-swatch-thumb{
+ --thumb-panel:#d82626;--thumb-ink:#fff;--thumb-accent:#fff;
+}
+.editor-panel .theme-swatch-thumb::before{
+ content:'';position:absolute;top:51%;left:0;right:0;height:3px;background:#fff;z-index:1
+}
+.editor-panel .theme-swatch-art{
+ position:absolute;inset:55% 5px 5px;display:block;pointer-events:none;
+ background:
+ linear-gradient(var(--thumb-ink),var(--thumb-ink)) center 5px / 88% 3px no-repeat,
+ linear-gradient(var(--thumb-accent),var(--thumb-accent)) center 13px / 73% 3px no-repeat,
+ linear-gradient(var(--thumb-ink),var(--thumb-ink)) center 21px / 58% 3px no-repeat;
+}
+.editor-panel .theme-swatch-caption{
+ position:static;display:block;clip-path:none;width:auto;height:auto;
+ overflow:visible;white-space:nowrap;color:#d8dce4;
+ font:500 11px/16px Inter,Arial,sans-serif
+}
+.editor-panel .theme-swatch[aria-pressed="true"]{outline:0;border:0}
+.editor-panel .theme-swatch[aria-pressed="true"] .theme-swatch-thumb{
+ outline:2px solid #d82626;outline-offset:2px;border-color:#565a63
+}
+.editor-panel .theme-swatch:hover .theme-swatch-thumb{filter:brightness(.95)}
+.editor-panel .theme-swatch:focus-visible{outline:2px solid #a5a8b0;outline-offset:4px;border-radius:5px}
+
+/* Variantes editoriales: síntesis en 3:4, dos trazos redondeados por placa. */
+.editor-panel .theme-swatch-thumb{
+ background:linear-gradient(to bottom,transparent 52%,var(--thumb-panel) 52%),#aeb4bc
+}
+.editor-panel .theme-swatch-thumb::before{
+ background:var(--thumb-ink);height:3px;top:51%;
+}
+.editor-panel .theme-swatch-art{
+ position:absolute;inset:57% 5px 6px;display:flex;
+ flex-direction:column;align-items:center;justify-content:center;gap:5px;
+ background:none!important
+}
+.editor-panel .theme-swatch-art i{
+ display:block;width:91%;height:4px;flex:0 0 4px;
+ border-radius:5px;background:var(--thumb-ink)
+}
+.editor-panel .theme-swatch-art i:nth-child(2){
+ width:68%;background:var(--thumb-accent)
+}
+.editor-panel .theme-swatch[aria-pressed="true"] .theme-swatch-thumb{
+ outline:4px solid #d82626;outline-offset:2px
+}
+
+/* El consejo nunca ocupa sitio ni cambia el orden del zoom y la preview. */
+
+/* El aviso se posiciona en función del canvas y del borde real del viewport.
+   La geometría se actualiza en JS, sin breakpoints ni participación en flex. */
+.preview > .browser-zoom-tip:not([hidden]){
+ position:absolute!important;
+ top:var(--zoom-help-top,88px)!important;
+ left:var(--zoom-help-left,calc(50% + 282px))!important;
+ right:auto!important;
+ width:210px;margin:0;z-index:30;align-self:auto;order:initial;
+ transition:left .14s ease-out,top .14s ease-out;
+}
+@media(prefers-reduced-motion:reduce){
+ .preview > .browser-zoom-tip{transition:none}
+}
+@media(max-width:700px){
+ .preview > .browser-zoom-tip{display:none!important}
+}
+
+
+/* Lenguaje común de miniaturas: 3:4, 52% foto gris, 48% módulo editorial,
+   dos barras de 4px redondeadas; diferencia de marca solo por color. */
+.preview .editor-mini{
+ box-sizing:border-box;width:min(100%,56px);height:auto;aspect-ratio:3/4;
+ display:flex;flex-direction:column;overflow:hidden;margin:auto;
+ background:#aeb4bc;border-radius:3px;--mini-panel:#fff;--mini-text:#171717;
+ --mini-accent:#ed0000;--mini-bar:#ed0000;
+}
+.preview .editor-mini-photo{flex:0 0 52%;background:#aeb4bc}
+.preview .editor-mini-body{
+ flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;
+ background:var(--mini-panel);position:relative
+}
+.preview .editor-mini-strap{
+ width:100%;height:4px;flex:0 0 4px;background:var(--mini-bar);
+}
+.preview .editor-mini-lines{
+ flex:1;min-height:0;display:flex;flex-direction:column;
+ align-items:center;justify-content:center;gap:5px;width:100%;
+}
+.preview .editor-mini-lines i{
+ display:block;width:84%;height:4px;flex:0 0 4px;
+ background:var(--mini-text);border-radius:10px;
+}
+.preview .editor-mini-lines i:nth-child(2){
+ width:60%;background:var(--mini-accent);
+}
+.preview .editor-mini-quote{display:none}
+.preview .editor-mini-bae-white{
+ --mini-panel:#fff;--mini-text:#171717;--mini-accent:#d82626;--mini-bar:#fff;
+}
+.preview .editor-mini-ds-pink{
+ --mini-panel:#fff;--mini-text:#7749a6;--mini-accent:#e6008d;--mini-bar:#e6008d;
+}
+.preview .editor-mini-ds-pink .editor-mini-strap{
+ background:linear-gradient(90deg,#e6008d,#7749a6)
+}
+.preview .editor-mini-cronica-cover{
+ --mini-panel:#fff;--mini-text:#171717;--mini-accent:#ed0000;--mini-bar:#ed0000;
+}
+.preview .editor-mini-cronica-cover .editor-mini-strap{
+ height:12px;flex-basis:12px;position:relative
+}
+.preview .editor-mini-cronica-cover .editor-mini-strap::after{
+ content:'';position:absolute;left:20%;right:20%;top:4px;
+ height:4px;border-radius:10px;background:#fff
+}
+.preview .browser-zoom-demo-preview{background:transparent;box-shadow:none;display:flex;align-items:center;justify-content:center}
+.preview .browser-zoom-demo-preview>.editor-mini{max-height:100%}
+
+/* BAE: foto neutra, dos líneas por placa; sin sombreado oscuro. */
+.editor-panel .theme-swatch-thumb{
+ background:linear-gradient(to bottom,#aeb4bc 52%,var(--thumb-panel) 52%)
+}
+.editor-panel .theme-swatch-thumb::before{background:var(--thumb-ink)}
+.editor-panel .theme-swatch-art i{height:4px;flex-basis:4px;border-radius:10px}
+.editor-panel .theme-swatch[aria-pressed="true"] .theme-swatch-thumb{
+ outline-width:4px
+}
+
+/* Posicionamiento nativo CSS Anchor Positioning (Chrome/Edge modernos).
+   Se ancla a la placa real, respeta el tope lateral mínimo de 20px, igual que el panel izquierdo, y
+   no salta por breakpoints ni interpola mediciones de JS. */
+@supports (position-anchor: --editor-poster) and (left: anchor(right)){
+ .preview .canvas-stage{anchor-name:--editor-poster}
+ .preview > .browser-zoom-tip:not([hidden]){
+  position:fixed!important;
+  position-anchor:--editor-poster;
+  left:min(calc(anchor(right) + 24px),calc(100vw - 230px))!important;
+  top:calc(anchor(top) + 24px)!important;
+  right:auto!important;
+  transition:none!important;
+  z-index:40
+ }
+}
+
+
+/* Navegación común: identidad del producto a la izquierda y Volver a la derecha.
+   En celular la marca y la descripción siguen juntas, con flecha a su derecha. */
+.header-inner .header-brand{
+ display:flex;align-items:center;gap:22px;
+ min-width:0;flex:1 1 auto;
+}
+.header-inner .header-brand .header-logo-link{flex:0 0 auto;min-width:0}
+.header-inner .header-brand .header-title{min-width:0}
+@media(max-width:700px){
+ .header-inner{
+  display:flex;flex-wrap:nowrap!important;
+  align-items:center;gap:10px;
+ }
+ .header-inner .header-brand{
+  display:flex;flex-direction:column;align-items:flex-start;
+  flex:1 1 auto;min-width:0;gap:5px;
+ }
+ .header-inner .header-brand .header-title{
+  font-size:14px;line-height:1.35;
+  overflow-wrap:anywhere;
+ }
+ .header-inner .dashboard-back-link{
+  flex:0 0 40px;width:40px!important;height:40px;min-height:40px;
+  margin:0 0 0 auto!important;padding:0!important;
+  align-self:center;justify-content:center;
+ }
+ .header-inner .dashboard-back-link .back-link-text{display:none}
+ .header-inner .dashboard-back-link .material-icons{font-size:22px}
+}
+@media(max-width:440px){
+ .header-inner .dashboard-back-link{
+  flex:0 0 40px;width:40px!important;
+  margin-left:auto!important;
+ }
+}
+
+/* Consejo flotante: geometría real del canvas, la caja y el viewport útil.
+   JS lo mantiene al costado mientras entre; el límite derecho es 20px. */
+@media(min-width:701px){
+ .preview > .browser-zoom-tip:not([hidden]){
+  position:fixed!important;
+  position-anchor:auto!important;
+  left:var(--zoom-tip-x,calc(100vw - 230px))!important;
+  top:var(--zoom-tip-y,90px)!important;
+  right:auto!important;
+  margin:0!important;
+  transition:none!important;
+  z-index:40;
+ }
+}
+
+/* Scrollbar exterior uniforme, fina y discreta en todos los productos Dev. */
+html{
+ scrollbar-width:thin;
+ scrollbar-color:#525864 #101114;
+}
+html::-webkit-scrollbar{width:8px;height:8px}
+html::-webkit-scrollbar-track{background:#101114}
+html::-webkit-scrollbar-thumb{
+ background:#525864;border:2px solid #101114;border-radius:999px;
+}
+html::-webkit-scrollbar-thumb:hover{background:#747b88}
+
+
+/* Consejo de zoom ampliado un 20% respecto de la tarjeta original.
+   El JS posiciona según el ancho real y permite superponerla a la placa. */
+.preview .browser-zoom-tip,
+.preview > .browser-zoom-tip:not([hidden]){
+ width:252px;
+ padding:12px;
+ gap:11px;
+ border-radius:11px;
+ font-size:13.2px;
+ line-height:1.45;
+}
+.preview .browser-zoom-tip-head{gap:10px}
+.preview .browser-zoom-tip-copy{gap:4px}
+.preview .browser-zoom-tip-title{font-size:14.4px;line-height:1.3}
+.preview .browser-zoom-tip-description{font-size:13.2px;line-height:1.45}
+.preview .browser-zoom-tip-close{flex-basis:26px;width:26px;height:26px;border-radius:6px}
+.preview .browser-zoom-tip-close .material-icons{font-size:19px}
+.preview .browser-zoom-demo-viewport{border-radius:7px}
+.preview .browser-zoom-demo-preview>.editor-mini{width:min(100%,67px)}
+.preview .browser-zoom-demo-preview{max-width:78px}
+
+/* Unificar glassmorphism y márgenes en las tarjetas de ayuda Dev.
+   Padding refinado: 21.6px × 0.8 = 17.28px. El posicionamiento mide la caja real. */
+.preview .browser-zoom-tip,
+.preview > .browser-zoom-tip:not([hidden]){
+ width:302.4px;
+ padding:17.28px;
+ background:rgba(22,23,30,.70);
+ -webkit-backdrop-filter:blur(18px) saturate(125%);
+ backdrop-filter:blur(18px) saturate(125%);
+ border-color:rgba(255,255,255,.22);
+ box-shadow:0 12px 36px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.10);
+ color:#f2f2f6;
+}
+.preview .browser-zoom-tip-title{font-size:22.31px;line-height:1.2;font-weight:700;color:#fff}
+.preview .browser-zoom-tip-description{color:#f0eff5}
+.preview .browser-zoom-tip-description strong{font-weight:700;color:#fff}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+ .preview .browser-zoom-tip,
+ .preview > .browser-zoom-tip:not([hidden]){background:#24252d}
 }

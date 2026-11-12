@@ -192,3 +192,61 @@
     font-size: 16px;
   }
 }
+
+/* Variante Sin diseño de Andy: lienzo gris sin decoraciones y controles contextuales ocultos. */
+.cronica-variant-thumbnail-blank{background:#aeb4bc!important}
+.cronica-variant-thumbnail-blank::before,.cronica-variant-thumbnail-blank::after{display:none!important}
+html[data-cronica-variant="blank"] #cronica-media-root,
+html[data-cronica-variant="blank"] #cronica-content-root,
+html[data-cronica-variant="blank"] #cronica-photo-zoom-root,
+html[data-cronica-variant="blank"] #cronica-preview-text-root,
+html[data-cronica-variant="blank"] .preview .cronica-text-hit {display:none!important}
+
+/* Navegador actualizado de Andy, integrado como componente React sobre Vista previa. */
+#cronica-pages-root{display:block;min-width:0}
+.cronica-preview-pages{display:flex;flex-direction:column;gap:8px;margin-bottom:15px;padding:13px 15px;border:1px solid #454a54;border-radius:11px;background:#24262b}
+.cronica-preview-pages .carousel-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:0}
+.cronica-preview-pages .carousel-heading h2{font-size:14px;font-weight:700;color:#fff;margin:0}
+.cronica-preview-pages .carousel-current{color:#c5cad2;margin:0;font-size:12px}
+.cronica-preview-pages .carousel-compact-row{display:flex;gap:8px;align-items:flex-start;min-width:0}
+.cronica-preview-pages .carousel-pages{display:flex;flex:1;flex-wrap:nowrap;gap:8px;min-width:0;overflow:auto hidden;scrollbar-width:none;margin:0}
+.cronica-preview-pages .carousel-pages::-webkit-scrollbar{display:none}
+.cronica-preview-pages .carousel-page-thumb{position:relative;display:flex;flex:0 0 71px;height:99px;flex-direction:column;align-items:center;justify-content:flex-start;gap:5px;padding:6px;background:#33363d;color:#f4f4f5;border:2px solid transparent;border-radius:9px;cursor:pointer}
+.cronica-preview-pages .carousel-page-thumb[aria-current=page]{outline:2px solid #ed0000;outline-offset:-2px;border-color:transparent;background:#3b3f48}
+.cronica-preview-pages .carousel-page-thumb:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.cronica-preview-pages .carousel-page-thumb .carousel-page-number{font-size:12px;font-weight:700;line-height:1.2}
+.cronica-preview-pages .carousel-page-thumb .cronica-variant-thumbnail{width:48px;height:67px;display:block;flex:none;margin:0;transform:none}
+.cronica-preview-pages .carousel-add-placeholder{display:flex;flex:0 0 60px;height:99px;align-items:center;justify-content:center;border:2px dashed #747984;border-radius:9px;background:transparent;color:#e3e5e9}
+.cronica-preview-pages .carousel-actions{display:flex;flex:0 0 auto;gap:6px;margin:0}
+.cronica-preview-pages .carousel-actions button{width:36px;height:36px;min-height:36px;flex:none;padding:0;display:inline-flex;align-items:center;justify-content:center}
+.cronica-preview-pages .carousel-actions .add-page-fixed{display:none}
+.cronica-preview-pages .carousel-actions .remove-page:disabled{opacity:.35}
+.cronica-preview-pages .cronica-variant-thumbnail-blank{background:#aeb4bc!important}
+.cronica-preview-pages .cronica-variant-thumbnail-blank::before,
+.cronica-preview-pages .cronica-variant-thumbnail-blank::after{display:none!important}
+/* Miniaturas realistas en Diseño de placas: fotografía, volanta y líneas. */
+.cronica-variant-thumbnail:not(.cronica-variant-thumbnail-blank){display:flex!important;flex-direction:column;overflow:hidden}
+.cronica-variant-thumbnail .cronica-variant-thumb-photo{display:block;flex:0 0 49%;background:#aeb4bc}
+.cronica-variant-thumbnail .cronica-variant-thumb-textbox{display:flex;flex:1;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:0;background:#fff}
+.cronica-variant-thumbnail .cronica-variant-thumb-strap{display:block;width:64%;height:5px;background:#ed0000;border-radius:1px}
+.cronica-variant-thumbnail .cronica-variant-thumb-lines{display:flex;width:78%;flex-direction:column;align-items:center;gap:3px}
+.cronica-variant-thumbnail .cronica-variant-thumb-lines i{display:block;height:3px;width:100%;border-radius:2px;background:#151515}
+.cronica-variant-thumbnail .cronica-variant-thumb-lines i:nth-child(2){width:75%}
+.cronica-variant-thumbnail .cronica-variant-thumb-lines i:nth-child(3){width:56%}
+.cronica-variant-thumbnail .cronica-variant-thumb-footer{display:block;width:45%;height:2px;background:#ed0000;margin-top:2px}
+.cronica-variant-thumbnail-internal .cronica-variant-thumb-footer{display:none}
+.cronica-variant-thumbnail:not(.cronica-variant-thumbnail-blank)::before,
+.cronica-variant-thumbnail:not(.cronica-variant-thumbnail-blank)::after{display:none!important}
+@media(max-width:700px){
+  .preview #cronica-pages-root{grid-column:1/-1;grid-row:1;margin:0}
+  .preview .preview-instructions{grid-row:2!important}
+  .preview .canvas-stage{grid-row:3!important}
+  .preview .preview-zoom{grid-row:3!important}
+  .preview #cronica-preview-text-root{grid-row:4!important}
+  .preview .preview-actions{grid-row:5!important}
+  .preview .bae-credits{grid-row:6!important}
+  .cronica-preview-pages{padding:9px;margin:0 0 8px}
+  .cronica-preview-pages .carousel-page-thumb{flex-basis:60px;height:86px}
+  .cronica-preview-pages .carousel-page-thumb .cronica-variant-thumbnail{height:55px;width:40px}
+  .cronica-preview-pages .carousel-add-placeholder{flex-basis:50px;height:86px}
+}

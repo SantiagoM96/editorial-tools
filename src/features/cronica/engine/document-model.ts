@@ -2,7 +2,7 @@
  * Modelo de documento Crónica desacoplado de React, formularios y Canvas.
  * Estos valores conservan los defaults de la versión editorial original.
  */
-export type EditorialVariant = 'cover' | 'internal';
+export type EditorialVariant = 'blank' | 'cover' | 'internal';
 export type EditorialLogo = 'none' | 'primary' | 'secondary' | 'white';
 export type EditorialAlignment = 'left' | 'center';
 
@@ -26,7 +26,7 @@ export interface EditorialPage extends EditorialContent {
   variant: EditorialVariant;
 }
 
-export const COVER_STRAP = 'LA CLAVE DE ESTA NOTICIA';
+export const COVER_STRAP = 'RESUMÍ ACÁ EL TEMA';
 export const COVER_HEADLINE = 'Escribí un título claro y directo. *Destacá el dato principal* y dejá los detalles para las siguientes placas.';
 export const INTERNAL_HEADLINE = 'En esta placa podés ampliar la información. Explicá qué pasó, quiénes están involucrados y por qué es importante. Usá frases cortas y una idea por vez para facilitar la lectura.';
 
@@ -35,6 +35,11 @@ export function createCoverContent(): EditorialContent {
 }
 
 export function createDefaultPage(variant: EditorialVariant): EditorialPage {
+  if (variant === 'blank') return {
+    headline: INTERNAL_HEADLINE, strapText: '', showStrap: false, size: '52',
+    alignment: 'left', forceUppercase: false, logo: 'primary', image: null,
+    photoName: null, zoom: 1, offsetX: 0, offsetY: 0, variant,
+  };
   if (variant === 'cover') {
     return {
       ...createCoverContent(),
