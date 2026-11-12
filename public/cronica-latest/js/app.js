@@ -3,7 +3,7 @@
 'use strict';
 
 const el=id=>document.getElementById(id),canvas=el('art'),ctx=canvas.getContext('2d'),W=1080,H=1440;
-let image=null,zoom=1,offsetX=0,offsetY=0,dragging=false,lastX=0,lastY=0,photoBottom=820,textAlignment='center',forceUppercase=false,selectedLogo='primary',photoHover=false,pageVariant='cover';
+let image=null,zoom=1,offsetX=0,offsetY=0,dragging=false,lastX=0,lastY=0,photoBottom=820,textAlignment='center',forceUppercase=false,selectedLogo='primary',logoPosition='right',photoHover=false,pageVariant='cover';
 const RED='#ed0000',BLACK='#080808',EDGE=80;
 // Volantas un 30 % más altas; las mismas medidas se usan en preview y PNG.
 const COVER_STRAP_HEIGHT=68,INTERNAL_STRAP_HEIGHT=65;
@@ -21,7 +21,7 @@ function drawBrandLogo(){
  if(selectedLogo==='none')return;
  const img=logoImages[selectedLogo];
  if(!img||!img.complete||!img.naturalWidth)return;
- ctx.drawImage(img,W-EDGE-LOGO_WIDTH,EDGE,LOGO_WIDTH,LOGO_HEIGHT);
+ ctx.drawImage(img,logoPosition==='left'?EDGE:W-EDGE-LOGO_WIDTH,EDGE,LOGO_WIDTH,LOGO_HEIGHT);
 }
 // El campo refleja el modo mayúsculas sin alterar el texto que escribió el usuario.
 function syncUppercaseUI(){
@@ -31,6 +31,13 @@ function syncUppercaseUI(){
 function syncLogoChoices(){
  document.querySelectorAll('.logo-choice').forEach(btn=>btn.setAttribute('aria-pressed',String(btn.dataset.logo===selectedLogo)));
 }
+function syncLogoPosition(){
+ document.querySelectorAll('[data-logo-position]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.logoPosition===logoPosition)));
+}
+document.querySelectorAll('[data-logo-position]').forEach(button=>button.addEventListener('click',()=>{
+ logoPosition=button.dataset.logoPosition;syncLogoPosition();render();
+}));
+syncLogoPosition();
 function parseRich(text){
  const out=[];let state={accent:false,italic:false,strike:false},buffer='';
  const flush=()=>{if(buffer){out.push({text:buffer,...state});buffer=''}};
@@ -172,8 +179,9 @@ function render(includeHover=true){
   // 1.05x del cuerpo arriba y .28x debajo de la línea base, más 10 px.
   const textRect={left:Math.max(0,left-26),top:Math.max(0,(baselines[0]??availableBottom)-size*1.05-10),
    right:Math.min(W,right+26),bottom:Math.min(H,(baselines.at(-1)??availableBottom)+size*.28+10)};
-  const logoRect={left:W-EDGE-LOGO_WIDTH-54,top:EDGE-54,
-   right:W-EDGE+54,bottom:EDGE+LOGO_HEIGHT+54};
+  const logoX=logoPosition==='left'?EDGE:W-EDGE-LOGO_WIDTH;
+  const logoRect={left:logoX-54,top:EDGE-54,
+   right:logoX+LOGO_WIDTH+54,bottom:EDGE+LOGO_HEIGHT+54};
   window.__editorialHotspotBounds={text:textRect,logo:logoRect};
 
   if(cover){
@@ -201,19 +209,24 @@ finally{window.dispatchEvent(new Event('modern:render'))}
 let carouselPages=[],activePage=0;
 function readCurrentPage(){
  return {headline:el('headline').value,strapText:el('strapText').value.toLocaleUpperCase('es-AR'),showStrap:el('showStrap').checked,
-  size:el('size').value,alignment:textAlignment,forceUppercase,logo:selectedLogo,image,zoom,offsetX,offsetY,variant:pageVariant};
+  size:el('size').value,alignment:textAlignment,forceUppercase,logo:selectedLogo,logoPosition,image,zoom,offsetX,offsetY,variant:pageVariant};
 }
 // Textos de orientación que muestran cómo aprovechar portada, volanta y placas internas.
-const COVER_STRAP="RESUMÍ ACÁ EL TEMA";
+const COVER_STRAP="CULTURA EN LA CIUDAD";
 // Ejemplo común para una nueva diapositiva: funciona tanto en Portada como en Interior.
 const DEFAULT_STRAP=COVER_STRAP;
-const COVER_HEADLINE="Escribí un título claro y directo. *Destacá el dato principal* y dejá los detalles para las siguientes placas.";
-const INTERNAL_HEADLINE="En esta placa podés ampliar la información. Explicá qué pasó, quiénes están involucrados y por qué es importante. Usá frases cortas y una idea por vez para facilitar la lectura.";
+const COVER_HEADLINE="Un nuevo *espacio cultural* abrió sus puertas y presentó actividades para toda la comunidad";
+const INTERNAL_HEADLINE="El espacio ofrecerá *talleres, muestras y espectáculos* durante todo el año. La programación incluirá propuestas gratuitas y actividades para distintas edades.";
+const INTERNAL_STRAP="NUEVAS ACTIVIDADES";
 function newBlankPage(){
- return {headline:INTERNAL_HEADLINE,strapText:DEFAULT_STRAP,showStrap:true,size:'52',alignment:'left',forceUppercase:false,logo:'primary',
-  image:null,zoom:1,offsetX:0,offsetY:0,variant:'blank'};
+ return {headline:INTERNAL_HEADLINE,strapText:INTERNAL_STRAP,showStrap:true,size:'52',alignment:'left',forceUppercase:false,logo:'primary',logoPosition:'right',
+  image:null,zoom:1,offsetX:0,offsetY:0,logoPosition:'right',variant:'blank',samplePending:true};
 }
-function saveActivePage(){if(carouselPages[activePage])carouselPages[activePage]=readCurrentPage()}
+function saveActivePage(){
+ const previous=carouselPages[activePage];if(!previous)return;
+ carouselPages[activePage]={...readCurrentPage(),
+  samplePending:pageVariant==='blank'&&Boolean(previous.samplePending)};
+}
 function syncVariantUI(){
  // La variante controla también el DOM de Formato y sus espejos mobile.
  document.documentElement.dataset.cronicaVariant=pageVariant;
@@ -224,7 +237,7 @@ function loadPage(page){
  el('headline').value=page.headline;el('strapText').value=String(page.strapText||'').toLocaleUpperCase('es-AR');
  el('showStrap').checked=page.showStrap;el('strapField').hidden=!page.showStrap;el('size').value=page.size;
  forceUppercase=Boolean(page.forceUppercase);syncUppercaseUI();
- selectedLogo=page.logo||'primary';syncLogoChoices();
+ selectedLogo=page.logo||'primary';syncLogoChoices();logoPosition=page.logoPosition||'right';syncLogoPosition();
  textAlignment=page.alignment;image=page.image;zoom=page.zoom;offsetX=page.offsetX;offsetY=page.offsetY;
  el('file').value='';dragging=false;
  el('alignLeft').setAttribute('aria-pressed',String(page.alignment==='left'));
@@ -282,8 +295,13 @@ function renderCarouselNavigation(){
  const recalc=()=>{
   const host=list.closest('.cronica-preview-pages');
   if(!host)return;
-  host.classList.toggle('carousel-is-overflowing',list.scrollWidth>list.clientWidth+2);
+  // La acción fija no debe depender de scrollLeft ni de la posición de la
+  // miniatura +: aparece en cuanto el contenido excede el ancho disponible.
+  const overflowing=list.scrollWidth>list.clientWidth+2;
+  host.classList.toggle('carousel-is-overflowing',overflowing);
+  el('addPage').disabled=false;
  };
+ recalc();
  requestAnimationFrame(recalc);
  if(!list.dataset.resizeObserved&&typeof ResizeObserver!=='undefined'){
   list.dataset.resizeObserved='true';
@@ -358,8 +376,20 @@ document.querySelectorAll('.cronica-variant-option').forEach(button=>button.addE
  // Una placa sin diseño no muestra volanta. Al aplicar Portada o Interior,
  // el usuario comienza con la volanta activa y su texto de ejemplo.
  if(previous==='blank'&&next!=='blank'){
+  // Las páginas nuevas son Sin diseño, pero estrenan textos completos
+  // al escoger Portada o Interior; no se reemplazan ediciones posteriores.
+  const current=carouselPages[activePage];
+  if(current?.samplePending){
+   el('headline').value=next==='cover'?COVER_HEADLINE:INTERNAL_HEADLINE;
+   el('strapText').value=next==='cover'?COVER_STRAP:INTERNAL_STRAP;
+   el('size').value=next==='cover'?'64':'52';
+   textAlignment=next==='cover'?'center':'left';
+   el('alignLeft').setAttribute('aria-pressed',String(textAlignment==='left'));
+   el('alignCenter').setAttribute('aria-pressed',String(textAlignment==='center'));
+   current.samplePending=false;
+  }
   el('showStrap').checked=true;
-  if(!el('strapText').value.trim())el('strapText').value=DEFAULT_STRAP;
+  if(!el('strapText').value.trim())el('strapText').value=next==='cover'?COVER_STRAP:INTERNAL_STRAP;
   el('strapField').hidden=false;
  }
  syncVariantUI();saveActivePage();renderCarouselNavigation();render();
@@ -458,7 +488,9 @@ canvas.addEventListener('pointerdown',event=>{if(!image)return;const r=canvas.ge
 canvas.addEventListener('pointermove',event=>{if(!dragging)return;const ratio=W/canvas.getBoundingClientRect().width;offsetX+=(event.clientX-lastX)*ratio;offsetY+=(event.clientY-lastY)*ratio;lastX=event.clientX;lastY=event.clientY;render()});
 canvas.addEventListener('pointerup',()=>dragging=false);canvas.addEventListener('pointercancel',()=>dragging=false);
 el('clearAll').addEventListener('click',()=>{
- const initial=newBlankPage();initial.variant=pageVariant;if(pageVariant==='cover'){initial.headline=COVER_HEADLINE;initial.strapText=COVER_STRAP;initial.showStrap=true;initial.size='64';initial.alignment='center'}
+ const initial=newBlankPage();initial.variant=pageVariant;initial.samplePending=false;
+ if(pageVariant==='cover'){initial.headline=COVER_HEADLINE;initial.strapText=COVER_STRAP;initial.showStrap=true;initial.size='64';initial.alignment='center'}
+ if(pageVariant==='internal'){initial.headline=INTERNAL_HEADLINE;initial.strapText=INTERNAL_STRAP;initial.showStrap=true}
  loadPage(initial);saveActivePage();
 });
 // Exportar una placa o todo el carrusel sin perder el estado de edición.

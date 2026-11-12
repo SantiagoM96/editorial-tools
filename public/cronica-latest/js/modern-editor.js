@@ -119,7 +119,7 @@ if(originalContent){
  // Firma inferior: dos presentaciones, sin alterar su diseño inicial.
  const footerField=document.createElement('div');
  footerField.className='control-field modern-footer-field';
- footerField.innerHTML='<label>Firma inferior</label><div class="modern-footer-options" role="group" aria-label="Firma inferior"><button type="button" data-footer-style="center" aria-pressed="'+String(!isCronica)+'">Centrada</button><button type="button" data-footer-style="carousel" aria-pressed="'+String(isCronica)+'">Carrusel</button></div>';
+ footerField.innerHTML='<label>Firma inferior</label><div class="modern-footer-options" role="group" aria-label="Firma inferior"><button type="button" data-footer-style="center" aria-pressed="'+String(!isCronica)+'"><span class="material-symbols-outlined" aria-hidden="true">format_align_center</span><span>Centrada</span></button><button type="button" data-footer-style="carousel" aria-pressed="'+String(isCronica)+'"><span class="material-symbols-outlined" aria-hidden="true">view_carousel</span><span>Carrusel</span></button></div>';
  originalContent.append(footerField);
  footerField.addEventListener('click',event=>{
   const button=event.target.closest('[data-footer-style]');
@@ -137,13 +137,11 @@ if(originalContent){
   originalContent.before(photoSection);
  }
  if(isCronica){
-  // Después de Formato y Alineación: switch, texto de volanta y titular.
+  // El switch permanece en Diseño de placas. Dentro de Textos:
+  // volanta -> formato/alineación -> texto principal -> tamaño.
   const formatRow=textPanel.querySelector('.typography-row');
-  let after=formatRow;
-  for(const sel of ['#showStrap','#strapText','#headline']){
-   const field=$(sel)?.closest('.control-field');
-   if(field){after.after(field);after=field}
-  }
+  const strapField=$('strapText')?.closest('.control-field');
+  if(formatRow&&strapField)formatRow.before(strapField);
  }else{
   const urlField=$('articleUrl')?.closest('.control-field');
   if(urlField){
@@ -160,6 +158,13 @@ if(originalContent){
   designSection.classList.add('modern-design-group');
   const fields=[...originalContent.querySelectorAll(':scope > .control-field')];
   for(const field of fields)designSection.append(field);
+  // Mismo layout que Diario Show: logo y posición lado a lado.
+  const logoField=designSection.querySelector('.logo-control-field');
+  const positionField=designSection.querySelector('.editor-logo-position-field');
+  if(logoField&&positionField){
+   const layout=document.createElement('div');layout.className='editor-logo-layout-row';
+   logoField.before(layout);layout.append(logoField,positionField);
+  }
   originalContent.remove();
  }
 }
@@ -300,10 +305,34 @@ function progress(range){
 }
 function trackThumb(range,host){
  if(!range||!host)return;
- range.addEventListener('pointerdown',()=>{
-  host.classList.add('is-thumb-engaged','is-adjusting');
+ // Igual que Diario Show: el halo blanco sólo aparece si el cursor está
+ // sobre la bolita, no al hacer clic en cualquier punto de la pista.
+ let engagedPointer=null;
+ const onThumb=event=>{
+  const rect=range.getBoundingClientRect();
+  const min=Number(range.min)||0,max=Number(range.max)||100;
+  const t=max>min?(Number(range.value)-min)/(max-min):0;
+  const radius=7.5;
+  const vertical=rect.height>rect.width;
+  const x=vertical?rect.left+rect.width/2:rect.left+radius+t*Math.max(0,rect.width-radius*2);
+  const y=vertical?rect.bottom-radius-t*Math.max(0,rect.height-radius*2):rect.top+rect.height/2;
+  return Math.abs(event.clientX-x)<=radius+4&&Math.abs(event.clientY-y)<=radius+4;
+ };
+ const hover=event=>{
+  if(engagedPointer!==null)return;
+  host.classList.toggle('is-thumb-hover',onThumb(event));
+ };
+ range.addEventListener('pointerenter',hover);
+ range.addEventListener('pointermove',hover);
+ range.addEventListener('pointerleave',()=>{if(engagedPointer===null)host.classList.remove('is-thumb-hover')});
+ range.addEventListener('pointerdown',event=>{
+  const engaged=onThumb(event);
+  engagedPointer=engaged?event.pointerId:null;
+  host.classList.toggle('is-thumb-engaged',engaged);
+  host.classList.toggle('is-thumb-hover',engaged);
+  host.classList.add('is-adjusting');
  });
- const stop=()=>host.classList.remove('is-thumb-engaged','is-adjusting');
+ const stop=()=>{engagedPointer=null;host.classList.remove('is-thumb-engaged','is-thumb-hover','is-adjusting')};
  window.addEventListener('pointerup',stop);window.addEventListener('pointercancel',stop);
  range.addEventListener('blur',stop);range.addEventListener('input',()=>progress(range));
  progress(range);
@@ -389,7 +418,7 @@ mirrorToggle?.addEventListener('click',()=>{
 });
 function syncMirror(){
  if(!host.isConnected)return;
- const ids=['headline','size',...(isCronica?[]:['quote','enableQuote'])];
+ const ids=['headline','size',...(isCronica?['strapText']:['quote','enableQuote'])];
  for(const id of ids){
   const source=$(id),mirror=mirrorId(id);
   if(!source||!mirror)continue;
@@ -399,6 +428,10 @@ function syncMirror(){
  const textValue=$('sizeLabel')?.textContent;
  if(mirrorId('sizeLabel'))mirrorId('sizeLabel').textContent=textValue||size.value;
  if(mirrorId('quote'))mirrorId('quote').hidden=$('quote').hidden;
+ if(isCronica){
+  const strap=mirrorId('strapText')?.closest('.control-field');
+  if(strap)strap.hidden=!$('showStrap')?.checked;
+ }
  for(const id of ['formatUppercase','alignLeft','alignCenter']){
   const source=$(id),mirror=mirrorId(id);
   if(source&&mirror)mirror.setAttribute('aria-pressed',source.getAttribute('aria-pressed'));
@@ -407,7 +440,7 @@ function syncMirror(){
  progress(size);if(mirrorId('size'))progress(mirrorId('size'));
  progress(zoom);if(dots)progress(dots);
 }
-for(const id of ['headline','size','quote','enableQuote']){
+for(const id of ['headline','size','quote','enableQuote','strapText']){
  const source=$(id),mirror=mirrorId(id);if(!source||!mirror)continue;
  mirror.addEventListener(source.type==='checkbox'?'change':'input',()=>{
   if(source.type==='checkbox')source.checked=mirror.checked;else source.value=mirror.value;
@@ -438,14 +471,24 @@ if(identityMirror){
   requestAnimationFrame(updateHeight);
  });
  identityMirror.addEventListener('click',event=>{
-  const choice=event.target.closest('[data-logo],[data-footer-style],[data-page-variant],[data-theme]');
+  const choice=event.target.closest('[data-logo],[data-logo-position],[data-footer-style],[data-page-variant],[data-theme]');
   if(!choice)return;
   const selector=choice.dataset.logo!==undefined?'[data-logo="'+choice.dataset.logo+'"]':
+   choice.dataset.logoPosition!==undefined?'[data-logo-position="'+choice.dataset.logoPosition+'"]':
    choice.dataset.footerStyle!==undefined?'[data-footer-style="'+choice.dataset.footerStyle+'"]':
    choice.dataset.pageVariant!==undefined?'[data-page-variant="'+choice.dataset.pageVariant+'"]':
    '[data-theme="'+choice.dataset.theme+'"]';
   identitySource.querySelector(selector)?.click();
   syncIdentityMirror();
+ });
+ // El interruptor del espejo de Diseño de placas actúa sobre el input
+ // original, evitando duplicar estado y listeners.
+ const mirrorStrap=identityMirror.querySelector('#showStrapIdentityPreview');
+ mirrorStrap?.addEventListener('change',()=>{
+  const original=$('showStrap');
+  original.checked=mirrorStrap.checked;
+  original.dispatchEvent(new Event('change',{bubbles:true}));
+  syncIdentityMirror();syncMirror();
  });
 }
 function syncVariantDependentControls(){
@@ -459,37 +502,34 @@ function syncVariantDependentControls(){
   const footer=card.querySelector('.modern-footer-field');
   if(logo)logo.hidden=!designed;
   if(footer)footer.hidden=!footerAllowed;
-  // El switch de volanta puede estar dentro de esta tarjeta: ocultar
-  // su campo completo, nunca únicamente el input.
   const switchField=card.querySelector('#showStrap, #showStrapIdentityPreview')?.closest('.control-field');
-  const strapField=card.querySelector('#strapText, #strapTextIdentityPreview')?.closest('.control-field');
   if(switchField)switchField.hidden=!designed;
-  if(strapField)strapField.hidden=!designed||!$('showStrap')?.checked;
  }
  const photoPanel=panel.querySelector('.modern-photo-group');
  if(photoPanel)photoPanel.hidden=!designed;
  if(textPanel)textPanel.hidden=!designed;
  if(host)host.hidden=!designed;
- // Ocultar de forma explícita también el switch y el campo en la copia
- // contextual: nunca mostrar «Mostrar volanta» cuando es Sin diseño.
+ // El contenido de la volanta solo aparece en Textos si el switch
+ // de Diseño de placas está habilitado.
  for(const card of [textPanel,clone].filter(Boolean)){
-  const switchField=card.querySelector('#showStrap, #showStrapMobile')?.closest('.control-field');
-  const strapField=card.querySelector('#strapText, #strapTextMobile')?.closest('.control-field');
-  if(switchField)switchField.hidden=!designed;
-  if(strapField)strapField.hidden=!designed||!$('showStrap')?.checked;
+  const field=card.querySelector('#strapText, #strapTextMobile')?.closest('.control-field');
+  if(field)field.hidden=!designed||!$('showStrap')?.checked;
  }
  // No borrar valores: al volver a una variante que los admite se restauran.
 }
 function syncIdentityMirror(){
  if(!identityMirror||!identitySource)return;
- for(const option of identityMirror.querySelectorAll('[data-logo],[data-footer-style],[data-page-variant],[data-theme]')){
+ for(const option of identityMirror.querySelectorAll('[data-logo],[data-logo-position],[data-footer-style],[data-page-variant],[data-theme]')){
   const selector=option.dataset.logo!==undefined?'[data-logo="'+option.dataset.logo+'"]':
+   option.dataset.logoPosition!==undefined?'[data-logo-position="'+option.dataset.logoPosition+'"]':
    option.dataset.footerStyle!==undefined?'[data-footer-style="'+option.dataset.footerStyle+'"]':
    option.dataset.pageVariant!==undefined?'[data-page-variant="'+option.dataset.pageVariant+'"]':
    '[data-theme="'+option.dataset.theme+'"]';
   const source=identitySource.querySelector(selector);
   if(source)option.setAttribute('aria-pressed',source.getAttribute('aria-pressed'));
  }
+ const switchMirror=identityMirror.querySelector('#showStrapIdentityPreview');
+ if(switchMirror)switchMirror.checked=Boolean($('showStrap')?.checked);
  syncVariantDependentControls();
 }
 function showPreviewContext(which){
@@ -547,9 +587,10 @@ clone.querySelectorAll('.help-trigger').forEach(t=>{
  b.addEventListener('click',e=>{e.stopPropagation();const open=!t.classList.contains('is-open');
   t.classList.toggle('is-open',open);b.setAttribute('aria-expanded',String(open))});
 });
-function syncAfterRender(){syncMirror();updateHeight()}
+function syncAfterRender(){syncMirror();syncIdentityMirror();updateHeight()}
 window.addEventListener('modern:render',syncAfterRender);
 document.addEventListener('click',()=>requestAnimationFrame(syncAfterRender));
+$('showStrap')?.addEventListener('change',()=>requestAnimationFrame(syncAfterRender));
 syncMirror();
 // A transparent hit surface lets the user scroll over the TEXT portion
 // of the canvas (touch-action:pan-y), while the photo keeps native reframe drag.
