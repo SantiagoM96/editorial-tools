@@ -195,6 +195,11 @@
  window.addEventListener('scroll',schedule,{passive:true});
  const trigger=qs('#dsOnboardingTrigger');
  if(trigger)trigger.addEventListener('click',start);
+ // Si comienza la carga de una foto, el recorrido no debe impedir continuar
+ // editando ni exportar. Es también el comportamiento esperado por el smoke
+ // de Pages que carga una imagen antes de tocar el botón de descarga.
+ const photoInput=qs('#file');
+ if(photoInput)photoInput.addEventListener('change',()=>{if(active)finish()});
  // El recorrido se inicia una vez en desktop, igual que en MLZ.
  // ?onboarding=off desactiva el módulo por completo en pruebas de exportación.
  // ?onboarding=force permite reproducir el recorrido aun si ya fue completado.
