@@ -96,3 +96,22 @@ test('BAE: la exportación puede probarse con onboarding desactivado sin elimina
   const download = await promise;
   expect(download.suggestedFilename()).toMatch(/\.png$/i);
 });
+
+test('BAE: el tutorial inicial se cierra al empezar a editar y deja exportar', async ({ page }) => {
+  await page.goto('/bae/', { waitUntil: 'load' });
+  await expect(page.getByRole('dialog', { name: 'Organizá las diapositivas' })).toBeVisible();
+  const base64 = await page.evaluate(() => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 480; canvas.height = 640;
+    canvas.getContext('2d').fillRect(0, 0, 480, 640);
+    return canvas.toDataURL('image/png').split(',')[1];
+  });
+  await page.locator('#file').setInputFiles({
+    name: 'foto-editorial.png', mimeType: 'image/png', buffer: Buffer.from(base64, 'base64'),
+  });
+  await expect(page.locator('#dsOnboardingLayer')).toBeHidden();
+  await expect.poll(() => page.locator('#photoDropzone').evaluate(el => el.hidden)).toBe(true);
+  const download = page.waitForEvent('download');
+  await page.locator('#download').click();
+  expect((await download).suggestedFilename()).toMatch(/\.png$/i);
+});
