@@ -10,7 +10,7 @@ test('Crónica Andy: snapshot funcional con variantes, edición visual y carruse
   await page.locator('.editor-panel .cronica-variant-option[data-page-variant="cover"]').first().click();
   await expect(page.locator('.editor-panel .cronica-variant-option[data-page-variant="cover"]').first()).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('.cronica-rich-headline').first()).toBeVisible();
-  await page.locator('#addPage').click();
+  await page.locator('.carousel-add-placeholder').first().click();
   await expect(page.locator('#pageIndicator')).toContainText('2 de 2');
   await expect(page.locator('#art')).toBeVisible();
 });
