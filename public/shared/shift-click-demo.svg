@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="250" viewBox="0 0 600 250" role="img" aria-labelledby="title desc">
+<title id="title">Shift y clic: expandir o contraer todos los módulos</title>
+<desc id="desc">Shift se mantiene presionado y el mouse físico hace clic. Una manito animada se desplaza en curva desde abajo, pasa por detrás de Shift y presiona el chevrón de Diseño de placas. Los tres módulos se abren y cierran juntos.</desc>
+<style>
+ .module{fill:#292d38;stroke:#747c8c;stroke-width:2}
+ .heading{fill:#e7ebf4;font:600 14px system-ui,-apple-system,sans-serif}
+ .bodyline{stroke:#929baa;stroke-width:3;stroke-linecap:round}
+ .chevron{fill:none;stroke:#e4e9f2;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+ .shift{fill:#333b4a;stroke:#8996a9;stroke-width:2}
+ .shift-icon{stroke:#edf3fc;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round}
+ .shift-label{fill:#edf3fc;font:700 21px system-ui,-apple-system,sans-serif}
+ .cursor-hand{fill:#f5f7fc;stroke:#262b36;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+ .mouse{fill:#303746;stroke:#8793a8;stroke-width:2}
+ .mouse-divider{fill:none;stroke:#818b9f;stroke-width:2}
+ .mouse-button{fill:#68778f}
+ .physical-mouse{animation:physical-mouse-tap 4.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center center}
+ .press{animation:shift-down 4.2s ease-in-out infinite}
+ .cursor-click{animation:cursor-tap 4.2s ease-in-out infinite;transform-box:fill-box;transform-origin:top left}
+ .hand-pointer{filter:drop-shadow(0 2px 2px rgba(0,0,0,.45))}
+ .click-ring{fill:none;stroke:#f3f6fd;stroke-width:3;animation:click-flash 4.2s ease-out infinite;transform-origin:293px 40px}
+ .body{animation:body-visible 4.2s ease-in-out infinite}
+ @keyframes shift-down{
+  0%,15%,79%,100%{fill:#333b4a;stroke:#8996a9}
+  19%,73%{fill:#536279;stroke:#cad5e6}
+ }
+ @keyframes cursor-tap{
+  0%,31%,40%,100%{transform:scale(1)}
+  34%,37%{transform:scale(.86)}
+ }
+ @keyframes physical-mouse-tap{
+  0%,31%,42%,100%{transform:translateY(0)}
+  34%,38%{transform:translateY(3px)}
+ }
+ @keyframes click-flash{
+  0%,32%,43%,100%{opacity:0;transform:scale(.6)}
+  35%{opacity:.8;transform:scale(1)}
+  42%{opacity:0;transform:scale(1.45)}
+ }
+ @keyframes body-visible{
+  0%,36%,82%,100%{opacity:0}
+  45%,72%{opacity:1}
+ }
+ @media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important}
+  .body{opacity:1}
+  .click-ring{opacity:0}
+ }
+</style>
+<rect x="1" y="1" width="598" height="248" rx="18" fill="#20232c" stroke="#444a58" stroke-width="2"/>
+<!-- Izquierda: tres acordeones. Las alturas y las posiciones se sincronizan. -->
+<g id="modules">
+ <g id="module-design">
+  <rect class="module" x="18" y="18" width="294" height="36" rx="8">
+   <animate attributeName="height" values="36;36;66;66;36;36" keyTimes="0;.36;.46;.72;.84;1" dur="4.2s" repeatCount="indefinite"/>
+  </rect>
+  <text class="heading" x="32" y="41">Diseño de placas</text>
+  <path class="chevron" d="M287 34l6 6 6-6"/>
+  <g class="body">
+   <path class="bodyline" d="M34 63h160M34 73h120"/>
+  </g>
+ </g>
+ <g id="module-photo">
+  <animateTransform attributeName="transform" type="translate" values="0 0;0 0;0 30;0 30;0 0;0 0" keyTimes="0;.36;.46;.72;.84;1" dur="4.2s" repeatCount="indefinite"/>
+  <rect class="module" x="18" y="62" width="294" height="36" rx="8">
+   <animate attributeName="height" values="36;36;66;66;36;36" keyTimes="0;.36;.46;.72;.84;1" dur="4.2s" repeatCount="indefinite"/>
+  </rect>
+  <text class="heading" x="32" y="85">Fotografía</text>
+  <path class="chevron" d="M287 78l6 6 6-6"/>
+  <g class="body">
+   <path class="bodyline" d="M34 107h178M34 117h110"/>
+  </g>
+ </g>
+ <g id="module-text">
+  <animateTransform attributeName="transform" type="translate" values="0 0;0 0;0 60;0 60;0 0;0 0" keyTimes="0;.36;.46;.72;.84;1" dur="4.2s" repeatCount="indefinite"/>
+  <rect class="module" x="18" y="106" width="294" height="36" rx="8">
+   <animate attributeName="height" values="36;36;66;66;36;36" keyTimes="0;.36;.46;.72;.84;1" dur="4.2s" repeatCount="indefinite"/>
+  </rect>
+  <text class="heading" x="32" y="129">Textos</text>
+  <path class="chevron" d="M287 122l6 6 6-6"/>
+  <g class="body">
+   <path class="bodyline" d="M34 151h150M34 161h205"/>
+  </g>
+ </g>
+</g>
+<!-- La mano está por DEBAJO de Shift en el orden de pintura.
+     Curva por debajo de la tecla: no la atraviesa. -->
+<g id="mouse-pointer" class="hand-pointer">
+ <g id="pointer-motion">
+  <animateMotion dur="4.2s" repeatCount="indefinite"
+   path="M520 207 C486 230 437 213 401 192 C357 170 319 112 293 40"
+   keyTimes="0;.17;.34;1"
+   keyPoints="0;0;1;1"
+   calcMode="linear"/>
+  <animate attributeName="opacity" values="0;1;1;1;1;0;0"
+   keyTimes="0;.11;.18;.72;.80;.89;1" dur="4.2s" repeatCount="indefinite"/>
+  <g class="cursor-click">
+   <!-- Cursor mano con dedo índice extendido; la yema apunta al chevrón. -->
+   <path class="cursor-hand" d="M0 0 C-2 -5 -8 -3 -8 2 L-8 16
+     C-11 11 -17 11 -18 16 C-19 19 -15 25 -12 31
+     C-9 38 -3 43 6 43 L19 43 C28 43 31 36 31 27
+     L31 16 C31 10 25 8 22 12 C20 7 15 7 12 11
+     C10 6 5 6 3 10 L3 2 C3 -1 1 -1 0 0 Z"/>
+  </g>
+ </g>
+</g>
+<!-- Shift permanece presionado mientras la mano va al chevrón. -->
+<g id="shift-key">
+ <rect class="shift press" x="360" y="78" width="118" height="64" rx="10"/>
+ <path class="shift-icon" d="M385 115v-17l-8 9m8-9 8 9"/>
+ <text class="shift-label" x="402" y="117">Shift</text>
+</g>
+<!-- Mouse físico permanece a la derecha y simula una pulsación breve. -->
+<g id="mouse-button" class="physical-mouse">
+ <rect class="mouse" x="519" y="78" width="55" height="82" rx="27"/>
+ <path class="mouse-divider" d="M546 79 V111 H520"/>
+ <rect class="mouse-button" x="528" y="88" width="9" height="18" rx="4">
+  <animate attributeName="fill" values="#68778f;#68778f;#f3f6ff;#68778f;#68778f"
+   keyTimes="0;.32;.36;.42;1" dur="4.2s" repeatCount="indefinite"/>
+ </rect>
+</g>
+<circle class="click-ring" cx="293" cy="40" r="18"/>
+</svg>
