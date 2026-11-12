@@ -36,7 +36,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: SantiagoM96/mlz
-          ref: ef57c6ba9204e5665b42d31cfcd076b229ef6597
+          ref: 6d00bb597ff2173dcb8af69a770f2ff059048f32
           path: reference-latest
           persist-credentials: false
       - run: npm ci --no-audit --no-fund

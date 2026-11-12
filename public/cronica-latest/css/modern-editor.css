@@ -1135,3 +1135,287 @@ html[data-cronica-variant="blank"] .modern-preview-identity-editor .control-fiel
  transform:translateX(-50%)!important;z-index:4!important;
  margin:0!important;pointer-events:none!important;
 }
+
+/* Cambio 22 — paridad de botones de Textos con Diario Show DEV.
+   Misma geometría 43 px y selección interna blanca en alineación.
+   No se modifican listeners ni los controles del resto de los módulos. */
+.editor-panel .modern-text-card .typography-row,
+.modern-preview-text-editor .modern-text-card .typography-row{
+ grid-template-columns:minmax(0,1fr) auto!important;
+ gap:8px!important;align-items:start!important;
+}
+.editor-panel .modern-text-card .typography-row .help-label-row>label{
+ font-size:14px!important;font-weight:600!important;line-height:20px!important;
+}
+.editor-panel .modern-text-card .typography-row .help-label-row{
+ min-height:20px!important;height:20px!important;margin-bottom:9px!important;
+}
+.editor-panel .modern-text-card .typography-row .format-buttons{
+ display:flex!important;flex-wrap:nowrap!important;gap:0!important;width:max-content!important;
+}
+.editor-panel .modern-text-card .typography-row .format-buttons button{
+ box-sizing:border-box!important;display:flex!important;align-items:center;justify-content:center;
+ flex:0 0 43px!important;width:43px!important;min-width:43px!important;
+ height:43px!important;padding:0!important;
+}
+.editor-panel .modern-text-card .typography-row .format-buttons .modern-independent{
+ margin-left:7px!important;
+ border:1px solid #4a4e56!important;border-radius:7px!important;
+}
+.editor-panel .modern-text-card .typography-row .format-buttons #formatUppercase[aria-pressed="true"],
+.editor-panel .modern-text-card .typography-row .format-buttons #formatUppercaseMobile[aria-pressed="true"]{
+ background:var(--editor-accent,#ed0000)!important;
+ border-color:var(--editor-accent,#ed0000)!important;color:white!important;
+}
+.editor-panel .modern-text-card .typography-row .align-field{
+ justify-self:end!important;width:max-content!important;
+}
+.editor-panel .modern-text-card .typography-row .align-buttons{
+ display:inline-flex!important;align-items:stretch!important;
+ justify-content:flex-end!important;gap:0!important;
+ width:max-content!important;height:43px!important;border-radius:7px!important;
+}
+.editor-panel .modern-text-card .typography-row .align-buttons button{
+ box-sizing:border-box!important;position:relative!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ flex:0 0 39px!important;width:39px!important;min-width:39px!important;
+ height:43px!important;padding:0!important;
+ border:1px solid #4a4e56!important;border-radius:0!important;
+ background:#292c32!important;color:#f4f4f4!important;box-shadow:none!important;
+}
+.editor-panel .modern-text-card .typography-row .align-buttons button:first-child{
+ border-radius:7px 0 0 7px!important;
+}
+.editor-panel .modern-text-card .typography-row .align-buttons button:last-child{
+ border-radius:0 7px 7px 0!important;border-left:0!important;
+}
+.editor-panel .modern-text-card .typography-row .align-buttons button[aria-pressed="true"]{
+ background:#3b3f46!important;color:#fff!important;
+ box-shadow:inset 0 0 0 1.5px #f4f4f4!important;z-index:1!important;
+}
+.editor-panel .modern-text-card .typography-row .align-buttons button:hover:not([aria-pressed="true"]){
+ background:#343841!important;
+}
+@media(max-width:420px){
+ .editor-panel .modern-text-card .typography-row{
+  grid-template-columns:minmax(0,1fr)!important;row-gap:16px!important;
+ }
+ .editor-panel .modern-text-card .typography-row .align-field{justify-self:end!important}
+}
+
+/* Cambio 23: ubicación de logo igual a Diario Show, dos segmentos compactos. */
+.editor-panel .modern-design-group .editor-logo-layout-row{
+ display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;
+ align-items:start;min-width:0;
+}
+.editor-panel .modern-design-group .editor-logo-layout-row>.control-field{
+ margin:0!important;min-width:0;
+}
+.editor-panel .modern-design-group .editor-logo-position-field{
+ justify-self:end;width:max-content;
+}
+.editor-panel .modern-design-group .editor-logo-position-field>label{
+ display:block;font-size:14px!important;font-weight:600;line-height:20px;
+ white-space:nowrap;margin:0 0 9px!important;
+}
+.editor-panel .modern-design-group .editor-logo-position-controls{
+ display:inline-flex;align-items:stretch;justify-content:flex-end;
+ gap:0!important;height:43px;border-radius:7px;
+}
+.editor-panel .modern-design-group .editor-logo-position-button{
+ display:flex;align-items:center;justify-content:center;position:relative;
+ flex:0 0 39px;width:39px;min-width:39px;height:43px;
+ padding:0;border:1px solid #4a4e56;border-radius:0;
+ background:#292c32;color:#f4f4f4;box-shadow:none;cursor:pointer;
+}
+.editor-panel .modern-design-group .editor-logo-position-button:first-child{border-radius:7px 0 0 7px}
+.editor-panel .modern-design-group .editor-logo-position-button:last-child{
+ border-radius:0 7px 7px 0;border-left:0;
+}
+.editor-panel .modern-design-group .editor-logo-position-button[aria-pressed="true"]{
+ background:#3b3f46;color:#fff;box-shadow:inset 0 0 0 1.5px #f4f4f4;z-index:1;
+}
+.editor-panel .modern-design-group .editor-logo-position-button:hover:not([aria-pressed="true"]){background:#343841}
+.editor-panel .modern-design-group .editor-logo-position-button .material-symbols-outlined{
+ font-size:24px;line-height:1;font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;
+}
+@media(max-width:420px){
+ .editor-panel .modern-design-group .editor-logo-layout-row{grid-template-columns:minmax(0,1fr) auto;gap:8px}
+ .editor-panel .modern-design-group .editor-logo-position-button{flex-basis:35px;width:35px}
+}
+html[data-cronica-variant="blank"] .editor-panel .editor-logo-layout-row,
+html[data-editor-plate-variant="blank"] .editor-panel .editor-logo-layout-row{
+ display:none!important;
+}
+
+/* Cambio 24 — mismo comportamiento que Diario Show: el botón + permanece
+   en una columna fija desde el primer desborde de la pista. La miniatura
+   punteada sigue al final del contenido y puede verse al desplazarse. */
+.preview>.cronica-preview-pages .carousel-compact-row{
+ display:flex!important;align-items:center!important;min-width:0!important;gap:10px!important;
+}
+.preview>.cronica-preview-pages .carousel-pages{
+ box-sizing:border-box!important;flex:1 1 0!important;min-width:0!important;
+ width:0!important;overflow-x:auto!important;overflow-y:hidden!important;
+}
+.preview>.cronica-preview-pages .carousel-actions{
+ position:relative!important;z-index:3!important;isolation:isolate;
+ flex:0 0 30px!important;width:30px!important;min-width:30px!important;
+ display:grid!important;grid-template-columns:30px!important;
+ grid-template-rows:30px 30px!important;row-gap:6px!important;
+ background:#24262c!important;
+}
+.preview>.cronica-preview-pages .carousel-actions #addPage{
+ display:flex!important;visibility:hidden!important;pointer-events:none!important;
+ grid-column:1!important;grid-row:1!important;
+}
+.preview>.cronica-preview-pages.carousel-is-overflowing .carousel-actions #addPage{
+ visibility:visible!important;pointer-events:auto!important;
+}
+.preview>.cronica-preview-pages .carousel-actions #removePage{
+ grid-column:1!important;grid-row:2!important;
+}
+
+/* Cambio 25 — etiquetas de Firma inferior con iconografía Material, Crónica DEV. */
+.editor-panel .modern-footer-options button{
+ display:inline-flex!important;align-items:center!important;justify-content:center!important;
+ gap:7px!important;white-space:nowrap;
+}
+.editor-panel .modern-footer-options button .material-symbols-outlined{
+ display:inline-block;flex:0 0 auto;font-family:'Material Symbols Outlined';
+ font-size:20px;line-height:1;font-weight:normal;font-style:normal;
+ font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;
+}
+@media(max-width:380px){.editor-panel .modern-footer-options button{gap:5px!important;padding:8px 5px!important}}
+
+/* Cambio 28 — ajuste óptico de tamaños por identidad.
+   Se mantiene la relación de aspecto natural de cada SVG. */
+.header-inner .editor-platform-switcher{
+ box-sizing:border-box;display:flex;align-items:center;justify-content:flex-start;
+ gap:clamp(12px,2.2vw,24px);flex:1 1 auto;min-width:0;
+ padding:4px 0;overflow:visible;
+}
+.header-inner .editor-platform-option{
+ position:relative;isolation:isolate;display:flex;align-items:center;justify-content:center;
+ flex:0 1 auto;min-width:0;width:auto;min-height:50px;
+ padding:5px 0;margin:0;box-sizing:border-box;
+ border:0!important;border-radius:0!important;
+ background:transparent!important;box-shadow:none!important;
+ text-decoration:none;cursor:pointer;
+ filter:grayscale(1);opacity:.53;transform:scale(1);
+ transform-origin:center center;
+ transition:filter .23s ease,opacity .23s ease,
+  transform .32s cubic-bezier(.16,1.28,.35,1);
+}
+.header-inner .editor-platform-option img{
+ box-sizing:border-box;display:block;flex:none;pointer-events:none;
+ width:auto!important;height:var(--platform-logo-height)!important;
+ max-width:100%!important;max-height:none!important;
+ object-fit:contain;filter:none!important;opacity:1;
+}
+/* En el diseño anterior todos medían 32 px de alto.
+   Crónica crece 25%; los logos más apaisados bajan de tamaño. */
+.header-inner .editor-platform-cronica{--platform-logo-height:40px}
+.header-inner .editor-platform-diarioshow{--platform-logo-height:25.92px}
+.header-inner .editor-platform-bae{--platform-logo-height:19.44px}
+.header-inner .editor-platform-option.is-active{
+ filter:none!important;opacity:1;transform:scale(1.065);
+ background:none!important;border:0!important;box-shadow:none!important;
+ z-index:1;cursor:default;
+ animation:editor-logo-pop .42s cubic-bezier(.18,1.5,.4,1) both;
+}
+.header-inner .editor-platform-option:hover:not(.is-active){
+ filter:grayscale(.25);opacity:.94;transform:scale(1.04);
+ background:none!important;box-shadow:none!important;
+}
+.header-inner .editor-platform-option:focus-visible{
+ outline:2px solid #f3f3f5;outline-offset:4px;
+ border-radius:4px!important;opacity:1;
+}
+.header-inner .editor-platform-option:active:not(.is-active){transform:scale(.97)}
+@keyframes editor-logo-pop{
+ 0%{transform:scale(.96)}
+ 55%{transform:scale(1.095)}
+ 100%{transform:scale(1.065)}
+}
+@media(max-width:900px){
+ .header-inner .editor-platform-switcher{gap:clamp(8px,1.7vw,16px)}
+ .header-inner .editor-platform-option{min-height:42px;padding:4px 0}
+ .header-inner .editor-platform-cronica{--platform-logo-height:clamp(28px,4.4vw,38px)}
+ .header-inner .editor-platform-diarioshow{--platform-logo-height:clamp(19.44px,2.916vw,25.92px)}
+ .header-inner .editor-platform-bae{--platform-logo-height:clamp(15.12px,2.16vw,19.44px)}
+}
+@media(max-width:700px){
+ .header-inner .editor-platform-switcher{flex:1 1 auto;min-width:0;gap:8px}
+ .header-inner .editor-platform-option{flex:0 1 auto;min-width:0;min-height:38px;padding:3px 0}
+ .header-inner .editor-platform-cronica{--platform-logo-height:clamp(19px,5.4vw,27px)}
+ .header-inner .editor-platform-diarioshow{--platform-logo-height:clamp(14.04px,4.212vw,20.52px)}
+ .header-inner .editor-platform-bae{--platform-logo-height:clamp(10.8px,3.132vw,15.12px)}
+ .header-inner .editor-platform-option.is-active{transform:scale(1.045)}
+}
+@media(max-width:400px){
+ .header-inner .editor-platform-switcher{gap:6px}
+ .header-inner .editor-platform-option{min-height:34px}
+}
+@media(prefers-reduced-motion:reduce){
+ .header-inner .editor-platform-option{animation:none!important;transition:none!important}
+}
+
+/* Cambio 32 — misma respuesta táctil de sliders que Diario Show:
+   base oscura, hover gris, bolita blanca con halo al arrastrar el thumb.
+   El cambio es visual: no altera el valor ni el rango permitido. */
+.editor-panel .modern-size-field.is-thumb-hover input[type=range]::-webkit-slider-thumb,
+.editor-panel .modern-card .modern-body .is-thumb-hover #dots::-webkit-slider-thumb,
+.preview .modern-photo-zoom.is-thumb-hover input[type=range]::-webkit-slider-thumb,
+.editor-panel .modern-size-field.is-thumb-hover input[type=range]::-moz-range-thumb,
+.editor-panel .modern-card .modern-body .is-thumb-hover #dots::-moz-range-thumb,
+.preview .modern-photo-zoom.is-thumb-hover input[type=range]::-moz-range-thumb{
+ background:#9297a1!important;box-shadow:none!important;
+}
+.editor-panel .modern-size-field.is-thumb-engaged input[type=range]::-webkit-slider-thumb,
+.editor-panel .modern-card .modern-body .is-thumb-engaged #dots::-webkit-slider-thumb,
+.preview .modern-photo-zoom.is-thumb-engaged input[type=range]::-webkit-slider-thumb,
+.editor-panel .modern-size-field.is-thumb-engaged input[type=range]::-moz-range-thumb,
+.editor-panel .modern-card .modern-body .is-thumb-engaged #dots::-moz-range-thumb,
+.preview .modern-photo-zoom.is-thumb-engaged input[type=range]::-moz-range-thumb{
+ background:#fff!important;border-color:#fff!important;
+ box-shadow:0 0 0 3px rgba(255,255,255,.27),0 0 10px 3px rgba(255,255,255,.48)!important;
+}
+
+/* Cambio 34 — espaciado interior de Diario Show y ritmo de 16px. */
+.editor-panel .modern-card .modern-body,
+.preview .modern-preview-identity-editor .modern-body,
+.preview .modern-preview-text-editor .modern-body{
+ box-sizing:border-box;padding:18px 14px!important;
+}
+.editor-panel .modern-card .modern-body > .control-field,
+.editor-panel .modern-card .modern-body > .editor-logo-layout-row,
+.editor-panel .modern-card .modern-body > .typography-row,
+.editor-panel .modern-card .modern-body > .modern-footer-field{
+ margin-top:0!important;margin-bottom:0!important;
+}
+.editor-panel .modern-card .modern-body > .control-field + .control-field,
+.editor-panel .modern-card .modern-body > .control-field + .editor-logo-layout-row,
+.editor-panel .modern-card .modern-body > .editor-logo-layout-row + .control-field,
+.editor-panel .modern-card .modern-body > .editor-logo-layout-row + .modern-footer-field,
+.editor-panel .modern-card .modern-body > .control-field + .typography-row,
+.editor-panel .modern-card .modern-body > .typography-row + .control-field{
+ margin-top:16px!important;
+}
+.editor-panel .modern-design-group .modern-body > .editor-logo-layout-row,
+.editor-panel .modern-design-group .modern-body > .modern-footer-field{
+ margin-top:16px!important;
+}
+.editor-panel .modern-design-group .editor-logo-layout-row > .control-field{
+ margin-top:0!important;margin-bottom:0!important;
+}
+.editor-panel .modern-import-group .modern-body > .control-field:first-child{
+ margin-top:0!important;
+}
+@media(max-width:700px){
+ .modern-track > .editor-panel .modern-card .modern-body,
+ .modern-track > .preview .modern-preview-identity-editor .modern-body,
+ .modern-track > .preview .modern-preview-text-editor .modern-body{
+  padding:15px 12px!important;
+ }
+}

@@ -71,6 +71,24 @@ if(designCard&&identityCard){
  for(const node of [...identityBody.children])designBody.append(node);
  identityCard.remove();
 }
+// Cambio 45 — Diario Show: «Mostrar autor de la cita» vive en Diseño
+// de placas; el input condicionado permanece arriba de todo en Textos.
+// Se mueven los nodos reales: ningún ID ni listener se duplica.
+if(designCard){
+ const designBody=designCard.querySelector(':scope > .ds-control-card-body');
+ const textBody=document.querySelector('#dsMobileControlsPanel .ds-texts-group > .ds-control-card-body');
+ const authorField=el('quoteAuthorField');
+ const switchLabel=authorField?.querySelector('.ds-author-toggle');
+ if(designBody&&textBody&&authorField&&switchLabel){
+  const switchField=document.createElement('div');
+  switchField.className='control-field ds-author-switch-field';
+  switchField.id='quoteAuthorToggleField';
+  switchField.hidden=true;
+  switchField.append(switchLabel);
+  designBody.append(switchField);
+  textBody.prepend(authorField);
+ }
+}
 // Secciones plegables: solo se oculta el contenido, sin reiniciar controles.
 document.querySelectorAll('.ds-control-card-toggle').forEach(button=>{
  button.addEventListener('click',()=>{
@@ -404,9 +422,9 @@ function setVariant(value){
  if(!palette[value])return;
  pageBlank=false;document.documentElement.dataset.editorPlateVariant=value;
  // Primera vista de la tercera variante: ejemplo sin reemplazar contenido editado.
- if(['quote','quote-blue'].includes(value)&&el('headline').value==='*Mauro Icardi* consiguió la *eximición de prisión* tras el escándalo con Wanda Nara'){
-  el('headline').value='OJALÁ A LA GENTE LE DIERA TANTO MIEDO TENER UN HIJO GOLPEADOR COMO TENER UN HIJO GAY';
-  el('quoteAuthor').value='La Joaqui';
+ if(['quote','quote-blue'].includes(value)&&el('headline').value==='Una artista sorprendió con un *anuncio inesperado* y emocionó a sus seguidores'){
+  el('headline').value='ESTOY VIVIENDO UNA ETAPA LLENA DE *NUEVOS DESAFÍOS*';
+  el('quoteAuthor').value='Una artista invitada';
  }
  el('theme').value=value;
  el('photoLayoutOptions').dataset.variant=value;
@@ -425,6 +443,8 @@ function setVariant(value){
  }
  if(isQuote&&photoLayout!=='single')setPhotoLayout('single');
  el('quoteAuthorField').hidden=!isQuote;
+ const authorToggleField=el('quoteAuthorToggleField');
+ if(authorToggleField)authorToggleField.hidden=!isQuote;
  document.querySelectorAll('.ds-footer-style-field').forEach(field=>field.hidden=isQuote);
  el('quoteAuthorInputField').hidden=!el('showQuoteAuthor').checked;
  // Importar noticias no corresponde a las variantes de cita 3 y 4.
@@ -602,7 +622,7 @@ el('photoZoom').addEventListener('input',event=>{if(photoLayout==='split')active
  canvas.addEventListener('pointerup',()=>{dragging=false});
  canvas.addEventListener('pointercancel',()=>{dragging=false});
 el('clearAll').addEventListener('click',()=>{
- el('articleUrl').value='';el('headline').value='';el('quoteAuthor').value='La Joaqui';el('showQuoteAuthor').checked=true;el('quoteAuthorInputField').hidden=false;el('file').value='';for(const id of ['file','fileLeft','fileRight']){el(id).value='';updatePhotoPicker(id,null)}
+ el('articleUrl').value='';el('headline').value='Una artista sorprendió con un *anuncio inesperado* y emocionó a sus seguidores';el('quoteAuthor').value='Una artista invitada';el('showQuoteAuthor').checked=true;el('quoteAuthorInputField').hidden=false;el('file').value='';for(const id of ['file','fileLeft','fileRight']){el(id).value='';updatePhotoPicker(id,null)}
  selectedTexture='1';halftone=halftoneAssets['1']||null;document.querySelectorAll('.texture-option').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.texture==='1')));
  setVariant('pink');
  forceUppercase=false;syncUppercaseUI();
@@ -707,7 +727,8 @@ function syncMobileTextEditor(){
   mirrorId('sizeLabel').textContent=el('sizeLabel').textContent;
  }
  mirrorId('headline').classList.toggle('uppercase-preview',el('headline').classList.contains('uppercase-preview'));
- mirrorId('showQuoteAuthor').checked=el('showQuoteAuthor').checked;
+ const mirroredAuthorSwitch=mirrorId('showQuoteAuthor');
+ if(mirroredAuthorSwitch)mirroredAuthorSwitch.checked=el('showQuoteAuthor').checked;
  mirrorId('quoteAuthorField').hidden=el('quoteAuthorField').hidden;
  mirrorId('quoteAuthorInputField').hidden=el('quoteAuthorInputField').hidden;
  for(const id of ['alignLeft','alignCenter','formatUppercase']){
@@ -720,7 +741,7 @@ for(const id of ['headline','quoteAuthor']){
   source.dispatchEvent(new Event('input',{bubbles:true}));
  });
 }
-mirrorId('showQuoteAuthor').addEventListener('change',event=>{
+mirrorId('showQuoteAuthor')?.addEventListener('change',event=>{
  const source=el('showQuoteAuthor');source.checked=event.target.checked;
  source.dispatchEvent(new Event('change',{bubbles:true}));
  syncMobileTextEditor();

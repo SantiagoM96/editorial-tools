@@ -670,3 +670,15 @@ html::-webkit-scrollbar-thumb:hover{background:#747b88}
  .preview .browser-zoom-tip,
  .preview > .browser-zoom-tip:not([hidden]){background:#24252d}
 }
+
+/* Cambio 18: mismo trazo CSS que los hotspots de texto y logo.
+   Mismo patrón dash del navegador y 2 px; se conserva el gris de foto.
+   El SVG sigue en DOM por compatibilidad pero no dibuja una segunda línea. */
+.preview .photo-hover-border{
+ box-sizing:border-box!important;
+ border:2px dashed #41464e!important;
+ border-radius:6px!important;
+}
+.preview .photo-hover-border>.photo-hover-outline{
+ display:none!important;
+}

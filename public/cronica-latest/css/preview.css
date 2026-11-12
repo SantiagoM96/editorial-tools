@@ -107,3 +107,15 @@
 @media (max-width:700px){
  .preview .canvas-stage{width:min(540px,calc(100vw - 100px));max-width:100%;margin-inline:auto}
 }
+
+/* Cambio 18: mismo trazo CSS que los hotspots de texto y logo.
+   Mismo patrón dash del navegador y 2 px; se conserva el gris de foto.
+   El SVG sigue en DOM por compatibilidad pero no dibuja una segunda línea. */
+.preview .photo-hover-border{
+ box-sizing:border-box!important;
+ border:2px dashed #41464e!important;
+ border-radius:6px!important;
+}
+.preview .photo-hover-border>.photo-hover-outline{
+ display:none!important;
+}

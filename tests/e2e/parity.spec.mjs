@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { mkdir } from 'node:fs/promises';
 
-test.skip(!process.env.CI, 'Requiere los archivos fuente BAE y Diario Show del checkout fijado');
+test.skip(!process.env.CI, 'Requiere el snapshot fijado de los tres editores en reference-latest');
 
 async function stableCanvasFingerprint(page, url) {
   const response = await page.goto(url, { waitUntil: 'load' });
@@ -23,14 +23,13 @@ async function stableCanvasFingerprint(page, url) {
 }
 
 for (const product of [
+  { name: 'Crónica de Andy', original: 'cronica-dev', migrated: 'cronica-latest' },
   { name: 'BAE', original: 'bae-dev', migrated: 'bae' },
   { name: 'Diario Show', original: 'diarioshow-dev', migrated: 'diarioshow' },
 ]) {
   test(product.name + ': canvas idéntico al commit original', async ({ page }) => {
-    const originalUrl = product.migrated === 'diarioshow'
-      ? 'http://127.0.0.1:4175/diarioshow-dev/?onboarding=off'
-      : 'http://127.0.0.1:4174/' + product.original + '/';
-    const migratedUrl = 'http://127.0.0.1:4173/' + product.migrated + '/' + (product.migrated === 'diarioshow' ? '?onboarding=off' : '');
+    const originalUrl = 'http://127.0.0.1:4175/' + product.original + '/?onboarding=off';
+    const migratedUrl = 'http://127.0.0.1:4173/' + product.migrated + '/?onboarding=off';
     const original = await stableCanvasFingerprint(page, originalUrl);
     await mkdir('tests/artifacts/parity', { recursive: true });
     await page.locator('#art').screenshot({

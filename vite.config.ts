@@ -14,7 +14,7 @@ function legacyEditorRoutes(): Plugin {
       server.middlewares.use((req, _res, next) => {
         const current = req.url ?? '/';
         const pathname = current.split('?')[0];
-        if (pathname && ['/bae/', '/diarioshow/'].includes(pathname)) {
+        if (pathname && ['/bae/', '/diarioshow/', '/cronica-latest/'].includes(pathname)) {
           req.url = current.replace(pathname, pathname + 'index.html');
         }
         next();
