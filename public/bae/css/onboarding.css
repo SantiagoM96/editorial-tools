@@ -196,3 +196,63 @@
 /* Identidad visual propia de BAE DEV. */
 .ds-onboarding-layer .ds-tour-card{border-color:rgba(255,255,255,.22)}
 .ds-onboarding-layer .ds-tour-next:hover{filter:brightness(1.14)}
+
+/* Shift + clic — ilustración animada debajo de la explicación. */
+.ds-onboarding-layer .ds-tour-shift-demo{
+ width:100%;margin:0 0 16px;overflow:hidden;
+ border-radius:10px;
+}
+.ds-onboarding-layer .ds-tour-shift-demo[hidden]{display:none!important}
+.ds-onboarding-layer .ds-tour-shift-demo img{
+ display:block;width:100%;height:auto;max-height:170px;object-fit:contain;
+}
+
+/* Cambio 35 — mismo salto instantáneo de máscara que Diario Show.
+   Cuatro paneles de oscurecimiento independientes sin desplazamiento
+   entre pasos; la tarjeta también aparece en su nueva posición sin volar. */
+@media(min-width:701px){
+ .ds-onboarding-layer .ds-tour-shade{
+  background:rgba(9,10,14,.77)!important;
+  transition:none!important;animation:none!important;
+ }
+ .ds-onboarding-layer .ds-tour-highlight{
+  border:0!important;border-radius:0!important;box-shadow:none!important;
+  background:transparent!important;
+  transition:none!important;animation:none!important;
+ }
+ .ds-onboarding-layer .ds-tour-card{
+  transition:none!important;
+ }
+ .ds-onboarding-layer.is-whole-screen .ds-tour-shade{display:none!important}
+}
+
+/* Cambio 39: máscara de tres ventanas independientes.
+   La vista previa y sólo los controles de logo/posición y firma quedan libres. */
+.ds-onboarding-layer .ds-tour-multispot{
+ position:fixed;inset:0;width:100vw;height:100vh;z-index:0;
+ pointer-events:auto;display:none;
+}
+.ds-onboarding-layer.is-logo-spotlight .ds-tour-multispot{display:block}
+.ds-onboarding-layer.is-logo-spotlight .ds-tour-shade,
+.ds-onboarding-layer.is-logo-spotlight .ds-tour-highlight{display:none!important}
+.ds-onboarding-layer .ds-tour-multispot path{fill:rgba(9,10,14,.77);fill-rule:evenodd}
+.ds-onboarding-layer.is-logo-spotlight .ds-tour-card{z-index:1}
+
+/* Cambio 41 — perforaciones SVG redondeadas, radio geométrico real de 8px.
+   El mismo recorte se utiliza para pasos individuales y múltiples. */
+.ds-onboarding-layer.is-rounded-spotlight .ds-tour-multispot{display:block!important}
+.ds-onboarding-layer.is-rounded-spotlight .ds-tour-shade,
+.ds-onboarding-layer.is-rounded-spotlight .ds-tour-highlight{display:none!important}
+
+/* Cambio 43 — «Siguiente» no debe mostrar ningún aro exterior.
+   El onboarding lo enfoca por JS al cambiar de paso, lo que a veces
+   disparaba :focus-visible aun sin interacción por teclado.
+   Se conserva indicación accesible de teclado mediante subrayado interno. */
+.ds-onboarding-layer .ds-tour-card .ds-tour-next:focus,
+.ds-onboarding-layer .ds-tour-card .ds-tour-next:focus-visible{
+ outline:none!important;outline-offset:0!important;
+ box-shadow:none!important;
+}
+.ds-onboarding-layer .ds-tour-card .ds-tour-next:focus-visible{
+ text-decoration:underline;text-underline-offset:3px;
+}

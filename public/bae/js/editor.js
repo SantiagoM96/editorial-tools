@@ -4,7 +4,7 @@
 const el=id=>document.getElementById(id),canvas=el('art'),ctx=canvas.getContext('2d'),W=1080,H=1440;
 let halftone=null;const halftoneLayer=document.createElement('canvas');halftoneLayer.width=1080;halftoneLayer.height=1236;const halftoneCtx=halftoneLayer.getContext('2d');let importingArticle=false;let selectedTexture='1';const halftoneAssets={};function loadTexture(id,path){const asset=new Image();asset.onload=()=>{halftoneAssets[id]=asset;if(selectedTexture===id){halftone=asset;render()}};asset.onerror=()=>console.error('No se pudo cargar '+path);asset.src=path}loadTexture('1','../bae/halftone-2.svg?v=1');loadTexture('2','./textures/punteado-grises-ajustados.svg?v=1');let textAlignment='left';let image=null,zoom=1,offsetX=0,offsetY=0,dragging=false,lastX=0,lastY=0,photoBottom=820;
 const LOGO_MARGIN=80,LOGO_WIDTH=123.75*1.15,LOGO_HEIGHT=LOGO_WIDTH*192/358;
-let selectedLogo='primary',footerStyle='center',pageBlank=false;
+let selectedLogo='primary',logoPosition='right',footerStyle='center',pageBlank=false;
 document.addEventListener('editorial:footer-style',event=>{footerStyle=event.detail.style;render()});
 const logoImages={},logoSources={primary:'./logos/primario.svg',white:'./logos/blanco.svg'};
 for(const [key,src] of Object.entries(logoSources)){
@@ -17,7 +17,7 @@ function drawBrandLogo(){
  if(selectedLogo==='none')return;
  const img=logoImages[selectedLogo];
  if(!img||!img.complete||!img.naturalWidth)return;
- ctx.drawImage(img,W-LOGO_MARGIN-LOGO_WIDTH,LOGO_MARGIN,LOGO_WIDTH,LOGO_HEIGHT);
+ ctx.drawImage(img,logoPosition==='left'?LOGO_MARGIN:W-LOGO_MARGIN-LOGO_WIDTH,LOGO_MARGIN,LOGO_WIDTH,LOGO_HEIGHT);
 }
 function syncLogoChoices(){
  document.querySelectorAll('.logo-choice').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.logo===selectedLogo)));
@@ -26,6 +26,13 @@ document.querySelectorAll('.logo-choice').forEach(button=>button.addEventListene
  selectedLogo=button.dataset.logo;syncLogoChoices();render();
 }));
 syncLogoChoices();
+function syncLogoPosition(){
+ document.querySelectorAll('[data-logo-position]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.logoPosition===logoPosition)));
+}
+document.querySelectorAll('[data-logo-position]').forEach(button=>button.addEventListener('click',()=>{
+ logoPosition=button.dataset.logoPosition;syncLogoPosition();render();
+}));
+syncLogoPosition();
 const palette={dark:{bg:'#171717',text:'#fff',accent:'#D82626'},white:{bg:'#fff',text:'#171717',accent:'#D82626'},red:{bg:'#D82626',text:'#fff',accent:'#fff'}};
 function parseRich(text){const out=[];let style={accent:false,italic:false,strike:false},buffer='';const flush=()=>{if(buffer){out.push({text:buffer,...style});buffer=''}};for(const c of String(text)){const field=c==='*'?'accent':c==='_'?'italic':c==='~'?'strike':null;if(field){flush();style={...style,[field]:!style[field]}}else buffer+=c}flush();return out}
 function wrapRich(text,size,quote=false){const result=[];for(const paragraph of String(text).split('\n')){const spans=quote?[{text:paragraph,italic:true,accent:false,strike:false}]:parseRich(paragraph);let line=[],width=0;for(const span of spans){for(const part of span.text.match(/\S+|\s+/g)||[]){const font=(span.italic?'italic ':'')+size+'px "DM Serif Display",Georgia,serif';ctx.font=font;const partWidth=ctx.measureText(part).width;if(width+partWidth>920&&width>0&&part.trim()){result.push({parts:line,quote});line=[];width=0}if(!line.length&&!part.trim())continue;line.push({...span,text:part,width:partWidth});width+=partWidth}}if(line.length)result.push({parts:line,quote})}return result}
@@ -126,8 +133,8 @@ window.__editorialHotspotBounds={
  text:{left:Math.max(0,minX-26),right:Math.min(W,maxX+26),
   top:Math.max(0,(baselines[0]??footerTop)-size*1.05-10),
   bottom:Math.min(H,(baselines.at(-1)??footerTop)+size*.28+10)},
- logo:{left:W-LOGO_MARGIN-LOGO_WIDTH-54,top:LOGO_MARGIN-54,
-  right:W-LOGO_MARGIN+54,bottom:LOGO_MARGIN+LOGO_HEIGHT+54}
+ logo:{left:(logoPosition==='left'?LOGO_MARGIN:W-LOGO_MARGIN-LOGO_WIDTH)-54,top:LOGO_MARGIN-54,
+  right:(logoPosition==='left'?LOGO_MARGIN:W-LOGO_MARGIN-LOGO_WIDTH)+LOGO_WIDTH+54,bottom:LOGO_MARGIN+LOGO_HEIGHT+54}
 };
 const overlay=el('importOverlay');if(overlay){overlay.style.height=(photoBottom/H*100)+'%';}updatePhotoStage();el('dotsLabel').textContent=el('dots').value+'%';el('sizeLabel').textContent=size;el('zoomLabel').textContent=Math.round(zoom*100)+' %';el('photoZoom').value=Math.round(zoom*100);el('status').textContent=boxTop<=80?'Texto demasiado largo: reducí el tamaño.':'Vista previa activa · Arrastrá la foto para reencuadrarla.';
 }catch(error){el('status').textContent='Error de vista previa: '+error.message;console.error(error)}
@@ -212,7 +219,7 @@ el('clearAll').addEventListener('click',()=>{
  el('theme').value='dark';document.querySelectorAll('.theme-swatch').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.theme==='dark')));
  el('size').value='70';el('dots').value='5';textAlignment='left';
  el('alignLeft').setAttribute('aria-pressed','true');el('alignCenter').setAttribute('aria-pressed','false');
- image=null;zoom=1;offsetX=0;offsetY=0;dragging=false;selectedLogo='primary';syncLogoChoices();photoStage.classList.remove('is-drag-over');
+ image=null;zoom=1;offsetX=0;offsetY=0;dragging=false;selectedLogo='primary';logoPosition='right';syncLogoChoices();syncLogoPosition();photoStage.classList.remove('is-drag-over');
  el('importStatus').textContent='Pegá una URL de BAE Negocios.';
  render();
 });
@@ -308,7 +315,7 @@ window.BAEEditor={
  headline:el('headline').value,quote:el('quote').value,enableQuote:el('enableQuote').checked,
  size:el('size').value,dots:el('dots').value,alignment:textAlignment,
  uppercase:el('formatUppercase')?.getAttribute('aria-pressed')==='true',
- image,zoom,offsetX,offsetY,selectedLogo,footerStyle,selectedTexture};},
+ image,zoom,offsetX,offsetY,selectedLogo,logoPosition,footerStyle,selectedTexture};},
  setPageState(s){
   pageBlank=s.variant==='blank';document.documentElement.dataset.editorPlateVariant=s.variant;
   el('theme').value=s.theme||'dark';
@@ -321,7 +328,7 @@ window.BAEEditor={
   el('alignCenter').setAttribute('aria-pressed',String(textAlignment==='center'));
   const upper=el('formatUppercase');if(upper){upper.setAttribute('aria-pressed',String(Boolean(s.uppercase)));el('headline').classList.toggle('uppercase-preview',Boolean(s.uppercase))}
   image=s.image||null;zoom=s.zoom||1;offsetX=s.offsetX||0;offsetY=s.offsetY||0;
-  selectedLogo=s.selectedLogo||'primary';syncLogoChoices();footerStyle=s.footerStyle||'center';
+  selectedLogo=s.selectedLogo||'primary';syncLogoChoices();logoPosition=s.logoPosition||'right';syncLogoPosition();footerStyle=s.footerStyle||'center';
   document.querySelectorAll('[data-footer-style]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.footerStyle===footerStyle)));
   selectedTexture=s.selectedTexture||'1';halftone=halftoneAssets[selectedTexture]||null;
   document.querySelectorAll('.texture-option').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.texture===selectedTexture)));

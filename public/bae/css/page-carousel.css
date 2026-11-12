@@ -219,3 +219,13 @@ html[data-editor-plate-variant=blank] #splitPhotoZones{display:none!important}
  transform:translateX(-50%)!important;z-index:5!important;
  margin:0!important;pointer-events:none!important;
 }
+
+/* Cambio 17: sólo selector de diseño cuando la página está vacía. */
+html[data-editor-plate-variant="blank"] .editor-panel > .panel-group:not(:has(.theme-swatches)),
+html[data-editor-plate-variant="blank"] .editor-panel .modern-card:not(.modern-design-group),
+html[data-editor-plate-variant="blank"] .modern-preview-identity-editor,
+html[data-editor-plate-variant="blank"] .modern-preview-text-editor,
+html[data-editor-plate-variant="blank"] .preview .modern-logo-hit,
+html[data-editor-plate-variant="blank"] .preview .modern-text-hit{
+ display:none!important;
+}

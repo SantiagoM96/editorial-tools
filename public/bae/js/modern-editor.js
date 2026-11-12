@@ -134,6 +134,13 @@ if(originalContent){
   designSection.classList.add('modern-design-group');
   const fields=[...originalContent.querySelectorAll(':scope > .control-field')];
   for(const field of fields)designSection.append(field);
+  // Mismo layout que Diario Show: logo y posición lado a lado.
+  const logoField=designSection.querySelector('.logo-control-field');
+  const positionField=designSection.querySelector('.editor-logo-position-field');
+  if(logoField&&positionField){
+   const layout=document.createElement('div');layout.className='editor-logo-layout-row';
+   logoField.before(layout);layout.append(logoField,positionField);
+  }
   originalContent.remove();
  }
 }
@@ -152,6 +159,32 @@ for(const section of [...panel.querySelectorAll(':scope > section.panel-group')]
  makeCard(section,title,section===textPanel);
 }
 if(!textPanel)return;
+// Cambio 45 — BAE: los switches de contenido pertenecen a Diseño de placas;
+// el campo editable del textual aparece PRIMERO dentro de Textos.
+if(!isCronica){
+ const designBody=panel.querySelector('.modern-design-group > .modern-body');
+ const textBody=textPanel.querySelector(':scope > .modern-body');
+ const quoteToggle=$('enableQuote');
+ const quoteField=quoteToggle?.closest('.control-field');
+ const quoteInput=$('quote');
+ if(designBody&&textBody&&quoteField&&quoteInput){
+  const switchLabel=quoteField.querySelector('label.switch-row');
+  if(switchLabel){
+   const switchField=document.createElement('div');
+   switchField.className='control-field modern-quote-toggle-field';
+   switchField.append(switchLabel);
+   designBody.append(switchField);
+  }
+  quoteField.classList.add('modern-quote-input-field');
+  const label=document.createElement('label');
+  label.htmlFor='quote';label.textContent='Textual';
+  quoteField.prepend(label);
+  textBody.prepend(quoteField);
+  const syncQuote=()=>{quoteField.hidden=!quoteToggle.checked;quoteInput.hidden=!quoteToggle.checked};
+  quoteToggle.addEventListener('change',syncQuote);
+  syncQuote();
+ }
+}
 // Photo input card: native file input and its existing image loader remain intact.
 const photoFile=$('file');
 if(photoFile&&!photoFile.closest('.modern-photo-picker')){
@@ -245,10 +278,34 @@ function progress(range){
 }
 function trackThumb(range,host){
  if(!range||!host)return;
- range.addEventListener('pointerdown',()=>{
-  host.classList.add('is-thumb-engaged','is-adjusting');
+ // Igual que Diario Show: el halo blanco sólo aparece si el cursor está
+ // sobre la bolita, no al hacer clic en cualquier punto de la pista.
+ let engagedPointer=null;
+ const onThumb=event=>{
+  const rect=range.getBoundingClientRect();
+  const min=Number(range.min)||0,max=Number(range.max)||100;
+  const t=max>min?(Number(range.value)-min)/(max-min):0;
+  const radius=7.5;
+  const vertical=rect.height>rect.width;
+  const x=vertical?rect.left+rect.width/2:rect.left+radius+t*Math.max(0,rect.width-radius*2);
+  const y=vertical?rect.bottom-radius-t*Math.max(0,rect.height-radius*2):rect.top+rect.height/2;
+  return Math.abs(event.clientX-x)<=radius+4&&Math.abs(event.clientY-y)<=radius+4;
+ };
+ const hover=event=>{
+  if(engagedPointer!==null)return;
+  host.classList.toggle('is-thumb-hover',onThumb(event));
+ };
+ range.addEventListener('pointerenter',hover);
+ range.addEventListener('pointermove',hover);
+ range.addEventListener('pointerleave',()=>{if(engagedPointer===null)host.classList.remove('is-thumb-hover')});
+ range.addEventListener('pointerdown',event=>{
+  const engaged=onThumb(event);
+  engagedPointer=engaged?event.pointerId:null;
+  host.classList.toggle('is-thumb-engaged',engaged);
+  host.classList.toggle('is-thumb-hover',engaged);
+  host.classList.add('is-adjusting');
  });
- const stop=()=>host.classList.remove('is-thumb-engaged','is-adjusting');
+ const stop=()=>{engagedPointer=null;host.classList.remove('is-thumb-engaged','is-thumb-hover','is-adjusting')};
  window.addEventListener('pointerup',stop);window.addEventListener('pointercancel',stop);
  range.addEventListener('blur',stop);range.addEventListener('input',()=>progress(range));
  progress(range);
@@ -383,9 +440,10 @@ if(identityMirror){
   requestAnimationFrame(updateHeight);
  });
  identityMirror.addEventListener('click',event=>{
-  const choice=event.target.closest('[data-logo],[data-footer-style],[data-page-variant],[data-theme]');
+  const choice=event.target.closest('[data-logo],[data-logo-position],[data-footer-style],[data-page-variant],[data-theme]');
   if(!choice)return;
   const selector=choice.dataset.logo!==undefined?'[data-logo="'+choice.dataset.logo+'"]':
+   choice.dataset.logoPosition!==undefined?'[data-logo-position="'+choice.dataset.logoPosition+'"]':
    choice.dataset.footerStyle!==undefined?'[data-footer-style="'+choice.dataset.footerStyle+'"]':
    choice.dataset.pageVariant!==undefined?'[data-page-variant="'+choice.dataset.pageVariant+'"]':
    '[data-theme="'+choice.dataset.theme+'"]';
@@ -395,8 +453,9 @@ if(identityMirror){
 }
 function syncIdentityMirror(){
  if(!identityMirror||!identitySource)return;
- for(const option of identityMirror.querySelectorAll('[data-logo],[data-footer-style],[data-page-variant],[data-theme]')){
+ for(const option of identityMirror.querySelectorAll('[data-logo],[data-logo-position],[data-footer-style],[data-page-variant],[data-theme]')){
   const selector=option.dataset.logo!==undefined?'[data-logo="'+option.dataset.logo+'"]':
+   option.dataset.logoPosition!==undefined?'[data-logo-position="'+option.dataset.logoPosition+'"]':
    option.dataset.footerStyle!==undefined?'[data-footer-style="'+option.dataset.footerStyle+'"]':
    option.dataset.pageVariant!==undefined?'[data-page-variant="'+option.dataset.pageVariant+'"]':
    '[data-theme="'+option.dataset.theme+'"]';
