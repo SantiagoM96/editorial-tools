@@ -219,3 +219,24 @@ html[data-editor-plate-variant=blank] #splitPhotoZones{display:none!important}
  transform:translateX(-50%)!important;z-index:5!important;
  margin:0!important;pointer-events:none!important;
 }
+
+/* Cambio 17: el estado Sin diseño muestra SOLO la elección de variante. */
+html[data-editor-plate-variant="blank"] #dsMobileControlsPanel > .panel-group:not(.ds-plate-design-group),
+html[data-editor-plate-variant="blank"] #dsMobileControlsPanel > .ds-control-card:not(.ds-plate-design-group),
+html[data-editor-plate-variant="blank"] #dsMobileContentEditor,
+html[data-editor-plate-variant="blank"] #dsMobileTextEditor,
+html[data-editor-plate-variant="blank"] .ds-mobile-content-editor,
+html[data-editor-plate-variant="blank"] .ds-mobile-text-editor,
+html[data-editor-plate-variant="blank"] #dsLogoHitButton,
+html[data-editor-plate-variant="blank"] #dsHeadlineHitButton,
+html[data-editor-plate-variant="blank"] .preview .logo-choices,
+html[data-editor-plate-variant="blank"] #photoDropzone,
+html[data-editor-plate-variant="blank"] #splitPhotoZones{
+ display:none!important;
+}
+html[data-editor-plate-variant="blank"] #dsMobileControlsPanel > .ds-plate-design-group{
+ display:block!important;
+}
+html[data-editor-plate-variant="blank"] #dsMobileControlsPanel > .ds-plate-design-group .ds-control-card-body > :not(.ds-variant-field){
+ display:none!important;
+}

@@ -2,7 +2,7 @@
    Las placas guardan sus propios estados del motor nativo; no se sustituye el canvas. */
 (()=>{
 'use strict';
-const isDS=location.pathname.includes('/diarioshow/');
+const isDS=location.pathname.includes('diarioshow-dev');
 const editor=isDS?window.DiarioShowEditor:window.BAEEditor;
 const main=document.querySelector('main'),preview=main?.querySelector('.preview');
 if(!editor||!preview)return;
@@ -24,9 +24,29 @@ const variantSelector=isDS?'.ds-variant-option[data-variant]':'.theme-swatch[dat
 const blankParent=document.querySelector(isDS?'.ds-variant-options':'.theme-swatches');
 let pages=[editor.getPageState()],active=0,drag=null,suppressClick=false;
 const $=(name)=>nav.querySelector(name);
+// Textos de ejemplo ficticios y editables, nunca se importan de noticias reales.
+function sampleForVariant(variant){
+ if(isDS){
+  if(['quote','quote-blue'].includes(variant))return {
+   headline:'ESTOY VIVIENDO UNA ETAPA LLENA DE *NUEVOS DESAFÍOS*',
+   quoteAuthor:'Una artista invitada',showQuoteAuthor:true,
+   size:'70',alignment:'center'
+  };
+  return {
+   headline:'Una artista sorprendió con un *anuncio inesperado* y emocionó a sus seguidores',
+   quoteAuthor:'Una artista invitada',showQuoteAuthor:false,
+   size:'70',alignment:'center'
+  };
+ }
+ return {
+  headline:'Una empresa argentina anunció *nuevas inversiones* para ampliar su producción',
+  quote:'“El objetivo es generar más empleo durante el próximo año”',
+  enableQuote:true,size:'70',alignment:'left'
+ };
+}
 function blankPage(){
  const initial=editor.getPageState();
- return {...initial,variant:'blank',headline:'',image:null,zoom:1,offsetX:0,offsetY:0,
+ return {...initial,variant:'blank',samplePending:true,headline:'',image:null,zoom:1,offsetX:0,offsetY:0,
   quote:'',enableQuote:false,quoteAuthor:'',showQuoteAuthor:false,
   photoLayout:'single',splitPhotos:{left:{image:null,zoom:1,x:0,y:0},right:{image:null,zoom:1,x:0,y:0}}};
 }
@@ -64,7 +84,11 @@ const nav=document.createElement('section');nav.className='editor-slide-nav';
 nav.setAttribute('aria-label','Diapositivas');
 nav.innerHTML='<div class="editor-slide-heading"><strong>Diapositivas</strong><span class="editor-slide-indicator" aria-live="polite"></span></div><div class="editor-slide-row"><div class="editor-slide-track" role="group" aria-label="Seleccionar diapositiva"></div><div class="editor-slide-actions"><button type="button" class="editor-slide-add-fixed" aria-label="Agregar diapositiva" title="Agregar diapositiva"><span class="material-icons">add</span></button><button type="button" class="editor-slide-delete" aria-label="Eliminar diapositiva" title="Eliminar diapositiva"><span class="material-icons">delete_outline</span></button></div></div>';
 preview.insertBefore(nav,preview.querySelector('.preview-toolbar'));
-function save(){pages[active]=editor.getPageState()}
+function save(){
+ const previous=pages[active];
+ const current=editor.getPageState();
+ pages[active]={...current,samplePending:current.variant==='blank'&&Boolean(previous?.samplePending)};
+}
 function load(index){
  active=index;editor.setPageState(pages[index]);syncBlankOptions();draw();
 }
@@ -145,9 +169,33 @@ document.addEventListener('click',event=>{
  }
  const variantButton=event.target.closest(variantSelector);
  if(!variantButton)return;
+ const variant=isDS?variantButton.dataset.variant:variantButton.dataset.theme;
+ const previousVariant=pages[active]?.variant;
+ const shouldSeed=pages[active]?.variant==='blank'&&pages[active]?.samplePending;
  if(pages[active]?.variant==='blank')editor.setBlank(false);
- // El controlador de la marca actualiza el resto del estado después de este evento.
- setTimeout(()=>{save();draw()},0);
+ // Ejecutar luego del listener nativo de cada marca para no sobrescribir
+ // su configuración de plantilla. No repetir el ejemplo después.
+ setTimeout(()=>{
+  if(shouldSeed){
+   const current=editor.getPageState();
+   const sample=sampleForVariant(variant);
+   editor.setPageState({...current,...sample,variant,theme:variant});
+   pages[active].samplePending=false;
+  }else if(isDS&&previousVariant!==variant){
+   // Si el usuario todavía conserva nuestro ejemplo, adaptarlo al nuevo
+   // formato; nunca sustituir un título escrito a mano.
+   const current=editor.getPageState();
+   const generic=sampleForVariant('pink');
+   const quote=sampleForVariant('quote');
+   const unchanged=[generic.headline,quote.headline,''].includes(current.headline);
+   const wasQuote=['quote','quote-blue'].includes(previousVariant);
+   const isQuote=['quote','quote-blue'].includes(variant);
+   if(unchanged&&wasQuote!==isQuote){
+    editor.setPageState({...current,...sampleForVariant(variant),variant,theme:variant});
+   }
+  }
+  save();draw();
+ },0);
 },true);
 // La tarjeta sin diseño debe aparecer en el mismo selector del producto.
 insertBlankOptions();
