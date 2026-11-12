@@ -51,15 +51,15 @@ export function PageNavigator() {
               <span className="carousel-page-number">{index + 1}</span>
             </button>
           ))}
-          <button type="button" className="carousel-add-placeholder"
-            aria-label="Agregar otra diapositiva"
+          <button type="button" className="carousel-add-placeholder" id="addPage"
+            aria-label="Agregar página interna"
             onClick={() => issueCarouselCommand({ type: 'add-page' })}>
             <span className="material-icons" aria-hidden="true">add</span>
           </button>
         </div>
         <div className="carousel-actions">
-          <button type="button" id="addPage" aria-label="Agregar página interna"
-            title="Agregar página interna" onClick={() => issueCarouselCommand({ type: 'add-page' })}>
+          <button type="button" className="add-page-fixed" aria-label="Agregar otra diapositiva"
+            title="Agregar otra diapositiva" onClick={() => issueCarouselCommand({ type: 'add-page' })}>
             <span className="material-icons" aria-hidden="true">add</span>
           </button>
           <button type="button" id="removePage" className="remove-page"

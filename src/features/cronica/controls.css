@@ -219,7 +219,7 @@ html[data-cronica-variant="blank"] .preview .cronica-text-hit {display:none!impo
 .cronica-preview-pages .carousel-add-placeholder{display:flex;flex:0 0 60px;height:99px;align-items:center;justify-content:center;border:2px dashed #747984;border-radius:9px;background:transparent;color:#e3e5e9}
 .cronica-preview-pages .carousel-actions{display:flex;flex:0 0 auto;gap:6px;margin:0}
 .cronica-preview-pages .carousel-actions button{width:36px;height:36px;min-height:36px;flex:none;padding:0;display:inline-flex;align-items:center;justify-content:center}
-.cronica-preview-pages .carousel-actions #addPage{display:none}
+.cronica-preview-pages .carousel-actions .add-page-fixed{display:none}
 .cronica-preview-pages .carousel-actions .remove-page:disabled{opacity:.35}
 .cronica-preview-pages .cronica-variant-thumbnail-blank{background:#aeb4bc!important}
 .cronica-preview-pages .cronica-variant-thumbnail-blank::before,
