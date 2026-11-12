@@ -195,9 +195,10 @@
  window.addEventListener('scroll',schedule,{passive:true});
  const trigger=qs('#dsOnboardingTrigger');
  if(trigger)trigger.addEventListener('click',start);
- // El inicio automático interfiere con la verificación de publicación de Pages;
- // el recorrido completo sigue disponible desde Ayuda y con ?onboarding=force.
- if(mq.matches&&new URLSearchParams(location.search).get('onboarding')==='force'){
+ // El recorrido se inicia una vez en desktop, igual que en MLZ.
+ // ?onboarding=off desactiva el módulo por completo en pruebas de exportación.
+ // ?onboarding=force permite reproducir el recorrido aun si ya fue completado.
+ if(mq.matches&&(!completed() || new URLSearchParams(location.search).get('onboarding')==='force')){
   // Después de que el editor termine su primera renderización.
   window.addEventListener('load',()=>requestAnimationFrame(()=>requestAnimationFrame(start)),{once:true});
  }

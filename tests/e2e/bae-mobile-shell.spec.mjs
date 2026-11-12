@@ -73,12 +73,11 @@ test('BAE: cada diapositiva conserva su estado y puede seleccionarse', async ({ 
   await expect.poll(() => page.evaluate(() => window.EditorialSlides.active())).toBe(1);
 });
 
-test('BAE: recorrido de Ayuda completo, persistente y sin bloquear la edición', async ({ page }) => {
+test('BAE: tutorial de 10 pasos aparece automáticamente en primera visita y puede reabrirse', async ({ page }) => {
   await page.goto('/bae/', { waitUntil: 'load' });
-  await expect(page.locator('#dsOnboardingLayer')).toHaveCount(0);
   await expect(page.locator('#art')).toBeVisible();
-  await page.locator('#dsOnboardingTrigger').click();
   await expect(page.getByRole('dialog', { name: 'Organizá las diapositivas' })).toBeVisible();
+  await expect(page.locator('#dsTourProgress')).toHaveText('1 de 10');
   await page.getByRole('button', { name: 'Omitir' }).click();
   await expect(page.locator('#dsOnboardingLayer')).toBeHidden();
   await expect.poll(() => page.evaluate(() => localStorage.getItem('bae-dev-tour-desktop-v1'))).toBe('complete');
