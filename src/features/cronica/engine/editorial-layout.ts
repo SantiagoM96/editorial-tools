@@ -128,7 +128,7 @@ export function calculateEditorialLayout(
     return availableBottom - (lines.length ? size * 0.85 + (lines.length - 1) * lineHeight() : 0);
   }
   const showBar = input.showStrap;
-  const barHeight = showBar ? (cover ? 52 : 50) : 0;
+  const barHeight = showBar ? (cover ? 68 : 65) : 0;
   const requiredGap = cover ? 80 : 80;
   while (size > 32 && textTop() - (showBar ? barHeight + requiredGap : 80) < 230) {
     size -= 2;
@@ -140,8 +140,8 @@ export function calculateEditorialLayout(
   let panelTop: number;
   let barY: number;
   if (cover) {
-    panelTop = Math.max(160, top - (showBar ? 76 : 56.5));
-    barY = panelTop - 26;
+    panelTop = Math.max(160, top - (showBar ? 50 + 68 / 2 : 56.5));
+    barY = panelTop - 68 / 2;
   } else {
     panelTop = Math.max(160, top - 50 - (showBar ? barHeight : 0));
     barY = panelTop;

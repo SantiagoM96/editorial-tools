@@ -93,12 +93,12 @@ describe('Capas Canvas Crónica — contratos sin DOM de editor', () => {
     const raw = makeContext();
     const ctx = raw as unknown as CanvasRenderingContext2D;
     drawStrapLayer(ctx, { strapText: '  noticia    ágil ', isCover: true, y: 600 });
-    expect(raw.fillRect).toHaveBeenCalledWith((1080 - 164) / 2, 600, 164, 52);
-    expect(raw.fillText).toHaveBeenCalledWith('NOTICIA ÁGIL', 540, 626, 896);
+    expect(raw.fillRect).toHaveBeenCalledWith((1080 - 164) / 2, 600, 164, 68);
+    expect(raw.fillText).toHaveBeenCalledWith('NOTICIA ÁGIL', 540, 634, 896);
     expect(raw.textBaseline).toBe('alphabetic');
     expect(raw.textAlign).toBe('left');
     drawStrapLayer(ctx, { strapText: 'INTERIOR', isCover: false, y: 640 });
-    expect(raw.fillRect).toHaveBeenCalledWith(0, 640, 1080, 50);
+    expect(raw.fillRect).toHaveBeenCalledWith(0, 640, 1080, 65);
   });
 
   it('titulares mantienen alineación y tachado con trazo rojo del mismo ancho', () => {

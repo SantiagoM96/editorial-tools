@@ -21,7 +21,7 @@ export function drawStrapLayer(
   } = options;
   const content = strapText.replace(/\s+/g, ' ').trim().toLocaleUpperCase('es-AR');
   const maxWidth = canvasWidth - edge * 2;
-  let size = isCover ? 34 : 32;
+  let size = isCover ? 40 : 38;
   ctx.textBaseline = 'middle';
   while (size > 16) {
     ctx.font = '800 ' + size + 'px Inter,Arial,sans-serif';
@@ -29,7 +29,7 @@ export function drawStrapLayer(
     size--;
   }
   const textWidth = ctx.measureText(content).width;
-  const barHeight = isCover ? 52 : 50;
+  const barHeight = isCover ? 68 : 65;
   const width = isCover ? Math.min(maxWidth, Math.ceil(textWidth + 44)) : canvasWidth;
   const left = isCover ? (canvasWidth - width) / 2 : 0;
   ctx.fillStyle = CRONICA_RED;
