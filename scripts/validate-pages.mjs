@@ -47,6 +47,17 @@ for (const page of ['index.html', 'cronica/index.html', 'bae/index.html', 'diari
       throw Error('Título de producción incorrecto: ' + page);
     }
   }
+  if (environment === 'development' && ['bae/index.html', 'diarioshow/index.html'].includes(page)) {
+    const refs = [...html.matchAll(/\b(?:href|src)=["'](\.\/(?:js|css)\/[^"']+)["']/gi)]
+      .map(match => match[1]);
+    if (!refs.length) throw Error('Faltan referencias CSS/JS en ' + page);
+    for (const ref of refs) {
+      const url = new URL(ref, 'https://editorial.local/' + page);
+      if (url.searchParams.get('editorial_dev_sha') !== metadata.sha.slice(0, 12)) {
+        throw Error('Archivo CSS/JS sin invalidación de caché DEV: ' + page + ' → ' + ref);
+      }
+    }
+  }
   if (page === 'index.html' && !html.includes('src="' + base + 'assets/')) {
     throw Error('La aplicación React no apunta al base path ' + base);
   }
