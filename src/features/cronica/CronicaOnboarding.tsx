@@ -62,7 +62,6 @@ export function CronicaOnboarding() {
   const raf=requestAnimationFrame(()=>requestAnimationFrame(show));
   return ()=>{cancelled=true;cancelAnimationFrame(raf)};
  // Montar solo una vez; la query no cambia durante esta sesión.
- // eslint-disable-next-line react-hooks/exhaustive-deps
  },[]);
  useEffect(()=>{
   if(!active)return;
@@ -93,7 +92,6 @@ export function CronicaOnboarding() {
    window.removeEventListener('resize',onResize);
   };
  // El cierre solo depende de active; los listeners no deben instalarse por cada paso.
- // eslint-disable-next-line react-hooks/exhaustive-deps
  },[active]);
  useLayoutEffect(()=>{
   if(!active)return;
