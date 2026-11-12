@@ -35,6 +35,11 @@ export function createCoverContent(): EditorialContent {
 }
 
 export function createDefaultPage(variant: EditorialVariant): EditorialPage {
+  if (variant === 'blank') return {
+    headline: INTERNAL_HEADLINE, strapText: '', showStrap: false, size: '52',
+    alignment: 'left', forceUppercase: false, logo: 'primary', image: null,
+    photoName: null, zoom: 1, offsetX: 0, offsetY: 0, variant,
+  };
   if (variant === 'cover') {
     return {
       ...createCoverContent(),
