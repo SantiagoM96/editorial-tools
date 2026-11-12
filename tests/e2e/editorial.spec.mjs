@@ -119,7 +119,7 @@ test('Diario Show: variante de cita, fotografía y exportación PNG', async ({ p
   const errors = await loadPage(page, '/diarioshow/');
   await expect(page.locator('#art')).toBeVisible();
   await page.locator('#dsMobileControlsPanel button[data-variant="quote"]').click();
-  await expect(page.locator('button[data-variant="quote"]')).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('#dsMobileControlsPanel button[data-variant="quote"]')).toHaveAttribute('aria-pressed', 'true');
   await page.locator('#dsMobileControlsPanel .cronica-rich-headline').first().fill('Prueba de cita editorial');
   await uploadSyntheticImage(page);
   const download = page.waitForEvent('download', { timeout: 30000 });

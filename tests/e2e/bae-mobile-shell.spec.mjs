@@ -65,7 +65,7 @@ test('BAE: iPhone sin zoom y edición contextual del texto', async ({ page }) =>
 test('BAE: cada diapositiva conserva su estado y puede seleccionarse', async ({ page }) => {
   await page.goto('/bae/?onboarding=off', { waitUntil: 'load' });
   await expect.poll(() => page.evaluate(() => window.EditorialSlides?.count())).toBe(1);
-  await page.locator('.editor-slide-add-fixed').click();
+  await page.locator('.editor-slide-add-tile').click();
   await expect.poll(() => page.evaluate(() => window.EditorialSlides.count())).toBe(2);
   await page.evaluate(() => window.EditorialSlides.select(0));
   await expect.poll(() => page.evaluate(() => window.EditorialSlides.active())).toBe(0);

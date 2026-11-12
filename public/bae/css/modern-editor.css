@@ -718,3 +718,9 @@ main .modern-track>.editor-panel:not(.modern-preview-text-editor):not(.modern-pr
   border-radius:9px!important;
  }
 }
+
+/* Texto enriquecido editable en iPhone: evitar zoom al enfocar con tamaño >=16px. */
+@media(max-width:700px){
+ .modern-preview-text-editor .cronica-rich-headline,
+ .modern-track > .editor-panel .cronica-rich-headline{font-size:16px!important}
+}
