@@ -1,4 +1,4 @@
-import {useEffect,useLayoutEffect,useRef,useState} from 'react';
+import {useEffect,useLayoutEffect,useRef,useState,type CSSProperties} from 'react';
 import {createPortal} from 'react-dom';
 
 const KEY='cronica-dev-tour-desktop-v1';
@@ -114,7 +114,7 @@ export function CronicaOnboarding() {
  if(disabled)return null;
  const step=steps[index],last=index===steps.length-1;
  const hole=placement?.hole,viewport=placement?.viewport;
- const shades:ReadonlyArray<React.CSSProperties>=hole&&viewport?
+ const shades:ReadonlyArray<CSSProperties>=hole&&viewport?
  [
   {left:0,top:0,width:viewport.width,height:hole.top},
   {left:0,top:hole.top,width:hole.left,height:hole.height},
