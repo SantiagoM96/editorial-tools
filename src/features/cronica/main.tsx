@@ -37,7 +37,7 @@ if (!mediaMount) throw new Error('No se encontró el contenedor de medios de Cr�
 
 createRoot(mediaMount).render(
   <StrictMode>
-    <CollapsiblePanel title="Diseño de la placa" className="cronica-media-panel">
+    <CollapsiblePanel title="Fotografía" className="cronica-media-panel">
       <MediaControls />
     </CollapsiblePanel>
   </StrictMode>,

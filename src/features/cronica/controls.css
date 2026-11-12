@@ -250,3 +250,19 @@ html[data-cronica-variant="blank"] .preview .cronica-text-hit {display:none!impo
   .cronica-preview-pages .carousel-page-thumb .cronica-variant-thumbnail{height:55px;width:40px}
   .cronica-preview-pages .carousel-add-placeholder{flex-basis:50px;height:86px}
 }
+
+/* Identidad gráfica y firma React dentro de Diseño de placas. */
+#cronica-controls-root .logo-control-field{margin-top:14px}
+#cronica-controls-root .editor-logo-position-field{margin-top:16px}
+#cronica-controls-root .editor-logo-position-field>label,
+#cronica-controls-root .modern-footer-field>label{display:block;margin-bottom:8px;font-size:13px;font-weight:600}
+#cronica-controls-root .editor-logo-position-controls{display:flex;align-items:center}
+#cronica-controls-root .editor-logo-position-button{display:inline-flex;width:40px;height:40px;justify-content:center;align-items:center;cursor:pointer;border:1px solid #555963;background:#282b31;color:#f4f4f5}
+#cronica-controls-root .editor-logo-position-button:first-child{border-radius:7px 0 0 7px}
+#cronica-controls-root .editor-logo-position-button:last-child{border-radius:0 7px 7px 0}
+#cronica-controls-root .editor-logo-position-button[aria-pressed=true]{border-color:#ed0000;box-shadow:inset 0 0 0 1px #ed0000}
+#cronica-controls-root .modern-footer-field{margin-top:16px}
+#cronica-controls-root .modern-footer-options{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#cronica-controls-root .modern-footer-options button{display:flex;align-items:center;justify-content:center;gap:7px;min-height:40px;padding:8px 10px;border:1px solid #555963;border-radius:7px;background:#292c32;color:#f4f4f5;font:600 13px Inter,Arial,sans-serif;cursor:pointer}
+#cronica-controls-root .modern-footer-options button[aria-pressed=true]{border-color:#ed0000;box-shadow:inset 0 0 0 1px #ed0000}
+#cronica-controls-root .modern-footer-options button .material-symbols-outlined{font-size:19px}
