@@ -73,21 +73,6 @@ export function ContentEditor() {
 
   return (
     <>
-      <div className="control-field">
-        <label className="switch-row" htmlFor="showStrap">
-          <span>Mostrar volanta</span>
-          <span className="switch">
-            <input
-              id="showStrap"
-              type="checkbox"
-              role="switch"
-              checked={content.showStrap}
-              onChange={(event) => change({ field: 'showStrap', value: event.currentTarget.checked })}
-            />
-            <span className="switch-track" />
-          </span>
-        </label>
-      </div>
       <div className="control-field" id="strapField" hidden={!content.showStrap}>
         <div className="help-label-row">
           <label htmlFor="strapText">Texto de la volanta</label>
@@ -126,6 +111,7 @@ export function ContentEditor() {
           }}
         />
       </div>
+      <TypographyControls typography={typography} onFormat={formatSelection} />
       <div className="control-field">
         <label htmlFor="headline">Texto principal</label>
         <textarea
@@ -149,7 +135,6 @@ export function ContentEditor() {
           onChange={(event) => change({ field: 'size', value: Number(event.currentTarget.value) })}
         />
       </div>
-      <TypographyControls typography={typography} onFormat={formatSelection} />
     </>
   );
 }

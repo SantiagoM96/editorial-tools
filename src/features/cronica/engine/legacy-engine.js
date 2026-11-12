@@ -20,7 +20,7 @@ import { createRenderScheduler } from './render-scheduler';
 'use strict';
 
 const el=id=>document.getElementById(id),canvas=el('art'),ctx=canvas.getContext('2d'),W=CANVAS_WIDTH,H=CANVAS_HEIGHT;
-let image=null,photoName=null,zoom=1,offsetX=0,offsetY=0,dragging=false,lastX=0,lastY=0,photoBottom=820,textAlignment='center',forceUppercase=false,selectedLogo='primary',photoHover=false,pageVariant='cover',photoDecodeFailed=false;
+let image=null,photoName=null,zoom=1,offsetX=0,offsetY=0,dragging=false,lastX=0,lastY=0,photoBottom=820,textAlignment='center',forceUppercase=false,selectedLogo='primary',logoPosition='right',footerStyle='carousel',photoHover=false,pageVariant='cover',photoDecodeFailed=false;
 const documentContent=createCoverContent();
 function emitContentState(){
  window.dispatchEvent(new CustomEvent('editorial:cronica:content-state',{detail:{...documentContent}}));
@@ -40,6 +40,23 @@ window.addEventListener('editorial:cronica:content-command',event=>{
  }else return;
  emitContentState();
  render();
+});
+// Diseño/firma son datos canónicos por página; React consume eventos tipados.
+function emitDesignState(){
+ window.dispatchEvent(new CustomEvent('editorial:cronica:design-state',{detail:{logoPosition,footerStyle}}));
+}
+window.addEventListener('editorial:cronica:design-request',emitDesignState);
+window.addEventListener('editorial:cronica:design-command',event=>{
+ const action=event.detail;
+ if(!action||typeof action.type!=='string')return;
+ if(action.type==='set-logo-position'){
+  if(action.position!=='left'&&action.position!=='right')return;
+  logoPosition=action.position;
+ }else if(action.type==='set-footer-style'){
+  if(action.style!=='center'&&action.style!=='carousel')return;
+  footerStyle=action.style;
+ }else return;
+ emitDesignState();render();
 });
 const EDGE=CONTENT_EDGE;
 const logoImages={},logoSources={primary:'../cronica/logos/primario.svg',secondary:'../cronica/logos/secundario.svg',white:'../cronica/logos/blanco.svg'};
@@ -82,6 +99,8 @@ window.addEventListener('editorial:cronica:media-command',event=>{
 function render(includeHover=true){
  try{
   document.documentElement.dataset.cronicaVariant=pageVariant;
+   document.documentElement.dataset.cronicaLogoPosition=logoPosition;
+   document.documentElement.dataset.cronicaLogo=selectedLogo;
   if(pageVariant==='blank'){
    ctx.clearRect(0,0,W,H);
    ctx.fillStyle='#aeb4bc';ctx.fillRect(0,0,W,H);
@@ -107,13 +126,13 @@ function render(includeHover=true){
    image,photoBottom,zoom,offsetX,offsetY,photoHover,includeHover,canvasWidth:W
   });
   offsetX=placement.offsetX;offsetY=placement.offsetY;
-  drawLogoLayer(ctx,selectedLogo,logoImages,W,EDGE);
+  drawLogoLayer(ctx,selectedLogo,logoImages,W,EDGE,logoPosition);
   drawTextPanelLayer(ctx,panelTop,W,H);
   if(showBar)drawStrapLayer(ctx,{
    strapText:documentContent.strapText,isCover:cover,y:barY,canvasWidth:W,edge:EDGE
   });
   drawHeadlineLayer(ctx,lines,size,baselines,textAlignment,W,EDGE);
-  if(cover)drawCoverFooterLayer(ctx,W,H,EDGE);
+  if(cover)drawCoverFooterLayer(ctx,W,H,EDGE,footerStyle);
   updatePhotoDropzone();
   emitMediaState();
   if(!photoDecodeFailed)el('status').textContent=size<requestedSize?'Texto largo: tamaño ajustado para respetar los márgenes.':'Vista previa activa · Arrastrá la foto para reencuadrarla.';
@@ -124,7 +143,7 @@ const carouselStore=new EditorialCarouselStore(readCurrentPage());
 const photoLoads=new PhotoLoadCoordinator();
 function readCurrentPage(){
  return snapshotEditorialPage(documentContent,{
-  alignment:textAlignment,forceUppercase,logo:selectedLogo,image,photoName,zoom,offsetX,offsetY,variant:pageVariant
+  alignment:textAlignment,forceUppercase,logo:selectedLogo,logoPosition,footerStyle,image,photoName,zoom,offsetX,offsetY,variant:pageVariant
  });
 }
 function saveActivePage(){carouselStore.saveActive(readCurrentPage())}
@@ -139,6 +158,7 @@ function loadPage(page){
  emitContentState();
  forceUppercase=Boolean(page.forceUppercase);syncUppercaseUI();
  selectedLogo=page.logo||'primary';
+ logoPosition=page.logoPosition||'right';footerStyle=page.footerStyle||'carousel';emitDesignState();
  textAlignment=page.alignment;image=page.image;photoName=page.photoName??null;zoom=page.zoom;offsetX=page.offsetX;offsetY=page.offsetY;
  dragging=false;
  emitTypographyState();

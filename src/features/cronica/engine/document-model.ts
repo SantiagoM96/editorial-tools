@@ -5,6 +5,8 @@
 export type EditorialVariant = 'blank' | 'cover' | 'internal';
 export type EditorialLogo = 'none' | 'primary' | 'secondary' | 'white';
 export type EditorialAlignment = 'left' | 'center';
+export type EditorialLogoPosition = 'left' | 'right';
+export type EditorialFooterStyle = 'center' | 'carousel';
 
 export interface EditorialContent {
   headline: string;
@@ -17,6 +19,8 @@ export interface EditorialPage extends EditorialContent {
   alignment: EditorialAlignment;
   forceUppercase: boolean;
   logo: EditorialLogo;
+  logoPosition: EditorialLogoPosition;
+  footerStyle: EditorialFooterStyle;
   image: HTMLImageElement | null;
   /** Nombre informativo de la fotografía por página; nunca interviene en Canvas. */
   photoName: string | null;
@@ -37,7 +41,7 @@ export function createCoverContent(): EditorialContent {
 export function createDefaultPage(variant: EditorialVariant): EditorialPage {
   if (variant === 'blank') return {
     headline: INTERNAL_HEADLINE, strapText: '', showStrap: false, size: '52',
-    alignment: 'left', forceUppercase: false, logo: 'primary', image: null,
+    alignment: 'left', forceUppercase: false, logo: 'primary', logoPosition: 'right', footerStyle: 'carousel', image: null,
     photoName: null, zoom: 1, offsetX: 0, offsetY: 0, variant,
   };
   if (variant === 'cover') {
@@ -46,6 +50,8 @@ export function createDefaultPage(variant: EditorialVariant): EditorialPage {
       alignment: 'center',
       forceUppercase: false,
       logo: 'primary',
+      logoPosition: 'right',
+      footerStyle: 'carousel',
       image: null,
       photoName: null,
       zoom: 1,
@@ -62,6 +68,8 @@ export function createDefaultPage(variant: EditorialVariant): EditorialPage {
     alignment: 'left',
     forceUppercase: false,
     logo: 'primary',
+    logoPosition: 'right',
+    footerStyle: 'carousel',
     image: null,
     photoName: null,
     zoom: 1,

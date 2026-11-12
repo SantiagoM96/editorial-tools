@@ -11,6 +11,10 @@ import { MobilePreviewTextEditor } from './MobilePreviewTextEditor';
 import { ContentEditor } from './ContentEditor';
 import { MediaControls, PhotoZoomControls } from './MediaControls';
 import './controls.css';
+import { PreviewHotspots } from './PreviewHotspots';
+import { CronicaOnboarding } from './CronicaOnboarding';
+import { RichHeadlineOverlay } from './RichHeadlineOverlay';
+import './onboarding.css';
 
 const mount = document.getElementById('cronica-controls-root');
 if (!mount) throw new Error('No se encontró el contenedor de controles de Crónica.');
@@ -18,6 +22,8 @@ if (!mount) throw new Error('No se encontró el contenedor de controles de Crón
 createRoot(mount).render(
   <StrictMode>
     <VariantControls />
+    <PreviewHotspots />
+    <CronicaOnboarding />
   </StrictMode>,
 );
 
@@ -37,7 +43,7 @@ if (!mediaMount) throw new Error('No se encontró el contenedor de medios de Cr�
 
 createRoot(mediaMount).render(
   <StrictMode>
-    <CollapsiblePanel title="Diseño de la placa" className="cronica-media-panel">
+    <CollapsiblePanel title="Fotografía" className="cronica-media-panel">
       <MediaControls />
     </CollapsiblePanel>
   </StrictMode>,
@@ -63,3 +69,7 @@ createRoot(previewTextRoot).render(<StrictMode><MobilePreviewTextEditor /></Stri
 const pageNavigationMount = document.getElementById('cronica-pages-root');
 if (!pageNavigationMount) throw new Error('Falta el navegador de páginas sobre vista previa.');
 createRoot(pageNavigationMount).render(<StrictMode><PageNavigator /></StrictMode>);
+
+const richRoot = document.getElementById('cronica-preview-rich-root');
+if (!richRoot) throw new Error('Falta el editor enriquecido de vista previa.');
+createRoot(richRoot).render(<StrictMode><RichHeadlineOverlay /></StrictMode>);

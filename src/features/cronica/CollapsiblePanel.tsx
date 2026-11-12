@@ -1,4 +1,4 @@
-import { useId, useState, type ReactNode } from 'react';
+import { useEffect, useId, useState, type MouseEvent, type ReactNode } from 'react';
 
 interface CollapsiblePanelProps {
   readonly title: string;
@@ -13,6 +13,24 @@ interface CollapsiblePanelProps {
 export function CollapsiblePanel({ title, className = '', children }: CollapsiblePanelProps) {
   const bodyId = useId();
   const [expanded, setExpanded] = useState(true);
+  useEffect(() => {
+    const changeAll = (event: Event) => {
+      if (event instanceof CustomEvent && typeof event.detail?.expanded === 'boolean') {
+        setExpanded(event.detail.expanded);
+      }
+    };
+    window.addEventListener('editorial:cronica:accordion-all', changeAll);
+    return () => window.removeEventListener('editorial:cronica:accordion-all', changeAll);
+  }, []);
+
+  const toggle = (event: MouseEvent<HTMLButtonElement>) => {
+    if (!event.shiftKey) { setExpanded(previous => !previous); return; }
+    const sections = [...document.querySelectorAll<HTMLButtonElement>('.modern-card .modern-toggle')];
+    const shouldExpand = sections.some(section => section.getAttribute('aria-expanded') === 'false');
+    window.dispatchEvent(new CustomEvent('editorial:cronica:accordion-all', {
+      detail: { expanded: shouldExpand },
+    }));
+  };
 
   return (
     <section className={`panel-group modern-card ${className}`.trim()} aria-label={title}>
@@ -21,7 +39,7 @@ export function CollapsiblePanel({ title, className = '', children }: Collapsibl
         className="modern-toggle"
         aria-expanded={expanded}
         aria-controls={bodyId}
-        onClick={() => setExpanded((previous) => !previous)}
+        onClick={toggle}
       >
         <span>{title}</span>
         <span className="material-icons modern-chevron" aria-hidden="true">expand_less</span>

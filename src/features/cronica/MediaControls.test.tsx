@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { MediaControls, PhotoZoomControls } from './MediaControls';
+import { BrandControls } from './BrandControls';
 import { isBrandLogo, isMediaSnapshot, isZoomPercent, initialMedia } from './media-model';
 
 afterEach(cleanup);
@@ -32,7 +33,7 @@ describe('Controles React de fotografía y logo', () => {
     };
     window.addEventListener('editorial:cronica:media-command', onCommand);
     try {
-      render(<MediaControls />);
+      render(<BrandControls />);
       expect(screen.getAllByRole('button')).toHaveLength(4);
       expect(screen.getByRole('button', { name: 'Primario' }).getAttribute('aria-pressed')).toBe('true');
       fireEvent.click(screen.getByRole('button', { name: 'Secundario' }));

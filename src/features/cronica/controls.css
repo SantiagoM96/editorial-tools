@@ -250,3 +250,55 @@ html[data-cronica-variant="blank"] .preview .cronica-text-hit {display:none!impo
   .cronica-preview-pages .carousel-page-thumb .cronica-variant-thumbnail{height:55px;width:40px}
   .cronica-preview-pages .carousel-add-placeholder{flex-basis:50px;height:86px}
 }
+
+/* Identidad gráfica y firma React dentro de Diseño de placas. */
+#cronica-controls-root .logo-control-field{margin-top:14px}
+#cronica-controls-root .editor-logo-position-field{margin-top:16px}
+#cronica-controls-root .editor-logo-position-field>label,
+#cronica-controls-root .modern-footer-field>label{display:block;margin-bottom:8px;font-size:13px;font-weight:600}
+#cronica-controls-root .editor-logo-position-controls{display:flex;align-items:center}
+#cronica-controls-root .editor-logo-position-button{display:inline-flex;width:40px;height:40px;justify-content:center;align-items:center;cursor:pointer;border:1px solid #555963;background:#282b31;color:#f4f4f5}
+#cronica-controls-root .editor-logo-position-button:first-child{border-radius:7px 0 0 7px}
+#cronica-controls-root .editor-logo-position-button:last-child{border-radius:0 7px 7px 0}
+#cronica-controls-root .editor-logo-position-button[aria-pressed=true]{border-color:#ed0000;box-shadow:inset 0 0 0 1px #ed0000}
+#cronica-controls-root .modern-footer-field{margin-top:16px}
+#cronica-controls-root .modern-footer-options{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#cronica-controls-root .modern-footer-options button{display:flex;align-items:center;justify-content:center;gap:7px;min-height:40px;padding:8px 10px;border:1px solid #555963;border-radius:7px;background:#292c32;color:#f4f4f5;font:600 13px Inter,Arial,sans-serif;cursor:pointer}
+#cronica-controls-root .modern-footer-options button[aria-pressed=true]{border-color:#ed0000;box-shadow:inset 0 0 0 1px #ed0000}
+#cronica-controls-root .modern-footer-options button .material-symbols-outlined{font-size:19px}
+
+/* Hotspots contextuales equivalentes a Andy, sin superponer controles a la exportación. */
+.preview .canvas-stage .cronica-logo-hit{position:absolute;z-index:5;top:3.7%;right:4.5%;width:20%;height:16%;display:block;opacity:0;cursor:pointer;border:2px dashed #ed0000;border-radius:8px;background:transparent!important;touch-action:manipulation}
+html[data-cronica-logo-position=left] .preview .canvas-stage .cronica-logo-hit{left:4.5%;right:auto}
+html[data-cronica-logo=none] .preview .canvas-stage .cronica-logo-hit,
+html[data-cronica-variant=blank] .preview .canvas-stage .cronica-logo-hit{display:none}
+.preview .canvas-stage .cronica-logo-hit:hover,
+.preview .canvas-stage .cronica-logo-hit:focus-visible{opacity:1}
+@media(min-width:701px){
+ .preview .canvas-stage .cronica-text-hit{position:absolute;z-index:5;display:block;opacity:0;top:var(--photo-height,60%);bottom:0;left:0;right:0;width:100%;border:2px dashed #ed0000;border-radius:8px;background:transparent!important;cursor:text}
+ .preview .canvas-stage .cronica-text-hit:hover,
+ .preview .canvas-stage .cronica-text-hit:focus-visible{opacity:1;outline:0}
+}
+
+/* Editor WYSIWYG contextual, conectado al mismo documento del motor. */
+#cronica-preview-rich-root{display:block;min-width:0}
+.cronica-rich-overlay{display:flex;flex-direction:column;gap:12px;padding:15px;margin:12px 0;background:#202228;border:1px solid #454a54;border-radius:11px}
+.cronica-rich-overlay-heading{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.cronica-rich-overlay-heading h2{margin:0;font-size:15px;font-weight:700}
+.cronica-rich-overlay-heading button{display:inline-flex;align-items:center;justify-content:center;min-height:32px;width:32px;border:1px solid #555963;border-radius:7px;background:#292c32;color:white}
+.cronica-rich-overlay .cronica-rich-headline{min-height:90px;white-space:pre-wrap;outline:none;overflow-wrap:anywhere;padding:13px;background:#2b2e35;color:#f7f7f8;border:1px solid #555963;border-radius:8px;font-size:16px;line-height:1.5}
+.cronica-rich-overlay .cronica-rich-headline:focus-visible{border-color:#ed0000;box-shadow:0 0 0 2px #ed000055}
+.cronica-rich-overlay .cronica-rich-headline [data-accent=true]{color:#ed0000;font-weight:800}
+.cronica-rich-overlay .cronica-rich-headline [data-italic=true]{font-style:italic}
+.cronica-rich-overlay .cronica-rich-headline [data-strike=true]{text-decoration:line-through}
+.cronica-rich-overlay-actions{display:flex;gap:8px;flex-wrap:wrap}
+.cronica-rich-overlay-actions button{display:inline-flex;align-items:center;justify-content:center;width:38px;height:36px;border:1px solid #555963;border-radius:7px;background:#292c32;color:#f7f7f8}
+@media(max-width:700px){#cronica-preview-rich-root{display:none!important}}
+
+/* Distribución original Andy: logo y selector de lado comparten una fila. */
+#cronica-controls-root .editor-logo-layout-row{display:flex;align-items:flex-start;gap:12px;min-width:0;margin-top:15px}
+#cronica-controls-root .editor-logo-layout-row .logo-control-field{flex:1;min-width:0;margin-top:0}
+#cronica-controls-root .editor-logo-layout-row .editor-logo-position-field{flex:none;margin-top:0}
+#cronica-controls-root .editor-logo-layout-row .logo-choices{display:flex;flex-wrap:wrap;gap:6px}
+#cronica-controls-root .modern-footer-field+ .control-field{margin-top:16px}
+@media(max-width:390px){#cronica-controls-root .editor-logo-layout-row{gap:7px}#cronica-controls-root .editor-logo-position-button{width:34px;height:36px}}

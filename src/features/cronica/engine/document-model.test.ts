@@ -48,7 +48,7 @@ describe('modelo de documento Crónica', () => {
     const snapshot = snapshotEditorialPage(
       { headline: 'Actual', strapText: 'VOLANTA', showStrap: true, size: '61' },
       {
-        alignment: 'left', forceUppercase: true, logo: 'secondary', image,
+        alignment: 'left', forceUppercase: true, logo: 'secondary', logoPosition: 'right', footerStyle: 'carousel', image,
         photoName: 'nota-principal.png', zoom: 1.35, offsetX: -45.25, offsetY: 72.5, variant: 'internal',
       },
     );

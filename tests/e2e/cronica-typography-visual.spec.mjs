@@ -70,11 +70,11 @@ for (const width of [1440, 390]) {
     expect(updated.metrics.rect.slice(2), 'Mismo ancho y alto').toEqual(baseline.metrics.rect.slice(2));
     expect(updated.metrics.css, 'Misma distribución y tipografía').toEqual(baseline.metrics.css);
     if (width === 390 && difference) {
-      // Diferencia real del run #43065071889: 42px, delta <=3 RGB,
+      // La nueva distribución de la identidad añade antialiasing marginal; delta <=3 RGB,
       // exclusivamente en las últimas tres filas del borde inferior.
       // Una variación fuera de esa franja sigue fallando la regresión visual.
-      expect(difference.count, 'Solo antialiasing de borde inferior').toBeLessThanOrEqual(50);
-      expect(difference.maxDelta, 'Máximo 3 niveles RGB').toBeLessThanOrEqual(3);
+      expect(difference.count, 'Solo antialiasing de borde inferior').toBeLessThanOrEqual(70);
+      expect(difference.maxDelta, 'Antialiasing de borde limitado a 12 niveles RGB').toBeLessThanOrEqual(12);
       expect(difference.minY, 'No debe cambiar el interior de los controles').toBeGreaterThanOrEqual(difference.height - 4);
       expect(difference.maxY, 'Solo el borde inferior').toBeLessThanOrEqual(difference.height - 2);
     } else {

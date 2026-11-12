@@ -14,6 +14,46 @@ export default defineConfig({
     browserName: 'chromium',
     viewport: { width: 1440, height: 900 },
     acceptDownloads: true,
+    // El resto de pruebas simula un usuario que ya completó la guía de Crónica.
+    // La prueba dedicada fuerza y verifica los ocho pasos con ?onboarding=force.
+    storageState: { cookies: [], origins: [
+          {
+                "origin": "http://127.0.0.1:4173",
+                "localStorage": [
+                      {
+                            "name": "cronica-dev-tour-desktop-v1",
+                            "value": "complete"
+                      }
+                ]
+          },
+          {
+                "origin": "http://127.0.0.1:4174",
+                "localStorage": [
+                      {
+                            "name": "cronica-dev-tour-desktop-v1",
+                            "value": "complete"
+                      }
+                ]
+          },
+          {
+                "origin": "http://127.0.0.1:4175",
+                "localStorage": [
+                      {
+                            "name": "cronica-dev-tour-desktop-v1",
+                            "value": "complete"
+                      }
+                ]
+          },
+          {
+                "origin": "http://127.0.0.1:4177",
+                "localStorage": [
+                      {
+                            "name": "cronica-dev-tour-desktop-v1",
+                            "value": "complete"
+                      }
+                ]
+          }
+    ] },
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
   },
