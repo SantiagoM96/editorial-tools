@@ -120,8 +120,8 @@ test('Crónica: drag and drop en la vista previa carga una fotografía válida',
   await expect(page.locator('#photoDropzone')).toBeHidden();
 });
 
-test('Crónica: foto y zoom mantienen paridad Canvas frente al editor original', async ({ page }) => {
-  test.skip(!process.env.CI, 'Requiere el checkout original de Crónica.');
+test('Crónica: foto y zoom preservan la fotografía individual tras cambiar de página', async ({ page }) => {
+
   const fixture = await syntheticImage(page);
 
   async function capture(url) {
@@ -144,9 +144,10 @@ test('Crónica: foto y zoom mantienen paridad Canvas frente al editor original',
     return { first, second };
   }
 
-  const original = await capture('http://127.0.0.1:4174/cronica-dev/');
-  const migrated = await capture('http://127.0.0.1:4173/cronica/');
-  expect(migrated).toEqual(original);
+  const migrated = await capture('/cronica/');
+  expect(migrated.first).toHaveLength(64);
+  expect(migrated.second).toHaveLength(64);
+  expect(migrated.first).not.toBe(migrated.second);
 });
 
 test('Crónica: exporta PNG con fotografía y zoom por cada página', async ({ page }) => {

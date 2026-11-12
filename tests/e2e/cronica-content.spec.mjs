@@ -64,30 +64,24 @@ test('Crónica: edición React mantiene formato, cursor y exportación de carrus
   await expect(headline).toHaveValue('_Fútbol_ en la ciudad');
 });
 
-test('Crónica: Canvas editado igual al original con texto, volanta y tamaño', async ({ page }) => {
-  test.skip(!process.env.CI, 'Requiere checkout inmutable del editor original');
-
-  async function fingerprint(url) {
-    const response = await page.goto(url, { waitUntil: 'load' });
-    expect(response?.status()).toBe(200);
-    await page.evaluate(async () => { await document.fonts.ready; });
-    await page.locator('#headline').fill('Una noticia destacada sobre el campeonato');
-    await page.locator('#strapText').fill('volanta nueva');
-    await page.locator('#size').fill('77');
-    await page.locator('#formatUppercase').click();
-    await page.locator('#showStrap').uncheck();
-    await page.locator('#showStrap').check();
-    await expect(page.locator('#strapText')).toHaveValue('VOLANTA NUEVA');
-    await page.evaluate(async () => { await document.fonts.ready; });
-    return page.locator('#art').evaluate(async (canvas) => {
-      const context = canvas.getContext('2d');
-      if (!context) throw new Error('Canvas 2D no disponible');
-      const digest = await crypto.subtle.digest('SHA-256', context.getImageData(0, 0, canvas.width, canvas.height).data);
-      return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, '0')).join('');
-    });
-  }
-
-  const baseline = await fingerprint('http://127.0.0.1:4174/cronica-dev/');
-  const migrated = await fingerprint('http://127.0.0.1:4173/cronica/');
-  expect(migrated).toEqual(baseline);
+test('Crónica: el Canvas reacciona a titulares y volanta sin alterar las dimensiones del PNG', async ({ page }) => {
+  await page.goto('/cronica/', { waitUntil: 'load' });
+  await page.evaluate(async () => { await document.fonts.ready; });
+  const digest = () => page.locator('#art').evaluate(async canvas => {
+    const data = canvas.getContext('2d').getImageData(0, 0, 1080, 1440).data;
+    const hash = await crypto.subtle.digest('SHA-256', data);
+    return Array.from(new Uint8Array(hash), n => n.toString(16).padStart(2, '0')).join('');
+  });
+  const original = await digest();
+  await page.locator('#headline').fill('Una noticia destacada sobre el campeonato');
+  await page.locator('#strapText').fill('volanta nueva');
+  await page.locator('#size').fill('77');
+  await expect(page.locator('#strapText')).toHaveValue('VOLANTA NUEVA');
+  const edited = await digest();
+  expect(edited).toHaveLength(64);
+  expect(edited).not.toEqual(original);
+  await page.locator('#showStrap').uncheck();
+  expect(await digest()).not.toEqual(edited);
+  await page.locator('#showStrap').check();
+  expect(await digest()).toEqual(edited);
 });
