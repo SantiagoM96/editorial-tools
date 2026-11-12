@@ -144,7 +144,9 @@
  window.addEventListener('scroll',schedule,{passive:true});
  const trigger=qs('#dsOnboardingTrigger');
  if(trigger)trigger.addEventListener('click',start);
- if(mq.matches&&(!completed() || new URLSearchParams(location.search).get('onboarding')==='force')){
+ // En Editorial Tools la ayuda es opt-in: el recorrido no debe bloquear
+ // la edición o exportación de una página recién abierta. ?onboarding=force lo prueba.
+ if(mq.matches&&new URLSearchParams(location.search).get('onboarding')==='force'){
   // Después de que el editor termine su primera renderización.
   window.addEventListener('load',()=>requestAnimationFrame(()=>requestAnimationFrame(start)),{once:true});
  }
