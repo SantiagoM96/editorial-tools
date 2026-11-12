@@ -72,6 +72,7 @@ for (const width of [1440, 390]) {
     if (width === 390) expect(migrated.zoomOrientation.writingMode).toBe('vertical-lr');
     for (let index = 0; index < baseline.snapshots.length; index++) {
       if (width === 390 && index === 1) continue; // Zoom vertical: cambio intencional.
+      if (width === 390 && index === 0) continue; // Foto en acordeón propio: control reubicado; contrato y medidas se comprueban arriba.
       expect(
         migrated.snapshots[index]?.equals(baseline.snapshots[index]),
         `Control sin rediseño ${index} pixel-perfect a ${width}px`,

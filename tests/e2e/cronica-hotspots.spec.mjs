@@ -8,5 +8,5 @@ test('Crónica: zonas contextuales abren los paneles sin alterar el Canvas',asyn
  await expect(page.locator('.cronica-variant-panel .logo-choice[aria-pressed=true]')).toBeFocused();
  const text=page.locator('#cronicaTextHit');
  await text.click({force:true});
- await expect(page.locator('#headline')).toBeFocused();
+ await expect(page.getByRole('textbox',{name:'Texto principal en edición visual'})).toBeFocused();
 });
