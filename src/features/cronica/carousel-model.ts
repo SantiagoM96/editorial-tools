@@ -1,4 +1,4 @@
-export type CrónicaVariant = 'cover' | 'internal';
+export type CrónicaVariant = 'blank' | 'cover' | 'internal';
 
 export interface CarouselSnapshot {
   readonly pages: readonly CrónicaVariant[];
@@ -19,7 +19,7 @@ export const initialCarousel: CarouselSnapshot = {
 };
 
 function isVariant(value: unknown): value is CrónicaVariant {
-  return value === 'cover' || value === 'internal';
+  return value === 'blank' || value === 'cover' || value === 'internal';
 }
 
 // Se validan snapshots recibidos del código legado antes de guardarlos en React.
@@ -43,5 +43,5 @@ export function isCarouselSnapshot(input: unknown): input is CarouselSnapshot {
 }
 
 export function currentPageLabel(snapshot: CarouselSnapshot): string {
-  return `${snapshot.activePage + 1} de ${snapshot.pages.length} · ${snapshot.variant === 'cover' ? 'Portada' : 'Interior'}`;
+  return `${snapshot.activePage + 1} de ${snapshot.pages.length} · ${snapshot.variant === 'blank' ? 'Sin diseño' : snapshot.variant === 'cover' ? 'Portada' : 'Interior'}`;
 }

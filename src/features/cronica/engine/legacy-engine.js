@@ -81,6 +81,16 @@ window.addEventListener('editorial:cronica:media-command',event=>{
 });
 function render(includeHover=true){
  try{
+  document.documentElement.dataset.cronicaVariant=pageVariant;
+  if(pageVariant==='blank'){
+   ctx.clearRect(0,0,W,H);
+   ctx.fillStyle='#aeb4bc';ctx.fillRect(0,0,W,H);
+   photoBottom=H;
+   updatePhotoDropzone();
+   emitMediaState();
+   el('status').textContent='Sin diseño · Elegí Portada o Interior para aplicar una composición.';
+   return;
+  }
   const {cover,requestedSize,size,lines,baselines,panelTop,barY,imageBottom,showBar}=
    calculateEditorialLayout({
     headline:documentContent.headline,
@@ -121,7 +131,7 @@ function saveActivePage(){carouselStore.saveActive(readCurrentPage())}
 // Los controles React consumen snapshots del store, no guardan fotografías.
 function loadPage(page){
  photoDecodeFailed=false;
- pageVariant=page.variant==='cover'?'cover':'internal';
+ pageVariant=['blank','cover','internal'].includes(page.variant)?page.variant:'internal';
  documentContent.headline=String(page.headline||'');
  documentContent.strapText=String(page.strapText||'').toLocaleUpperCase('es-AR');
  documentContent.showStrap=Boolean(page.showStrap);
@@ -156,7 +166,7 @@ function removePage(){
  loadPage(page);renderCarouselNavigation();
 }
 function changeVariant(next){
- if((next!=='cover'&&next!=='internal')||next===pageVariant)return;
+ if(!['blank','cover','internal'].includes(next)||next===pageVariant)return;
  pageVariant=next;
  carouselStore.setActiveVariant(next,readCurrentPage());
  renderCarouselNavigation();render();
@@ -209,9 +219,9 @@ window.addEventListener('resize',updateHoverBorderGeometry);
 function updatePhotoDropzone(){
  const zone=el('photoDropzone'),stage=el('photoStage');
  if(!zone||!stage)return;
- zone.hidden=Boolean(image);
+ zone.hidden=Boolean(image)||pageVariant==='blank';
  // El Canvas solo entra en el orden del Tab cuando la foto se puede reencuadrar.
- canvas.tabIndex=image?0:-1;
+ canvas.tabIndex=image&&pageVariant!=='blank'?0:-1;
  if(image&&document.activeElement===zone)canvas.focus({preventScroll:true});
  stage.style.setProperty('--photo-height',(photoBottom/H*100)+'%');
  updateHoverBorderGeometry();

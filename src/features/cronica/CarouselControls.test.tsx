@@ -12,6 +12,8 @@ describe('Contrato del carrusel de Crónica', () => {
     expect(isCarouselSnapshot({ pages: ['cover'], activePage: 0, variant: 'internal' })).toBe(false);
     expect(isCarouselSnapshot({ pages: ['cover'], activePage: 0, variant: 'cover' })).toBe(true);
     expect(currentPageLabel(initialCarousel)).toBe('1 de 1 · Portada');
+    expect(isCarouselSnapshot({ pages: ['blank'], activePage: 0, variant: 'blank' })).toBe(true);
+    expect(currentPageLabel({ pages: ['blank'], activePage: 0, variant: 'blank' })).toBe('1 de 1 · Sin diseño');
   });
 
   it('emite comandos tipados y presenta el estado de página recibido', () => {

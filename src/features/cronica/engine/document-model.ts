@@ -2,7 +2,7 @@
  * Modelo de documento Crónica desacoplado de React, formularios y Canvas.
  * Estos valores conservan los defaults de la versión editorial original.
  */
-export type EditorialVariant = 'cover' | 'internal';
+export type EditorialVariant = 'blank' | 'cover' | 'internal';
 export type EditorialLogo = 'none' | 'primary' | 'secondary' | 'white';
 export type EditorialAlignment = 'left' | 'center';
 
@@ -35,6 +35,11 @@ export function createCoverContent(): EditorialContent {
 }
 
 export function createDefaultPage(variant: EditorialVariant): EditorialPage {
+  if (variant === 'blank') return {
+    headline: INTERNAL_HEADLINE, strapText: '', showStrap: false, size: '52',
+    alignment: 'left', forceUppercase: false, logo: 'primary', image: null,
+    photoName: null, zoom: 1, offsetX: 0, offsetY: 0, variant,
+  };
   if (variant === 'cover') {
     return {
       ...createCoverContent(),

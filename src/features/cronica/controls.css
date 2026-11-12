@@ -192,3 +192,12 @@
     font-size: 16px;
   }
 }
+
+/* Variante Sin diseño de Andy: lienzo gris sin decoraciones y controles contextuales ocultos. */
+.cronica-variant-thumbnail-blank{background:#aeb4bc!important}
+.cronica-variant-thumbnail-blank::before,.cronica-variant-thumbnail-blank::after{display:none!important}
+html[data-cronica-variant="blank"] #cronica-media-root,
+html[data-cronica-variant="blank"] #cronica-content-root,
+html[data-cronica-variant="blank"] #cronica-photo-zoom-root,
+html[data-cronica-variant="blank"] #cronica-preview-text-root,
+html[data-cronica-variant="blank"] .preview .cronica-text-hit {display:none!important}

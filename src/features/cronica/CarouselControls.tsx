@@ -36,7 +36,7 @@ export function CarouselControls() {
                 key={index}
                 type="button"
                 aria-current={index === carousel.activePage ? 'page' : 'false'}
-                aria-label={`Página ${index + 1}, ${variant === 'cover' ? 'portada' : 'interior'}`}
+                aria-label={`Página ${index + 1}, ${variant === 'blank' ? 'sin diseño' : variant === 'cover' ? 'portada' : 'interior'}`}
                 onClick={() => issueCarouselCommand({ type: 'select-page', index })}
               >
                 {index + 1}
@@ -73,6 +73,17 @@ export function CarouselControls() {
           role="group"
           aria-label="Diseño de la página seleccionada"
         >
+          <button
+            type="button"
+            className="cronica-variant-option"
+            data-page-variant="blank"
+            aria-pressed={carousel.variant === 'blank'}
+            title="Usar placa sin diseño"
+            onClick={() => changeVariant('blank')}
+          >
+            <span className="cronica-variant-thumbnail cronica-variant-thumbnail-blank" aria-hidden="true" />
+            <span>Sin diseño</span>
+          </button>
           <button
             type="button"
             className="cronica-variant-option"
