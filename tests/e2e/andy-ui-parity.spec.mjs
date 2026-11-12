@@ -13,6 +13,8 @@ async function layout(page, url) {
   const response = await page.goto(url + '?onboarding=off', { waitUntil: 'load' });
   expect(response?.status(), url).toBe(200);
   await page.evaluate(async () => { await document.fonts.ready; });
+  // La altura de las pestañas móviles se ajusta tras transiciones y rAF.
+  await page.waitForTimeout(650);
   await expect(page.locator('#art')).toBeVisible();
   return page.evaluate(() => {
     const selectors = ['header .site-container', 'main', 'aside.editor-panel', '.preview', '.editor-slide-nav', '#art'];
