@@ -294,3 +294,11 @@ html[data-cronica-variant=blank] .preview .canvas-stage .cronica-logo-hit{displa
 .cronica-rich-overlay-actions{display:flex;gap:8px;flex-wrap:wrap}
 .cronica-rich-overlay-actions button{display:inline-flex;align-items:center;justify-content:center;width:38px;height:36px;border:1px solid #555963;border-radius:7px;background:#292c32;color:#f7f7f8}
 @media(max-width:700px){#cronica-preview-rich-root{display:none!important}}
+
+/* Distribución original Andy: logo y selector de lado comparten una fila. */
+#cronica-controls-root .editor-logo-layout-row{display:flex;align-items:flex-start;gap:12px;min-width:0;margin-top:15px}
+#cronica-controls-root .editor-logo-layout-row .logo-control-field{flex:1;min-width:0;margin-top:0}
+#cronica-controls-root .editor-logo-layout-row .editor-logo-position-field{flex:none;margin-top:0}
+#cronica-controls-root .editor-logo-layout-row .logo-choices{display:flex;flex-wrap:wrap;gap:6px}
+#cronica-controls-root .modern-footer-field+ .control-field{margin-top:16px}
+@media(max-width:390px){#cronica-controls-root .editor-logo-layout-row{gap:7px}#cronica-controls-root .editor-logo-position-button{width:34px;height:36px}}

@@ -1,6 +1,7 @@
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
 import { ContentEditor } from './ContentEditor';
+import { DesignOptions } from './DesignOptions';
 import { initialContent, isContentSnapshot } from './content-model';
 
 afterEach(cleanup);
@@ -32,7 +33,7 @@ describe('campos React de Crónica', () => {
     window.addEventListener('editorial:cronica:content-command', onCommand);
     window.addEventListener('editorial:cronica:content-request', onRequest);
     try {
-      render(<ContentEditor />);
+      render(<><DesignOptions variant="cover" /><ContentEditor /></>);
       const headline = screen.getByLabelText('Texto principal') as HTMLTextAreaElement;
       expect(headline.value).toBe(initialContent.headline);
 
@@ -65,7 +66,7 @@ describe('campos React de Crónica', () => {
     window.addEventListener('editorial:cronica:content-command', onCommand);
     window.addEventListener('editorial:cronica:content-request', onRequest);
     try {
-      render(<ContentEditor />);
+      render(<><DesignOptions variant="cover" /><ContentEditor /></>);
       const textarea = screen.getByLabelText('Texto principal') as HTMLTextAreaElement;
       textarea.focus();
       textarea.setSelectionRange(5, 10);
@@ -81,7 +82,7 @@ describe('campos React de Crónica', () => {
   });
 
   it('refleja mayúsculas visuales y restaura una página recibida', () => {
-    render(<ContentEditor />);
+    render(<><DesignOptions variant="cover" /><ContentEditor /></>);
     act(() => {
       window.dispatchEvent(new CustomEvent('editorial:cronica:typography-state', {
         detail: { uppercase: true, alignment: 'left' },

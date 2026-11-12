@@ -4,16 +4,23 @@ import {initialDesign,type DesignSnapshot} from './design-model';
 import {issueDesignCommand,subscribeToDesign} from './design-bridge';
 import {initialMedia} from './media-model';
 import {subscribeToMedia} from './media-bridge';
+import {BrandControls} from './BrandControls';
+import {initialContent} from './content-model';
+import {issueContentCommand,subscribeToContent} from './content-bridge';
 
 export function DesignOptions({variant}:{readonly variant:CrónicaVariant}){
  const [state,setState]=useState<DesignSnapshot>(initialDesign);
  const [logo,setLogo]=useState(initialMedia.logo);
+ const [content,setContent]=useState(initialContent);
  useEffect(()=>subscribeToDesign(setState),[]);
  useEffect(()=>subscribeToMedia(snapshot=>setLogo(snapshot.logo)),[]);
+ useEffect(()=>subscribeToContent(setContent),[]);
  if(variant==='blank')return null;
  return (
   <>
-   {logo!=='none'&&<div className="control-field editor-logo-position-field">
+   <div className="editor-logo-layout-row">
+    <BrandControls />
+    {logo!=='none'&&<div className="control-field editor-logo-position-field">
     <label>Ubicación logo</label>
     <div className="editor-logo-position-controls" role="group" aria-label="Ubicación horizontal del logo">
      {(['left','right'] as const).map(position=><button key={position} type="button" className="editor-logo-position-button"
@@ -23,7 +30,8 @@ export function DesignOptions({variant}:{readonly variant:CrónicaVariant}){
        <span className="material-symbols-outlined" aria-hidden="true">{position==='left'?'align_horizontal_left':'align_horizontal_right'}</span>
      </button>)}
     </div>
-   </div>}
+    </div>}
+   </div>
    {variant==='cover'&&<div className="control-field modern-footer-field">
     <label>Firma inferior</label>
     <div className="modern-footer-options" role="group" aria-label="Firma inferior">
@@ -34,6 +42,13 @@ export function DesignOptions({variant}:{readonly variant:CrónicaVariant}){
      </button>)}
     </div>
    </div>}
+   <div className="control-field">
+    <label className="switch-row" htmlFor="showStrap"><span>Mostrar volanta</span>
+     <span className="switch"><input id="showStrap" type="checkbox" role="switch"
+       checked={content.showStrap}
+       onChange={event=>issueContentCommand({field:'showStrap',value:event.currentTarget.checked})}/><span className="switch-track"/></span>
+    </label>
+   </div>
   </>
  );
 }

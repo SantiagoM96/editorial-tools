@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { CollapsiblePanel } from './CollapsiblePanel';
-import { BrandControls } from './BrandControls';
 import { DesignOptions } from './DesignOptions';
 import { currentPageLabel, initialCarousel, type CrónicaVariant } from './carousel-model';
 import { issueCarouselCommand, subscribeToCarouselState } from './carousel-bridge';
@@ -90,7 +89,6 @@ export function VariantControls() {
           </button>
         ))}
       </div>
-      <BrandControls />
       <DesignOptions variant={carousel.variant} />
     </CollapsiblePanel>
   );
