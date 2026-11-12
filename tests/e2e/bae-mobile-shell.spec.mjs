@@ -73,10 +73,12 @@ test('BAE: cada diapositiva conserva su estado y puede seleccionarse', async ({ 
   await expect.poll(() => page.evaluate(() => window.EditorialSlides.active())).toBe(1);
 });
 
-test('BAE: onboarding original aparece en la primera visita y se puede finalizar', async ({ page }) => {
+test('BAE: recorrido de Ayuda completo, persistente y sin bloquear la edición', async ({ page }) => {
   await page.goto('/bae/', { waitUntil: 'load' });
+  await expect(page.locator('#dsOnboardingLayer')).toHaveCount(0);
+  await expect(page.locator('#art')).toBeVisible();
+  await page.locator('#dsOnboardingTrigger').click();
   await expect(page.getByRole('dialog', { name: 'Organizá las diapositivas' })).toBeVisible();
-  await expect(page.locator('#dsTourProgress')).toContainText('1 de ');
   await page.getByRole('button', { name: 'Omitir' }).click();
   await expect(page.locator('#dsOnboardingLayer')).toBeHidden();
   await expect.poll(() => page.evaluate(() => localStorage.getItem('bae-dev-tour-desktop-v1'))).toBe('complete');
