@@ -15,7 +15,7 @@ async function loadPage(page, route) {
       failures.push('HTTP ' + r.status() + ': ' + r.url());
     }
   });
-  const target = route.startsWith('/diarioshow/') ? '/diarioshow/?onboarding=off' : route;
+  const target = ['/diarioshow/', '/bae/'].includes(route) ? route + '?onboarding=off' : route;
   const response = await page.goto(target, { waitUntil: 'domcontentloaded' });
   expect(response?.status()).toBe(200);
   await page.waitForLoadState('load');
@@ -90,45 +90,37 @@ test('Crónica: edición, carga de fotografía, carrusel y PNG 1080×1440', asyn
 test('BAE: variantes, carga de imagen y exportación PNG', async ({ page }) => {
   const errors = await loadPage(page, '/bae/');
   await expect(page.locator('#art')).toBeVisible();
-  await page.locator('#headline').fill('Prueba editorial BAE');
-  await page.locator('button[data-theme="white"]').click();
-  await expect(page.locator('button[data-theme="white"]')).toHaveAttribute('aria-pressed', 'true');
-  const chooser = page.waitForEvent('filechooser');
-  await page.locator('.bae-photo-surface').click();
-  expect(await (await chooser).element().getAttribute('id')).toBe('file');
+  await page.locator('aside.editor-panel .modern-text-card .cronica-rich-headline').fill('Prueba editorial BAE');
+  await expect(page.locator('#headline')).toHaveValue('Prueba editorial BAE');
+  const theme = page.locator('aside.editor-panel button[data-theme="white"]').first();
+  await theme.click();
+  await expect(theme).toHaveAttribute('aria-pressed', 'true');
   await uploadSyntheticImage(page);
-  await expect(page.locator('#baePhotoAction')).toHaveText('Cambiar');
-  await expect(page.locator('#baePhotoCaption')).toHaveText('qa-imagen.png');
   const download = page.waitForEvent('download', { timeout: 30000 });
   await page.locator('#download').click();
   await verifyPng(await download);
   await page.locator('#clearAll').click();
-  await expect(page.locator('#baePhotoAction')).toHaveText('Seleccioná');
-  await expect(page.locator('#baePhotoCaption')).toHaveText('una fotografía');
-  // Simula la devolución del importador sin depender de servicios externos.
+  await expect(page.locator('#photoDropzone')).toBeVisible();
+  // La API original de importación debe continuar aceptando imágenes.
   await page.evaluate(async () => {
     const preview = document.createElement('canvas');
     preview.width = 16; preview.height = 16;
-    const ctx = preview.getContext('2d');
-    if (!ctx) throw new Error('No Canvas 2D');
-    ctx.fillStyle = '#d82626';
-    ctx.fillRect(0, 0, 16, 16);
+    preview.getContext('2d').fillRect(0, 0, 16, 16);
     const image = new Image();
     image.src = preview.toDataURL('image/png');
     await image.decode();
     window.BAEEditor.setImage(image);
   });
-  await expect(page.locator('#baePhotoAction')).toHaveText('Cambiar');
-  await expect(page.locator('#baePhotoCaption')).toHaveText('Fotografía importada');
+  await expect(page.locator('#photoDropzone')).toBeHidden();
   expect(errors).toEqual([]);
 });
 
 test('Diario Show: variante de cita, fotografía y exportación PNG', async ({ page }) => {
   const errors = await loadPage(page, '/diarioshow/');
   await expect(page.locator('#art')).toBeVisible();
-  await page.locator('button[data-variant="quote"]').click();
+  await page.locator('#dsMobileControlsPanel button[data-variant="quote"]').click();
   await expect(page.locator('button[data-variant="quote"]')).toHaveAttribute('aria-pressed', 'true');
-  await page.locator('#headline').fill('Prueba de cita editorial');
+  await page.locator('#dsMobileControlsPanel .cronica-rich-headline').first().fill('Prueba de cita editorial');
   await uploadSyntheticImage(page);
   const download = page.waitForEvent('download', { timeout: 30000 });
   await page.locator('#download').click();

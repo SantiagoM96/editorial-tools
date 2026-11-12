@@ -3,7 +3,7 @@ import { readFile } from 'node:fs/promises';
 
 test('Diario Show: fotos compartidas tienen zoom independiente y exportan PNG', async ({ page }) => {
   await page.goto('/diarioshow/?onboarding=off', { waitUntil: 'load' });
-  await page.locator('[data-photo-layout="split"]').click();
+  await page.locator('#dsMobileControlsPanel [data-photo-layout="split"]').click();
   await expect(page.locator('#splitPhotoFields')).toBeVisible();
   await expect(page.locator('#splitPhotoZones')).toBeVisible();
   await expect(page.locator('#photoStage')).toHaveClass(/split-mode/);
@@ -35,6 +35,6 @@ test('Diario Show: fotos compartidas tienen zoom independiente y exportan PNG', 
   expect(png.subarray(0,8).toString('hex')).toBe('89504e470d0a1a0a');
   expect(png.readUInt32BE(16)).toBe(1080);
   expect(png.readUInt32BE(20)).toBe(1440);
-  await page.locator('[data-variant="quote"]').click();
+  await page.locator('#dsMobileControlsPanel [data-variant="quote"]').click();
   await expect(page.locator('#splitPhotoFields')).toBeHidden();
 });

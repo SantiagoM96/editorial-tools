@@ -2,8 +2,9 @@ import { expect, test } from '@playwright/test';
 
 test('Diario Show: siete pasos, cierre, persistencia y reinicio accesibles', async ({ page }) => {
   await page.goto('/diarioshow/?onboarding=force', { waitUntil: 'load' });
-  await expect(page.getByRole('dialog', { name: 'Elegí el diseño de tu placa' })).toBeVisible();
+  await expect(page.getByRole('dialog', { name: 'Organizá las diapositivas' })).toBeVisible();
   const expectedTitles = [
+    'Organizá las diapositivas',
     'Elegí el diseño de tu placa',
     'Definí la distribución fotográfica',
     'Agregá tus fotografías',
@@ -12,15 +13,15 @@ test('Diario Show: siete pasos, cierre, persistencia y reinicio accesibles', asy
     'Editá desde la vista previa',
     '¿Poco espacio?',
   ];
-  for (let step = 1; step <= 7; step++) {
+  for (let step = 1; step <= expectedTitles.length; step++) {
     await expect(page.locator('#dsTourTitle')).toHaveText(expectedTitles[step - 1]);
-    await expect(page.locator('#dsTourProgress')).toHaveText(step + ' de 7');
-    if (step < 7) await page.locator('.ds-tour-next').click();
+    await expect(page.locator('#dsTourProgress')).toHaveText(step + ' de ' + expectedTitles.length);
+    if (step < expectedTitles.length) await page.locator('.ds-tour-next').click();
   }
   await expect(page.getByRole('button', { name: 'Finalizar' })).toBeVisible();
   await page.locator('.ds-tour-next').click();
   await expect(page.locator('#dsOnboardingLayer')).toBeHidden();
-  await expect.poll(() => page.evaluate(() => localStorage.getItem('ds-editor-tour-desktop-v3'))).toBe('complete');
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('ds-dev-tour-desktop-v3'))).toBe('complete');
   await page.goto('/diarioshow/', { waitUntil: 'load' });
   await expect(page.locator('#dsOnboardingLayer')).toHaveCount(0);
   await page.locator('#dsOnboardingTrigger').click();
@@ -41,9 +42,9 @@ test('Diario Show: la guía no bloquea la edición móvil', async ({ page }) => 
 test('Diario Show: importación e identidad son independientes y la firma cambia el PNG', async ({ page }) => {
   await page.goto('/diarioshow/?onboarding=off');
   const importGroup = page.locator('#dsMobileControlsPanel .ds-import-group');
-  const identity = page.locator('#dsMobileControlsPanel .ds-content-group');
+  const identity = page.locator('#dsMobileControlsPanel .ds-plate-design-group');
   await expect(importGroup.getByRole('button', { name: /Importar noticia/ })).toBeVisible();
-  await expect(identity.getByRole('button', { name: /Identidad gráfica/ })).toBeVisible();
+  await expect(identity.getByRole('button', { name: /Diseño de placas/ })).toBeVisible();
   await expect(importGroup.locator('#articleUrl')).toBeVisible();
   await expect(identity.locator('[data-footer-style="center"]')).toHaveAttribute('aria-pressed', 'true');
   const before = await page.locator('#art').evaluate(canvas => canvas.toDataURL());
