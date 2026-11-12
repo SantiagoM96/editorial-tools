@@ -951,3 +951,9 @@ html[data-editor-plate-variant="blank"] .editor-panel .editor-logo-layout-row{
  display:block;margin-bottom:8px;
 }
 .editor-panel .modern-design-group .modern-quote-toggle-field{margin-top:16px!important}
+
+/* Ajuste de accesibilidad de Editorial Tools: iOS no debe hacer zoom involuntario. */
+@media(max-width:700px){
+ .modern-preview-text-editor .cronica-rich-headline,
+ .modern-track > .editor-panel .cronica-rich-headline{font-size:16px!important}
+}
