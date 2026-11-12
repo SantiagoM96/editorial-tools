@@ -87,6 +87,8 @@ describe('Capas Canvas Crónica — contratos sin DOM de editor', () => {
     drawLogoLayer(ctx, 'primary', { primary: img });
     const width = 75 * 1.25 * 1.15;
     expect(raw.drawImage).toHaveBeenCalledExactlyOnceWith(img, 1080 - 80 - width, 80, width, width * 191 / 175);
+    drawLogoLayer(ctx, 'primary', { primary: img }, 1080, 80, 'left');
+    expect(raw.drawImage).toHaveBeenLastCalledWith(img, 80, 80, width, width * 191 / 175);
   });
 
   it('volanta de portada conserva altura, color y baseline; interior ocupa ancho completo', () => {
@@ -126,5 +128,8 @@ describe('Capas Canvas Crónica — contratos sin DOM de editor', () => {
     expect(raw.save).toHaveBeenCalledOnce();
     expect(raw.restore).toHaveBeenCalledOnce();
     expect(raw.font).toBe('54px "Material Icons"');
+    raw.fillText.mockClear();
+    drawCoverFooterLayer(ctx, 1080, 1440, 80, 'center');
+    expect(raw.fillText).toHaveBeenCalledExactlyOnceWith('cronica.com.ar', 540, 1344);
   });
 });
