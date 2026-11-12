@@ -279,3 +279,18 @@ html[data-cronica-variant=blank] .preview .canvas-stage .cronica-logo-hit{displa
  .preview .canvas-stage .cronica-text-hit:hover,
  .preview .canvas-stage .cronica-text-hit:focus-visible{opacity:1;outline:0}
 }
+
+/* Editor WYSIWYG contextual, conectado al mismo documento del motor. */
+#cronica-preview-rich-root{display:block;min-width:0}
+.cronica-rich-overlay{display:flex;flex-direction:column;gap:12px;padding:15px;margin:12px 0;background:#202228;border:1px solid #454a54;border-radius:11px}
+.cronica-rich-overlay-heading{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.cronica-rich-overlay-heading h2{margin:0;font-size:15px;font-weight:700}
+.cronica-rich-overlay-heading button{display:inline-flex;align-items:center;justify-content:center;min-height:32px;width:32px;border:1px solid #555963;border-radius:7px;background:#292c32;color:white}
+.cronica-rich-overlay .cronica-rich-headline{min-height:90px;white-space:pre-wrap;outline:none;overflow-wrap:anywhere;padding:13px;background:#2b2e35;color:#f7f7f8;border:1px solid #555963;border-radius:8px;font-size:16px;line-height:1.5}
+.cronica-rich-overlay .cronica-rich-headline:focus-visible{border-color:#ed0000;box-shadow:0 0 0 2px #ed000055}
+.cronica-rich-overlay .cronica-rich-headline [data-accent=true]{color:#ed0000;font-weight:800}
+.cronica-rich-overlay .cronica-rich-headline [data-italic=true]{font-style:italic}
+.cronica-rich-overlay .cronica-rich-headline [data-strike=true]{text-decoration:line-through}
+.cronica-rich-overlay-actions{display:flex;gap:8px;flex-wrap:wrap}
+.cronica-rich-overlay-actions button{display:inline-flex;align-items:center;justify-content:center;width:38px;height:36px;border:1px solid #555963;border-radius:7px;background:#292c32;color:#f7f7f8}
+@media(max-width:700px){#cronica-preview-rich-root{display:none!important}}

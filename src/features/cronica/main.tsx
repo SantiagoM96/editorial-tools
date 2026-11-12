@@ -13,6 +13,7 @@ import { MediaControls, PhotoZoomControls } from './MediaControls';
 import './controls.css';
 import { PreviewHotspots } from './PreviewHotspots';
 import { CronicaOnboarding } from './CronicaOnboarding';
+import { RichHeadlineOverlay } from './RichHeadlineOverlay';
 import './onboarding.css';
 
 const mount = document.getElementById('cronica-controls-root');
@@ -68,3 +69,7 @@ createRoot(previewTextRoot).render(<StrictMode><MobilePreviewTextEditor /></Stri
 const pageNavigationMount = document.getElementById('cronica-pages-root');
 if (!pageNavigationMount) throw new Error('Falta el navegador de páginas sobre vista previa.');
 createRoot(pageNavigationMount).render(<StrictMode><PageNavigator /></StrictMode>);
+
+const richRoot = document.getElementById('cronica-preview-rich-root');
+if (!richRoot) throw new Error('Falta el editor enriquecido de vista previa.');
+createRoot(richRoot).render(<StrictMode><RichHeadlineOverlay /></StrictMode>);

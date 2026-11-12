@@ -21,7 +21,7 @@ export function PreviewHotspots() {
   const onText=()=>{
    if(window.matchMedia('(max-width:700px)').matches)return;
    revealAccordion('.cronica-text-panel');
-   document.querySelector<HTMLTextAreaElement>('#headline')?.focus({preventScroll:true});
+   window.dispatchEvent(new Event('editorial:cronica:open-rich-editor'));
   };
   logo?.addEventListener('click',onLogo);text?.addEventListener('click',onText);
   return ()=>{logo?.removeEventListener('click',onLogo);text?.removeEventListener('click',onText)};
