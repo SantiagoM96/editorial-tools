@@ -2,9 +2,10 @@
 (function(){
 'use strict';
 const el=id=>document.getElementById(id),canvas=el('art'),ctx=canvas.getContext('2d'),W=1080,H=1440;
-let halftone=null;const halftoneLayer=document.createElement('canvas');halftoneLayer.width=1080;halftoneLayer.height=1236;const halftoneCtx=halftoneLayer.getContext('2d');let importingArticle=false;let selectedTexture='1';const halftoneAssets={};function loadTexture(id,path){const asset=new Image();asset.onload=()=>{halftoneAssets[id]=asset;if(selectedTexture===id){halftone=asset;render()}};asset.onerror=()=>console.error('No se pudo cargar '+path);asset.src=path}loadTexture('1','../bae/halftone-2.svg?v=1');loadTexture('2','./textures/punteado-grises-ajustados.svg?v=1');let textAlignment='left',forceUppercase=false;let image=null,photoName=null,zoom=1,offsetX=0,offsetY=0,dragging=false,lastX=0,lastY=0,photoBottom=820;
+let halftone=null;const halftoneLayer=document.createElement('canvas');halftoneLayer.width=1080;halftoneLayer.height=1236;const halftoneCtx=halftoneLayer.getContext('2d');let importingArticle=false;let selectedTexture='1';const halftoneAssets={};function loadTexture(id,path){const asset=new Image();asset.onload=()=>{halftoneAssets[id]=asset;if(selectedTexture===id){halftone=asset;render()}};asset.onerror=()=>console.error('No se pudo cargar '+path);asset.src=path}loadTexture('1','../bae/halftone-2.svg?v=1');loadTexture('2','./textures/punteado-grises-ajustados.svg?v=1');let textAlignment='left';let image=null,zoom=1,offsetX=0,offsetY=0,dragging=false,lastX=0,lastY=0,photoBottom=820;
 const LOGO_MARGIN=80,LOGO_WIDTH=123.75*1.15,LOGO_HEIGHT=LOGO_WIDTH*192/358;
-let selectedLogo='primary';
+let selectedLogo='primary',footerStyle='center',pageBlank=false;
+document.addEventListener('editorial:footer-style',event=>{footerStyle=event.detail.style;render()});
 const logoImages={},logoSources={primary:'./logos/primario.svg',white:'./logos/blanco.svg'};
 for(const [key,src] of Object.entries(logoSources)){
  const img=new Image();logoImages[key]=img;
@@ -30,7 +31,8 @@ function parseRich(text){const out=[];let style={accent:false,italic:false,strik
 function wrapRich(text,size,quote=false){const result=[];for(const paragraph of String(text).split('\n')){const spans=quote?[{text:paragraph,italic:true,accent:false,strike:false}]:parseRich(paragraph);let line=[],width=0;for(const span of spans){for(const part of span.text.match(/\S+|\s+/g)||[]){const font=(span.italic?'italic ':'')+size+'px "DM Serif Display",Georgia,serif';ctx.font=font;const partWidth=ctx.measureText(part).width;if(width+partWidth>920&&width>0&&part.trim()){result.push({parts:line,quote});line=[];width=0}if(!line.length&&!part.trim())continue;line.push({...span,text:part,width:partWidth});width+=partWidth}}if(line.length)result.push({parts:line,quote})}return result}
 function render(){
 try{
-const colors=palette[el('theme').value]||palette.dark,size=Number(el('size').value),lineHeight=Math.round(size*1.12*0.8*1.10),main=wrapRich(forceUppercase?el('headline').value.toLocaleUpperCase('es-AR'):el('headline').value,size),quotes=el('enableQuote').checked?wrapRich(el('quote').value,size,true):[];
+ if(pageBlank){ctx.clearRect(0,0,W,H);ctx.fillStyle='#aeb4bc';ctx.fillRect(0,0,W,H);photoBottom=H;updatePhotoStage();return;}
+const colors=palette[el('theme').value]||palette.dark,size=Number(el('size').value),lineHeight=Math.round(size*1.12*0.8*1.10),main=wrapRich(document.getElementById('formatUppercase')?.getAttribute('aria-pressed')==='true'?el('headline').value.toLocaleUpperCase('es-AR'):el('headline').value,size),quotes=el('enableQuote').checked?wrapRich(el('quote').value,size,true):[];
 // Coordenadas en píxeles reales del PNG (1080 × 1440), no píxeles CSS.
 // Piso de la firma exactamente a 80 px del borde inferior.
 ctx.textBaseline='alphabetic';
@@ -107,11 +109,30 @@ for(let i=0;i<lines.length;i++){
   x+=part.width;
  }
 }
-ctx.fillStyle=colors.text;ctx.font='30px Arial';ctx.textAlign='center';ctx.fillText('baenegocios.com',W/2,footerBaseline);ctx.textAlign='left';
+ctx.fillStyle=colors.text;ctx.font='30px Arial';
+ctx.textAlign=footerStyle==='center'?'center':'left';
+ctx.fillText('baenegocios.com',footerStyle==='center'?W/2:80,footerBaseline);
+if(footerStyle==='carousel'){
+ ctx.font='54px "Material Icons"';ctx.textAlign='right';ctx.textBaseline='middle';
+ ctx.fillText('arrow_forward',W-80,H-80-16);ctx.textBaseline='alphabetic';
+}
+ctx.textAlign='left';
+// Los rectángulos interactivos siguen los glifos medidos, no la caja de diseño.
+const widths=lines.map(line=>line.parts.reduce((sum,p)=>sum+p.width,0));
+const minX=centered?Math.min(...widths.map(w=>(W-w)/2)):80;
+const maxX=centered?Math.max(...widths.map(w=>(W+w)/2)):Math.max(...widths.map(w=>80+w));
+window.__editorialHotspotBounds={
+ // Igual a Diario Show: 14+12 px horizontales, alto 1.05/.28 del tamaño y 10 px exteriores.
+ text:{left:Math.max(0,minX-26),right:Math.min(W,maxX+26),
+  top:Math.max(0,(baselines[0]??footerTop)-size*1.05-10),
+  bottom:Math.min(H,(baselines.at(-1)??footerTop)+size*.28+10)},
+ logo:{left:W-LOGO_MARGIN-LOGO_WIDTH-54,top:LOGO_MARGIN-54,
+  right:W-LOGO_MARGIN+54,bottom:LOGO_MARGIN+LOGO_HEIGHT+54}
+};
 const overlay=el('importOverlay');if(overlay){overlay.style.height=(photoBottom/H*100)+'%';}updatePhotoStage();el('dotsLabel').textContent=el('dots').value+'%';el('sizeLabel').textContent=size;el('zoomLabel').textContent=Math.round(zoom*100)+' %';el('photoZoom').value=Math.round(zoom*100);el('status').textContent=boxTop<=80?'Texto demasiado largo: reducí el tamaño.':'Vista previa activa · Arrastrá la foto para reencuadrarla.';
- }catch(error){el('status').textContent='Error de vista previa: '+error.message;console.error(error)}
- finally{window.dispatchEvent(new Event('editorial:bae:render'));}
- }
+}catch(error){el('status').textContent='Error de vista previa: '+error.message;console.error(error)}
+finally{window.dispatchEvent(new Event('modern:render'))}
+}
 // Algunos navegadores restauran el valor anterior del slider aunque el HTML diga 5.
 function resetDefaultHalftone(){el('dots').value='5';el('dotsLabel').textContent='5%';render()}
 resetDefaultHalftone();
@@ -145,18 +166,11 @@ function updatePhotoStage(){
  canvas.style.cursor=image?'grab':'default';
 }
 window.addEventListener('resize',updatePhotoStage);
-function updatePhotoPicker(){
- const action=el('baePhotoAction'),caption=el('baePhotoCaption');
- if(!action||!caption)return;
- action.textContent=image?'Cambiar':'Seleccioná';
- caption.textContent=image?(photoName||'Fotografía importada'):'una fotografía';
- caption.title=image?(photoName||''):'';
-}
 function loadPhoto(file){
  if(!file)return;
  if(!file.type.startsWith('image/')){el('status').textContent='Seleccioná un archivo de imagen válido.';return}
  const url=URL.createObjectURL(file),img=new Image();
- img.onload=()=>{image=img;photoName=file.name;zoom=1;offsetX=0;offsetY=0;updatePhotoPicker();render();URL.revokeObjectURL(url)};
+ img.onload=()=>{image=img;zoom=1;offsetX=0;offsetY=0;render();URL.revokeObjectURL(url)};
  img.onerror=()=>{el('status').textContent='No se pudo abrir esta fotografía';URL.revokeObjectURL(url)};
  img.src=url;
 }
@@ -196,9 +210,9 @@ el('clearAll').addEventListener('click',()=>{
  el('articleUrl').value='';el('headline').value='';el('quote').value='';el('enableQuote').checked=false;el('quote').hidden=true;el('file').value='';
  selectedTexture='1';halftone=halftoneAssets['1']||null;document.querySelectorAll('.texture-option').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.texture==='1')));
  el('theme').value='dark';document.querySelectorAll('.theme-swatch').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.theme==='dark')));
- el('size').value='70';el('dots').value='5';textAlignment='left';forceUppercase=false;el('headline').classList.remove('uppercase-preview');const upper=el('baeUppercase');if(upper)upper.setAttribute('aria-pressed','false');
+ el('size').value='70';el('dots').value='5';textAlignment='left';
  el('alignLeft').setAttribute('aria-pressed','true');el('alignCenter').setAttribute('aria-pressed','false');
- image=null;photoName=null;zoom=1;offsetX=0;offsetY=0;dragging=false;selectedLogo='primary';syncLogoChoices();updatePhotoPicker();photoStage.classList.remove('is-drag-over');
+ image=null;zoom=1;offsetX=0;offsetY=0;dragging=false;selectedLogo='primary';syncLogoChoices();photoStage.classList.remove('is-drag-over');
  el('importStatus').textContent='Pegá una URL de BAE Negocios.';
  render();
 });
@@ -255,5 +269,65 @@ function closeHelpTooltips(){
 document.addEventListener('click',event=>{if(!event.target.closest('.help-trigger'))closeHelpTooltips()});
 document.addEventListener('keydown',event=>{if(event.key==='Escape')closeHelpTooltips()});
 sizeHelpTooltips();
-window.BAEEditor={setImporting(active){importingArticle=active;render()},setImage(img){image=img;photoName=null;zoom=1;offsetX=0;offsetY=0;updatePhotoPicker();render()},setUppercase(value){forceUppercase=Boolean(value);el('headline').classList.toggle('uppercase-preview',forceUppercase);render()},refresh:render};render();document.fonts.ready.then(render);
+/* El aviso sigue el borde derecho real del canvas. Se desplaza hacia
+   adentro cuando faltarían menos de 24px al borde de la pantalla. */
+function positionBrowserZoomTip(){
+ const tip=el('browserZoomTip');
+ const stage=el('photoStage');
+ if(!tip||!stage||tip.hidden||document.documentElement.clientWidth<=700)return;
+ const stageRect=stage.getBoundingClientRect();
+ const tipWidth=tip.getBoundingClientRect().width;
+ const viewportWidth=document.documentElement.clientWidth;
+ // A la derecha de la placa (+24px), hasta que toca el límite de 20px.
+ // Al reducir el viewport se superpone a la placa, sin cambiar el layout.
+ const left=Math.min(stageRect.right+24,viewportWidth-tipWidth-20);
+ const top=stageRect.top+24;
+ tip.style.setProperty('--zoom-tip-x',left+'px');
+ tip.style.setProperty('--zoom-tip-y',top+'px');
+}
+let zoomTipPositionFrame=0;
+function scheduleBrowserZoomTipPosition(){
+ if(zoomTipPositionFrame)return;
+ zoomTipPositionFrame=window.requestAnimationFrame(()=>{
+  zoomTipPositionFrame=0;
+  positionBrowserZoomTip();
+ });
+}
+window.addEventListener('resize',scheduleBrowserZoomTipPosition);
+window.addEventListener('scroll',scheduleBrowserZoomTipPosition,{passive:true});
+if(typeof ResizeObserver!=='undefined'){
+ const zoomTipResizeObserver=new ResizeObserver(scheduleBrowserZoomTipPosition);
+ zoomTipResizeObserver.observe(el('photoStage'));
+ zoomTipResizeObserver.observe(el('browserZoomTip'));
+ zoomTipResizeObserver.observe(el('browserZoomTip').closest('.preview'));
+}
+el('dismissBrowserZoomTip').addEventListener('click',()=>{el('browserZoomTip').hidden=true;});
+scheduleBrowserZoomTipPosition();
+window.BAEEditor={
+ getPageState(){return {variant:pageBlank?'blank':el('theme').value,theme:el('theme').value,
+ headline:el('headline').value,quote:el('quote').value,enableQuote:el('enableQuote').checked,
+ size:el('size').value,dots:el('dots').value,alignment:textAlignment,
+ uppercase:el('formatUppercase')?.getAttribute('aria-pressed')==='true',
+ image,zoom,offsetX,offsetY,selectedLogo,footerStyle,selectedTexture};},
+ setPageState(s){
+  pageBlank=s.variant==='blank';document.documentElement.dataset.editorPlateVariant=s.variant;
+  el('theme').value=s.theme||'dark';
+  document.querySelectorAll('.theme-swatch').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.theme===s.variant)));
+  el('headline').value=s.headline||'';el('quote').value=s.quote||'';
+  el('enableQuote').checked=Boolean(s.enableQuote);el('quote').hidden=!s.enableQuote;
+  el('size').value=s.size||'70';el('dots').value=s.dots||'5';
+  textAlignment=s.alignment||'left';
+  el('alignLeft').setAttribute('aria-pressed',String(textAlignment==='left'));
+  el('alignCenter').setAttribute('aria-pressed',String(textAlignment==='center'));
+  const upper=el('formatUppercase');if(upper){upper.setAttribute('aria-pressed',String(Boolean(s.uppercase)));el('headline').classList.toggle('uppercase-preview',Boolean(s.uppercase))}
+  image=s.image||null;zoom=s.zoom||1;offsetX=s.offsetX||0;offsetY=s.offsetY||0;
+  selectedLogo=s.selectedLogo||'primary';syncLogoChoices();footerStyle=s.footerStyle||'center';
+  document.querySelectorAll('[data-footer-style]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.footerStyle===footerStyle)));
+  selectedTexture=s.selectedTexture||'1';halftone=halftoneAssets[selectedTexture]||null;
+  document.querySelectorAll('.texture-option').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.texture===selectedTexture)));
+  el('sizeLabel').textContent=el('size').value;el('dotsLabel').textContent=el('dots').value+'%';
+  render();el('headline').dispatchEvent(new Event('input',{bubbles:true}));
+ },
+ setBlank(active){pageBlank=Boolean(active);document.documentElement.dataset.editorPlateVariant=pageBlank?'blank':el('theme').value;render();},
+ setImporting(active){importingArticle=active;render()},setImage(img){image=img;zoom=1;offsetX=0;offsetY=0;render()},refresh:render};render();document.fonts.ready.then(render);
 })();

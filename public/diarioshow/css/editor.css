@@ -1315,43 +1315,43 @@ html::-webkit-scrollbar-thumb:hover{background:#747b88}
 
 
 /* Contenido: dos columnas, misma jerarquía y alineación que Formato / Alineación. */
-.editor-panel .ds-content-group .ds-logo-layout-row{
+.editor-panel .ds-plate-design-group .ds-logo-layout-row{
  display:grid;grid-template-columns:minmax(0,1.9fr) minmax(0,1fr);
  align-items:start;column-gap:12px;width:100%;
 }
-.editor-panel .ds-content-group .ds-logo-layout-row>.control-field{
+.editor-panel .ds-plate-design-group .ds-logo-layout-row>.control-field{
  min-width:0;margin:0!important;
 }
-.editor-panel .ds-content-group .ds-logo-layout-row>.control-field>label{
+.editor-panel .ds-plate-design-group .ds-logo-layout-row>.control-field>label{
  display:block;margin:0 0 8px!important;line-height:20px;
  min-height:20px;white-space:nowrap;
 }
-.editor-panel .ds-content-group .ds-logo-layout-row .logo-choices{
+.editor-panel .ds-plate-design-group .ds-logo-layout-row .logo-choices{
  margin-top:0;gap:10px;max-width:100%;
 }
-.editor-panel .ds-content-group .ds-logo-position-controls{
+.editor-panel .ds-plate-design-group .ds-logo-position-controls{
  display:flex;justify-content:flex-start;align-items:center;
  gap:8px;margin-top:0;min-height:43px;
 }
-.editor-panel .ds-content-group .ds-logo-position-button{
+.editor-panel .ds-plate-design-group .ds-logo-position-button{
  width:39px;height:42px;flex:none;
 }
-.editor-panel .ds-content-group .ds-logo-position-button .material-symbols-outlined{
+.editor-panel .ds-plate-design-group .ds-logo-position-button .material-symbols-outlined{
  font-size:24px;line-height:1;font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;
 }
 @media(max-width:380px){
- .editor-panel .ds-content-group .ds-logo-layout-row{
+ .editor-panel .ds-plate-design-group .ds-logo-layout-row{
   grid-template-columns:minmax(0,1.65fr) minmax(0,1fr);column-gap:8px;
  }
- .editor-panel .ds-content-group .ds-logo-position-button{width:35px}
- .editor-panel .ds-content-group .ds-logo-position-controls{gap:5px}
+ .editor-panel .ds-plate-design-group .ds-logo-position-button{width:35px}
+ .editor-panel .ds-plate-design-group .ds-logo-position-controls{gap:5px}
 }
 
 
 /* Diseño coherente de herramientas: etiquetas y controles a 43px,
    tomando como referencia la miniatura de Logo Diario Show. */
 .editor-panel .ds-texts-group .typography-row .help-label-row>label,
-.editor-panel .ds-content-group .ds-logo-layout-row>.control-field>label{
+.editor-panel .ds-plate-design-group .ds-logo-layout-row>.control-field>label{
  font-size:14px!important;
  font-weight:600;
  line-height:20px;
@@ -1361,14 +1361,14 @@ html::-webkit-scrollbar-thumb:hover{background:#747b88}
 }
 .editor-panel .ds-texts-group .typography-row .format-buttons button,
 .editor-panel .ds-texts-group .typography-row .align-buttons button,
-.editor-panel .ds-content-group .ds-logo-position-button{
+.editor-panel .ds-plate-design-group .ds-logo-position-button{
  height:43px!important;
 }
 /* Botonera de alineación de texto y de objetos: una misma pieza segmentada.
    El realce seleccionado se pinta *dentro* del botón, para preservar
    los cuatro lados incluso en el segundo segmento (línea central). */
 .editor-panel .ds-texts-group .typography-row .align-buttons,
-.editor-panel .ds-content-group .ds-logo-position-controls{
+.editor-panel .ds-plate-design-group .ds-logo-position-controls{
  display:inline-flex;
  align-items:stretch;
  gap:0!important;
@@ -1376,7 +1376,7 @@ html::-webkit-scrollbar-thumb:hover{background:#747b88}
  border-radius:7px;
 }
 .editor-panel .ds-texts-group .typography-row .align-buttons button,
-.editor-panel .ds-content-group .ds-logo-position-controls .ds-logo-position-button{
+.editor-panel .ds-plate-design-group .ds-logo-position-controls .ds-logo-position-button{
  display:flex;align-items:center;justify-content:center;
  position:relative;
  flex:0 0 39px;
@@ -1389,32 +1389,32 @@ html::-webkit-scrollbar-thumb:hover{background:#747b88}
  box-shadow:none;
 }
 .editor-panel .ds-texts-group .typography-row .align-buttons button:first-child,
-.editor-panel .ds-content-group .ds-logo-position-controls .ds-logo-position-button:first-child{
+.editor-panel .ds-plate-design-group .ds-logo-position-controls .ds-logo-position-button:first-child{
  border-radius:7px 0 0 7px!important;
 }
 .editor-panel .ds-texts-group .typography-row .align-buttons button:last-child,
-.editor-panel .ds-content-group .ds-logo-position-controls .ds-logo-position-button:last-child{
+.editor-panel .ds-plate-design-group .ds-logo-position-controls .ds-logo-position-button:last-child{
  border-radius:0 7px 7px 0!important;
  border-left:0!important;
 }
 .editor-panel .ds-texts-group .typography-row .align-buttons button[aria-pressed="true"],
-.editor-panel .ds-content-group .ds-logo-position-controls .ds-logo-position-button[aria-pressed="true"]{
+.editor-panel .ds-plate-design-group .ds-logo-position-controls .ds-logo-position-button[aria-pressed="true"]{
  background:#3b3f46!important;
  color:#fff!important;
  box-shadow:inset 0 0 0 1.5px #f4f4f4!important;
  z-index:1;
 }
 .editor-panel .ds-texts-group .typography-row .align-buttons button:hover:not([aria-pressed="true"]),
-.editor-panel .ds-content-group .ds-logo-position-controls .ds-logo-position-button:hover:not([aria-pressed="true"]){
+.editor-panel .ds-plate-design-group .ds-logo-position-controls .ds-logo-position-button:hover:not([aria-pressed="true"]){
  background:#343841!important;
 }
-.editor-panel .ds-content-group .ds-logo-position-controls{
+.editor-panel .ds-plate-design-group .ds-logo-position-controls{
  margin:0;min-height:43px;
 }
 /* El conjunto se adapta al espacio disponible sin perder la altura estándar. */
 @media(max-width:440px){
  .editor-panel .ds-texts-group .typography-row .align-buttons button,
- .editor-panel .ds-content-group .ds-logo-position-controls .ds-logo-position-button{
+ .editor-panel .ds-plate-design-group .ds-logo-position-controls .ds-logo-position-button{
   flex-basis:35px;width:35px!important;
  }
 }
@@ -1422,17 +1422,17 @@ html::-webkit-scrollbar-thumb:hover{background:#747b88}
 
 /* Diario Show Dev: ubicación de logo pegada al extremo derecho.
    Herramientas de texto cuadradas de 43 × 43 px, con alineación al final. */
-.editor-panel .ds-content-group .ds-logo-layout-row{
+.editor-panel .ds-plate-design-group .ds-logo-layout-row{
  grid-template-columns:minmax(0,1fr) auto;
 }
-.editor-panel .ds-content-group .ds-logo-position-field{
+.editor-panel .ds-plate-design-group .ds-logo-position-field{
  justify-self:end;
  width:max-content;
 }
-.editor-panel .ds-content-group .ds-logo-position-field>label{
+.editor-panel .ds-plate-design-group .ds-logo-position-field>label{
  text-align:left;
 }
-.editor-panel .ds-content-group .ds-logo-position-controls{
+.editor-panel .ds-plate-design-group .ds-logo-position-controls{
  justify-content:flex-end;
  width:max-content;
  margin-left:auto;
@@ -1485,7 +1485,7 @@ html::-webkit-scrollbar-thumb:hover{background:#747b88}
 .editor-panel .ds-texts-group .ds-headline-field{
  margin-top:var(--ds-internal-module-gap)!important;
 }
-.editor-panel .ds-content-group #articleImportField{
+.editor-panel .ds-plate-design-group #articleImportField{
  margin-top:var(--ds-internal-module-gap)!important;
 }
 .editor-panel .ds-photo-layout-group .ds-photo-upload-area{
@@ -1753,7 +1753,7 @@ html::-webkit-scrollbar-thumb:hover{background:#747b88}
 .editor-panel .ds-control-card-toggle:hover,
 .editor-panel .typography-row .format-buttons button:hover:not([aria-pressed="true"]),
 .editor-panel .typography-row .align-buttons button:hover:not([aria-pressed="true"]),
-.editor-panel .ds-content-group .ds-logo-position-controls .ds-logo-position-button:hover:not([aria-pressed="true"]),
+.editor-panel .ds-plate-design-group .ds-logo-position-controls .ds-logo-position-button:hover:not([aria-pressed="true"]),
 .editor-panel #articleImportField .import-row #importArticle:hover:not(:disabled),
 .editor-panel .theme-swatch:hover,
 .editor-panel .texture-option:hover .texture-number{
@@ -2486,7 +2486,7 @@ main:has(#dsMobileViewport){overflow-anchor:none}
 }
 .editor-panel .ds-control-card-toggle .ds-control-card-title{flex:1;min-width:0}
 .editor-panel .ds-import-group #articleImportField{margin-top:0!important}
-.editor-panel .ds-content-group .ds-footer-style-field{margin-top:16px}
+.editor-panel .ds-plate-design-group .ds-footer-style-field{margin-top:16px}
 .editor-panel .ds-footer-style-field>label{display:block;margin-bottom:9px;font-weight:600}
 .editor-panel .ds-footer-style-options{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .editor-panel .ds-footer-style-options button{
@@ -2505,4 +2505,194 @@ main:has(#dsMobileViewport){overflow-anchor:none}
 .editor-panel .help-tooltip.is-left::before{
  left:auto;right:-6px;border-left:0;border-bottom:0;
  border-top:1px solid #525762;border-right:1px solid #525762;
+}
+
+
+/* Pulso unificado: borde estático 1px + anillo externo 2px.
+   Se muestra al abrir y cerrar sin modificar dimensiones ni texto. */
+@keyframes ds-context-card-flash{
+ 0%,85%{border-color:#e6008d;box-shadow:0 0 0 2px #e6008d}
+ 100%{border-color:#383d46;box-shadow:0 0 0 0 transparent}
+}
+.editor-panel .ds-control-card.is-preview-context-target{
+ border-width:1px!important;box-sizing:border-box!important;
+ animation:ds-context-card-flash 1.05s linear both!important;
+}
+
+
+/* Hover de los hotspots igual al resto de los editores; selección persistente al clic. */
+@media (hover:hover) and (pointer:fine){
+ .preview #photoStage>.ds-preview-hit-button:hover{
+  border:2px dashed #e6008d!important;border-radius:6px!important;
+  background:transparent!important;box-shadow:none!important;outline:0!important;
+ }
+}
+
+
+/* Misma cabecera de geometría fija que Crónica y BAE.
+   El pulso pinta únicamente borde y sombra, jamás modifica el box model.
+   Icono y título conservan exactamente la posición al abrir/cerrar. */
+.editor-panel .ds-control-card>.ds-control-card-toggle{
+ box-sizing:border-box!important;
+ display:flex!important;align-items:center!important;
+ justify-content:flex-start!important;gap:12px!important;
+ height:46px!important;min-height:46px!important;max-height:46px!important;
+ padding:0 14px!important;margin:0!important;border:0!important;
+ font:600 13px/20px system-ui,Arial,sans-serif!important;
+ letter-spacing:normal!important;
+ transform:none!important;
+ transition:background-color .15s!important;
+}
+.editor-panel .ds-control-card>.ds-control-card-toggle .ds-section-icon{
+ flex:0 0 20px!important;width:20px!important;height:20px!important;
+ font-size:20px!important;line-height:20px!important;
+ padding:0!important;margin:0!important;
+ transform:none!important;
+}
+.editor-panel .ds-control-card>.ds-control-card-toggle .ds-control-card-title{
+ display:block!important;align-self:center!important;flex:1!important;min-width:0;
+ line-height:20px!important;padding:0!important;margin:0!important;
+ transform:none!important;
+}
+.editor-panel .ds-control-card>.ds-control-card-toggle .ds-control-card-chevron{
+ flex:0 0 21px!important;width:21px!important;height:21px!important;
+ font-size:21px!important;line-height:21px!important;
+ margin:0!important;padding:0!important;
+ transition:none!important;
+}
+.editor-panel .ds-control-card>.ds-control-card-toggle[aria-expanded="false"] .ds-control-card-chevron{
+ transform:rotate(180deg)!important;
+}
+@media(max-width:700px){
+ .editor-panel .ds-control-card>.ds-control-card-toggle{
+  height:44px!important;min-height:44px!important;max-height:44px!important;
+  padding:0 12px!important;
+ }
+}
+
+
+/* Hotspots instantáneos: nunca mostrar un contorno intermedio blanco.
+   El hover de fotografía no puede dibujar su línea sobre logo/titular. */
+.preview #photoStage>.ds-preview-hit-button{
+ border:2px dashed transparent!important;border-radius:6px!important;
+ transition:none!important;animation:none!important;
+}
+.preview #photoStage>.ds-preview-hit-button:hover,
+.preview #photoStage>.ds-preview-hit-button:focus-visible,
+.preview #photoStage>.ds-preview-hit-button.is-hotspot-selected{
+ border:2px dashed #e6008d!important;
+ transition:none!important;animation:none!important;
+}
+.preview #photoStage:has(>.ds-preview-hit-button:hover) .photo-hover-border,
+.preview #photoStage:has(>.ds-preview-hit-button:focus-visible) .photo-hover-border{
+ opacity:0!important;transition:none!important;
+}
+
+
+/* Diseño de placas ahora agrupa miniaturas, logo/ubicación y firma inferior.
+   Mantener el ritmo interno de Diario Show al mover los controles originales. */
+.editor-panel .ds-plate-design-group .ds-control-card-body>.ds-logo-layout-row{
+ margin-top:16px!important;
+}
+.editor-panel .ds-plate-design-group .ds-control-card-body>.ds-footer-style-field{
+ margin-top:16px!important;
+}
+.editor-panel .ds-plate-design-group .ds-control-card-body>.ds-logo-layout-row>.control-field{
+ margin-top:0!important;
+}
+/* Misma separación también en la copia contextual bajo la preview mobile. */
+.preview .ds-plate-design-group .ds-logo-layout-row{margin-top:16px!important}
+.preview .ds-plate-design-group .ds-footer-style-field{margin-top:16px!important}
+
+
+/* Tarjetas contextuales mobile: 4 px interiores de seguridad preservan
+   el halo exterior en los cuatro lados sin agrandar el carrusel. */
+@media(max-width:700px){
+ .ds-mobile-track>.preview>.ds-mobile-text-editor,
+ .ds-mobile-track>.preview>.ds-mobile-content-editor{
+  box-sizing:border-box!important;
+  width:100%!important;max-width:540px!important;
+  padding:4px!important;margin:0!important;
+  background:transparent!important;border:0!important;
+  box-shadow:none!important;overflow:visible!important;
+ }
+ .ds-mobile-track>.preview>.ds-mobile-text-editor>.ds-control-card,
+ .ds-mobile-track>.preview>.ds-mobile-content-editor>.ds-control-card{
+  box-sizing:border-box!important;width:100%!important;max-width:100%!important;
+  margin:0!important;border:1px solid #383d46!important;
+  border-radius:10px!important;overflow:visible!important;
+  background:#24262c!important;
+ }
+ .ds-mobile-track>.preview>.ds-mobile-text-editor>.ds-control-card>.ds-control-card-toggle,
+ .ds-mobile-track>.preview>.ds-mobile-content-editor>.ds-control-card>.ds-control-card-toggle{
+  border-radius:9px 9px 0 0!important;
+ }
+ .ds-mobile-track>.preview>.ds-mobile-text-editor>.ds-control-card>.ds-control-card-body,
+ .ds-mobile-track>.preview>.ds-mobile-content-editor>.ds-control-card>.ds-control-card-body{
+  border-radius:0 0 9px 9px!important;background:#202228!important;
+ }
+}
+/* El contorno se dibuja con un solo halo curvo de 2 px.
+   Mantener el borde gris fijo evita el doble trazo y las esquinas torcidas. */
+@keyframes ds-context-card-flash{
+ 0%,85%{border-color:#383d46;box-shadow:0 0 0 2px #e6008d}
+ 100%{border-color:#383d46;box-shadow:0 0 0 0 transparent}
+}
+.editor-panel .ds-control-card.is-preview-context-target{
+ box-sizing:border-box!important;border:1px solid #383d46!important;
+ border-radius:10px!important;
+ animation:ds-context-card-flash 1.05s linear both!important;
+}
+@media(prefers-reduced-motion:reduce){
+ .editor-panel .ds-control-card.is-preview-context-target{animation-duration:.01ms!important}
+}
+
+
+/* Corrección definitiva de bordes mobile:
+   la pista recorta por diseño al cambiar de pestaña; las tarjetas necesitan
+   espacio interior real en la columna, NO un contorno desplazado hacia afuera. */
+@media(max-width:700px){
+ .ds-mobile-track > #dsMobileControlsPanel{
+  box-sizing:border-box!important;
+  padding:6px 6px 10px!important;
+  background:transparent!important;border:0!important;
+  box-shadow:none!important;overflow:visible!important;
+ }
+ .ds-mobile-track > #dsMobileControlsPanel > .ds-control-card{
+  box-sizing:border-box!important;width:100%!important;
+  max-width:100%!important;margin:0 0 12px!important;
+  border:1px solid #383d46!important;border-radius:10px!important;
+  background:#24262c!important;overflow:visible!important;
+ }
+ /* La misma separación alrededor de la tarjeta contextual; el contorno no
+    queda debajo del borde lateral recortado por el carrusel. */
+ .ds-mobile-track>.preview>.ds-mobile-text-editor,
+ .ds-mobile-track>.preview>.ds-mobile-content-editor{
+  padding:6px!important;
+ }
+}
+/* La cabecera plegada ES la caja entera: las cuatro esquinas redondeadas.
+   Para la expandida, solo las superiores; el cuerpo cierra las inferiores. */
+.editor-panel .ds-control-card > .ds-control-card-toggle[aria-expanded="false"]{
+ border-radius:9px!important;
+}
+.editor-panel .ds-control-card > .ds-control-card-toggle[aria-expanded="true"]{
+ border-radius:9px 9px 0 0!important;
+}
+.editor-panel .ds-control-card > .ds-control-card-body:not([hidden]){
+ border-radius:0 0 9px 9px!important;
+ background:#202228!important;
+}
+@media(max-width:700px){
+ .ds-mobile-track>.preview>.ds-mobile-text-editor>.ds-control-card>.ds-control-card-toggle[aria-expanded="false"],
+ .ds-mobile-track>.preview>.ds-mobile-content-editor>.ds-control-card>.ds-control-card-toggle[aria-expanded="false"]{
+  border-radius:9px!important;
+ }
+ /* No dibujar un segundo outline de teclado por encima del halo cuando
+    se llega a la tarjeta mediante un toque de pantalla. */
+ @media(hover:none){
+  .ds-mobile-track .ds-control-card-toggle:focus-visible{
+   outline:none!important;
+  }
+ }
 }

@@ -2,7 +2,7 @@
 (function(){
 'use strict';
 const el=id=>document.getElementById(id),canvas=el('art'),ctx=canvas.getContext('2d'),W=1080,H=1440;
-let halftone=null;const halftoneLayer=document.createElement('canvas');halftoneLayer.width=1080;halftoneLayer.height=1236;const halftoneCtx=halftoneLayer.getContext('2d');let importingArticle=false;let photoRevision=0;let selectedTexture='1';const halftoneAssets={};function loadTexture(id,path){const asset=new Image();asset.onload=()=>{halftoneAssets[id]=asset;if(selectedTexture===id){halftone=asset;render()}};asset.onerror=()=>console.error('No se pudo cargar '+path);asset.src=path}loadTexture('1','../bae/halftone-editable.svg?v=2');loadTexture('2','../bae/halftone-2.svg?v=1');let textAlignment='center',forceUppercase=false;let image=null,zoom=1,offsetX=0,offsetY=0,dragging=false,lastX=0,lastY=0,photoBottom=820,photoHover=false;
+let halftone=null;const halftoneLayer=document.createElement('canvas');halftoneLayer.width=1080;halftoneLayer.height=1236;const halftoneCtx=halftoneLayer.getContext('2d');let importingArticle=false;let photoRevision=0;let selectedTexture='1';const halftoneAssets={};function loadTexture(id,path){const asset=new Image();asset.onload=()=>{halftoneAssets[id]=asset;if(selectedTexture===id){halftone=asset;render()}};asset.onerror=()=>console.error('No se pudo cargar '+path);asset.src=path}loadTexture('1','../bae/halftone-editable.svg?v=2');loadTexture('2','../bae/halftone-2.svg?v=1');let textAlignment='center',forceUppercase=false,pageBlank=false;let image=null,zoom=1,offsetX=0,offsetY=0,dragging=false,lastX=0,lastY=0,photoBottom=820,photoHover=false;
 // Foto compartida: dos recortes independientes dentro del área fotográfica.
 let photoLayout='single',activePhotoSide='left';
 // Regiones exactas aproximadas de cada línea de titular, en coordenadas del PNG.
@@ -38,6 +38,39 @@ function setPhotoLayout(mode){
  syncPhotoZoom();render();
 }
 document.querySelectorAll('[data-photo-layout]').forEach(b=>b.addEventListener('click',()=>setPhotoLayout(b.dataset.photoLayout)));
+// Shift + clic en la cabecera de Formato: cerrar todos si la cabecera
+// estaba abierta, abrir todos si estaba cerrada. No altera módulos ocultos
+// por la variante ni reconstruye los controles editoriales.
+document.addEventListener('click',event=>{
+ if(!event.shiftKey)return;
+ const toggle=event.target.closest?.('#dsMobileControlsPanel > .ds-control-card > .ds-control-card-toggle');
+ if(!toggle)return;
+ event.preventDefault();
+ event.stopImmediatePropagation();
+ const expand=toggle.getAttribute('aria-expanded')!=='true';
+ document.querySelectorAll('#dsMobileControlsPanel > .ds-control-card:not([hidden])').forEach(card=>{
+  const button=card.querySelector(':scope > .ds-control-card-toggle');
+  const body=card.querySelector(':scope > .ds-control-card-body');
+  if(!button||!body)return;
+  button.setAttribute('aria-expanded',String(expand));
+  body.hidden=!expand;
+ });
+ flashContextCard(toggle.closest('.ds-control-card'));
+ // Shift se interpreta como navegación por teclado y puede activar :focus-visible
+ // aunque el gesto haya sido con mouse: evitar ese segundo marco rosa.
+ // Mantener el foco para activaciones reales de teclado (click.detail === 0).
+ if(event.detail>0)toggle.blur();
+ if(typeof updateMobileSlideHeight==='function')requestAnimationFrame(updateMobileSlideHeight);
+},true);
+// Fusionar identidad en Diseño de placas sin duplicar IDs ni perder listeners.
+const designCard=document.querySelector('#dsMobileControlsPanel .ds-plate-design-group');
+const identityCard=document.querySelector('#dsMobileControlsPanel .ds-content-group');
+if(designCard&&identityCard){
+ const designBody=designCard.querySelector(':scope > .ds-control-card-body');
+ const identityBody=identityCard.querySelector(':scope > .ds-control-card-body');
+ for(const node of [...identityBody.children])designBody.append(node);
+ identityCard.remove();
+}
 // Secciones plegables: solo se oculta el contenido, sin reiniciar controles.
 document.querySelectorAll('.ds-control-card-toggle').forEach(button=>{
  button.addEventListener('click',()=>{
@@ -56,8 +89,12 @@ function drawFooter(color,baseline){
  ctx.textAlign=footerStyle==='center'?'center':'left';
  ctx.fillText('diarioshow.com.ar',footerStyle==='center'?W/2:80,baseline);
  if(footerStyle==='carousel'){
-  ctx.strokeStyle=color;ctx.lineWidth=5;ctx.lineCap='round';ctx.lineJoin='round';
-  ctx.beginPath();ctx.moveTo(W-112,baseline-29);ctx.lineTo(W-80,baseline-14);ctx.lineTo(W-112,baseline+1);ctx.stroke();
+  // Igual que la portada de Crónica: Material Icons arrow_forward de 54px,
+  // alineado al margen derecho de 80px y centrado verticalmente en el pie.
+  ctx.font='54px "Material Icons"';
+  ctx.textAlign='right';
+  ctx.textBaseline='middle';
+  ctx.fillText('arrow_forward',W-80,H-80-16);
  }
  ctx.restore();
 }
@@ -264,6 +301,7 @@ el('size').addEventListener('keydown',event=>{
 el('size').addEventListener('keyup',()=>setSizeAdjusting(false));
 function render(includeHover=true){
 try{
+ if(pageBlank){ctx.clearRect(0,0,W,H);ctx.fillStyle='#aeb4bc';ctx.fillRect(0,0,W,H);photoBottom=H;return;}
 headlineHitRegions=[];
 const colors=palette[el('theme').value]||palette.pink,size=Number(el('size').value),lineHeight=Math.round(size*1.12*0.8*1.10),main=wrapRich(headlineForPreview(),size),quotes=[];
 // Coordenadas en píxeles reales del PNG (1080 × 1440), no píxeles CSS.
@@ -332,7 +370,7 @@ for(let i=0;i<lines.length;i++){
 drawFooter(colors.text,footerBaseline);
 const overlay=el('importOverlay');if(overlay){overlay.style.height=(photoBottom/H*100)+'%';}updatePhotoStage();el('dotsLabel').textContent=el('dots').value+'%';el('sizeLabel').textContent=size;syncPhotoZoom();el('status').textContent=boxTop<=80?'Texto demasiado largo: reducí el tamaño.':'Vista previa activa · Arrastrá la foto para reencuadrarla.';
 }catch(error){el('status').textContent='Error de vista previa: '+error.message;console.error(error)}
-finally{syncMobileTextEditor();updatePreviewHitOverlays();if(document.getElementById('dsMobileContentEditor'))syncPreviewContentEditor()}
+finally{syncMobileTextEditor();updatePreviewHitOverlays();if(document.getElementById('dsMobileContentEditor'))syncPreviewContentEditor();window.dispatchEvent(new Event('modern:render'))}
 }
 // Algunos navegadores restauran el valor anterior del slider aunque el HTML diga 5.
 function resetDefaultHalftone(){el('dots').value='5';el('dotsLabel').textContent='5%';render()}
@@ -364,6 +402,7 @@ document.querySelectorAll('.texture-option').forEach(button=>button.addEventList
 const variantButtons=[...document.querySelectorAll('.ds-variant-option[data-variant]')];
 function setVariant(value){
  if(!palette[value])return;
+ pageBlank=false;document.documentElement.dataset.editorPlateVariant=value;
  // Primera vista de la tercera variante: ejemplo sin reemplazar contenido editado.
  if(['quote','quote-blue'].includes(value)&&el('headline').value==='*Mauro Icardi* consiguió la *eximición de prisión* tras el escándalo con Wanda Nara'){
   el('headline').value='OJALÁ A LA GENTE LE DIERA TANTO MIEDO TENER UN HIJO GOLPEADOR COMO TENER UN HIJO GAY';
@@ -386,7 +425,12 @@ function setVariant(value){
  }
  if(isQuote&&photoLayout!=='single')setPhotoLayout('single');
  el('quoteAuthorField').hidden=!isQuote;
+ document.querySelectorAll('.ds-footer-style-field').forEach(field=>field.hidden=isQuote);
  el('quoteAuthorInputField').hidden=!el('showQuoteAuthor').checked;
+ // Importar noticias no corresponde a las variantes de cita 3 y 4.
+ // Ocultar la tarjeta completa, nunca dejar una cabecera con cuerpo vacío.
+ const importGroup=el('articleImportField').closest('.ds-import-group');
+ importGroup.hidden=isQuote;
  el('articleImportField').hidden=isQuote;
  el('photoStage').classList.toggle('is-quote-variant',isQuote);
  photoHover=false;
@@ -835,8 +879,8 @@ const previewContentHost=document.createElement('div');
 previewContentHost.id='dsMobileContentEditor';
 previewContentHost.className='ds-mobile-content-editor editor-panel';
 previewContentHost.hidden=true;
-previewContentHost.setAttribute('aria-label','Identidad gráfica de la placa');
-const sourceContent=document.querySelector('#dsMobileControlsPanel .ds-content-group');
+previewContentHost.setAttribute('aria-label','Diseño de placas de la placa');
+const sourceContent=document.querySelector('#dsMobileControlsPanel .ds-plate-design-group');
 const previewContentCard=sourceContent.cloneNode(true);
 previewContentCard.querySelectorAll('[id]').forEach(node=>node.id+='Preview');
 previewContentCard.querySelectorAll('[for]').forEach(node=>node.setAttribute('for',node.getAttribute('for')+'Preview'));
@@ -852,12 +896,14 @@ previewContentToggle.addEventListener('click',()=>{
  requestAnimationFrame(updateMobileSlideHeight);
 });
 previewContentCard.addEventListener('click',event=>{
- const choice=event.target.closest('[data-logo],[data-logo-position],[data-footer-style]');
+ const choice=event.target.closest('[data-logo],[data-logo-position],[data-footer-style],[data-variant]');
  if(choice){
   const source=choice.dataset.logo!==undefined?
    sourceContent.querySelector('[data-logo="'+choice.dataset.logo+'"]'):
    choice.dataset.logoPosition!==undefined?
    sourceContent.querySelector('[data-logo-position="'+choice.dataset.logoPosition+'"]'):
+   choice.dataset.variant!==undefined?
+   sourceContent.querySelector('[data-variant="'+choice.dataset.variant+'"]'):
    sourceContent.querySelector('[data-footer-style="'+choice.dataset.footerStyle+'"]');
   source?.click();syncPreviewContentEditor();
   return;
@@ -866,10 +912,11 @@ previewContentCard.addEventListener('click',event=>{
 });
 function syncPreviewContentEditor(){
  if(!previewContentHost.isConnected)return;
- for(const button of previewContentCard.querySelectorAll('[data-logo],[data-logo-position],[data-footer-style]')){
+ for(const button of previewContentCard.querySelectorAll('[data-logo],[data-logo-position],[data-footer-style],[data-variant]')){
   const selector=button.dataset.logo!==undefined?
    '[data-logo="'+button.dataset.logo+'"]':button.dataset.logoPosition!==undefined?
-   '[data-logo-position="'+button.dataset.logoPosition+'"]':'[data-footer-style="'+button.dataset.footerStyle+'"]';
+   '[data-logo-position="'+button.dataset.logoPosition+'"]':button.dataset.variant!==undefined?
+   '[data-variant="'+button.dataset.variant+'"]':'[data-footer-style="'+button.dataset.footerStyle+'"]';
   const source=sourceContent.querySelector(selector);
   if(source)button.setAttribute('aria-pressed',source.getAttribute('aria-pressed'));
  }
@@ -897,14 +944,14 @@ function flashPreviewContextCard(context){
 function markDesktopContext(context){
  if(!mobileTabViewport.matches)flashPreviewContextCard(context);
 }
-// El acordeón actualiza aria-expanded en su propio listener de click.
-// En la fase de burbujeo se detecta solo la acción de EXPANDIR y se
-// desplaza el pulso al nuevo módulo sin cambiar los contextos de preview.
+// El pulso se activa al ABRIR y al CERRAR: el listener de cada
+// acordeón ya actualizó aria-expanded cuando llega el evento delegado.
+// Mantener fijo el borde evita desplazamientos del contenido.
 document.addEventListener('click',event=>{
  const toggle=event.target.closest?.('.ds-control-card-toggle');
  if(!toggle)return;
  const card=toggle.closest('.ds-control-card');
- if(!card||toggle.getAttribute('aria-expanded')!=='true')return;
+ if(!card)return;
  flashContextCard(card);
 });
 function scrollToPreviewContext(context){
@@ -1017,7 +1064,7 @@ function makePreviewHit(id,label,handler,context){
  hitLayer.appendChild(button);
  return button;
 }
-makePreviewHit('dsLogoHitButton','Editar logo e Identidad gráfica',showMobileContentEditor,'logo');
+makePreviewHit('dsLogoHitButton','Editar logo en Diseño de placas',showMobileContentEditor,'logo');
 makePreviewHit('dsHeadlineHitButton','Editar Texto principal',()=>{
  if(mobileTabViewport.matches)openMobileHeadlineEditor();
  else{
@@ -1110,5 +1157,35 @@ if(typeof ResizeObserver!=='undefined'){
 }
 syncMobileTabViewport();
 setPreviewContext('text');
-window.DiarioShowEditor={setImporting(active){importingArticle=active;render()},getPhotoRevision(){return photoRevision},setImage(img){photoRevision++;if(photoLayout==='split'){const p=splitPhotos[activePhotoSide];p.image=img;p.zoom=1;p.x=0;p.y=0;p.revision=photoRevision}else{image=img;zoom=1;offsetX=0;offsetY=0}render()},refresh:render};render();document.fonts.ready.then(render);
+window.DiarioShowEditor={
+ getPageState(){return {variant:pageBlank?'blank':el('theme').value,theme:el('theme').value,
+ headline:el('headline').value,quoteAuthor:el('quoteAuthor').value,showQuoteAuthor:el('showQuoteAuthor').checked,
+ size:el('size').value,dots:el('dots').value,alignment:textAlignment,uppercase:forceUppercase,
+ image,zoom,offsetX,offsetY,photoLayout,activePhotoSide,
+ splitPhotos:{left:{...splitPhotos.left},right:{...splitPhotos.right}},
+ selectedLogo,logoPosition,footerStyle,selectedTexture};},
+ setPageState(s){
+  setVariant(s.theme||'pink');
+  pageBlank=s.variant==='blank';document.documentElement.dataset.editorPlateVariant=s.variant;
+  el('headline').value=s.headline||'';el('quoteAuthor').value=s.quoteAuthor||'';
+  el('showQuoteAuthor').checked=Boolean(s.showQuoteAuthor);
+  el('quoteAuthorInputField').hidden=!s.showQuoteAuthor;
+  el('size').value=s.size||'70';el('dots').value=s.dots||'5';
+  textAlignment=s.alignment||'center';
+  el('alignLeft').setAttribute('aria-pressed',String(textAlignment==='left'));
+  el('alignCenter').setAttribute('aria-pressed',String(textAlignment==='center'));
+  forceUppercase=Boolean(s.uppercase);syncUppercaseUI();
+  image=s.image||null;zoom=s.zoom||1;offsetX=s.offsetX||0;offsetY=s.offsetY||0;
+  if(s.splitPhotos)for(const side of ['left','right'])Object.assign(splitPhotos[side],s.splitPhotos[side]);
+  setPhotoLayout(s.photoLayout||'single');activePhotoSide=s.activePhotoSide||'left';
+  selectedLogo=s.selectedLogo||'primary';syncLogoChoices();
+  logoPosition=s.logoPosition||'right';syncLogoPosition();footerStyle=s.footerStyle||'center';
+  document.querySelectorAll('[data-footer-style]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.footerStyle===footerStyle)));
+  selectedTexture=s.selectedTexture||'1';halftone=halftoneAssets[selectedTexture]||null;
+  document.querySelectorAll('.texture-option').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.texture===selectedTexture)));
+  el('sizeLabel').textContent=el('size').value;el('dotsLabel').textContent=el('dots').value+'%';
+  render();el('headline').dispatchEvent(new Event('input',{bubbles:true}));
+ },
+ setBlank(active){pageBlank=Boolean(active);document.documentElement.dataset.editorPlateVariant=pageBlank?'blank':el('theme').value;render();},
+ setImporting(active){importingArticle=active;render()},getPhotoRevision(){return photoRevision},setImage(img){photoRevision++;if(photoLayout==='split'){const p=splitPhotos[activePhotoSide];p.image=img;p.zoom=1;p.x=0;p.y=0;p.revision=photoRevision}else{image=img;zoom=1;offsetX=0;offsetY=0}render()},refresh:render};render();document.fonts.ready.then(render);
 })();

@@ -1,0 +1,198 @@
+/* Recorrido contextual — solo desktop, independiente del editor. */
+.ds-onboarding-trigger{display:none}
+.ds-onboarding-layer[hidden]{display:none!important}
+@media(min-width:701px){
+ /* Banderín flotante anclado al borde real del viewport (no a la placa).
+    Se muestra una pestaña de 36px y se despliega en hover/focus. */
+ body > #dsOnboardingTrigger.ds-onboarding-trigger{
+  position:fixed!important;
+  inset:auto 0 auto auto!important;
+  top:50%!important;
+  z-index:1200!important;
+  display:flex!important;
+  flex-direction:row!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:7px!important;
+  width:136px!important;
+  min-width:136px!important;
+  height:42px!important;
+  min-height:42px!important;
+  margin:0!important;
+  padding:0 8px 0 17px!important;
+  box-sizing:border-box!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  -webkit-backdrop-filter:none!important;
+  backdrop-filter:none!important;
+  color:#f2f2f6!important;
+  box-shadow:none!important;
+  clip-path:none!important;
+  transform:translate(106px,-50%)!important;
+  transition:transform .46s cubic-bezier(.22,1,.36,1)!important;
+  font:650 10.5px/1 Inter,Arial,sans-serif!important;
+  white-space:nowrap!important;
+  cursor:pointer!important;
+  touch-action:manipulation;
+ }
+ /* Un solo trazado SVG vectorial, de 2px uniformes en todo el perímetro
+    visible. El lado derecho no lleva línea. No hay polígonos superpuestos. */
+ body > #dsOnboardingTrigger.ds-onboarding-trigger .ds-onboarding-flag-art{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  display:block;
+  overflow:visible;
+  z-index:0;
+  pointer-events:none;
+ }
+ body > #dsOnboardingTrigger.ds-onboarding-trigger > span{
+  position:relative;
+  z-index:1;
+ }
+ body > #dsOnboardingTrigger.ds-onboarding-trigger .material-icons{
+  font-size:17px!important;
+  line-height:1!important;
+  flex:none;
+ }
+ body > #dsOnboardingTrigger.ds-onboarding-trigger:hover,
+ body > #dsOnboardingTrigger.ds-onboarding-trigger:focus-visible{
+  transform:translate(0,-50%)!important;
+ }
+ body > #dsOnboardingTrigger.ds-onboarding-trigger:focus-visible{
+  outline:2px solid #ffffff!important;
+  outline-offset:2px;
+ }
+ @media(prefers-reduced-motion:reduce){
+  body > #dsOnboardingTrigger.ds-onboarding-trigger{transition:none!important}
+ }
+ .ds-onboarding-layer{position:fixed;inset:0;z-index:2147482000;pointer-events:none;font-family:system-ui,-apple-system,Arial,sans-serif}
+ .ds-tour-shade{position:fixed;background:rgba(9,10,14,.77);pointer-events:auto}
+ .ds-tour-highlight{
+  position:fixed;border:2px solid var(--editor-accent);border-radius:12px;
+  box-shadow:0 0 0 2px rgba(230,0,141,.1),0 0 24px rgba(230,0,141,.28);
+  pointer-events:none;transition:left .16s ease,top .16s ease,width .16s ease,height .16s ease;
+ }
+ .ds-tour-card{
+  position:fixed;z-index:1;box-sizing:border-box;
+  max-width:calc(100vw - 32px);max-height:calc(100vh - 24px);
+  overflow:auto;
+  padding:19px 20px 16px;
+  background:#fdfcfd;color:#171821;
+  border:2px solid var(--editor-accent);border-radius:15px;
+  box-shadow:0 12px 52px rgba(0,0,0,.35);
+  pointer-events:auto;
+ }
+ .ds-tour-card-header,.ds-tour-footer,.ds-tour-nav{display:flex;align-items:center}
+ .ds-tour-card-header{justify-content:space-between;margin-bottom:13px}
+ .ds-tour-progress{display:inline-flex;padding:5px 10px;background:#ffe1f3;color:#95215b;border-radius:99px;font:700 12px/1 system-ui,Arial,sans-serif}
+ .ds-tour-close{width:30px;height:30px;min-width:30px;padding:0;border:0;border-radius:7px;background:transparent;color:#6b6e79;font:400 26px/1 system-ui,Arial,sans-serif;cursor:pointer}
+ .ds-tour-close:hover{background:#f0eaf0;color:#191a20}
+ .ds-tour-card h2{font:750 20px/1.24 system-ui,Arial,sans-serif;color:#171821;margin:0 0 10px}
+ .ds-tour-card p{font:400 14px/1.55 system-ui,Arial,sans-serif;color:#4f525e;margin:0 0 18px}
+ .ds-tour-dots{display:flex;gap:6px;margin-bottom:17px}
+ .ds-tour-dots span{height:7px;width:7px;border-radius:99px;background:#cdd0d6}
+ .ds-tour-dots span.is-current{width:20px;background:var(--editor-accent)}
+ .ds-tour-footer{justify-content:space-between;gap:8px}
+ .ds-tour-nav{gap:6px}
+ .ds-tour-skip,.ds-tour-back,.ds-tour-next{
+  width:auto;min-width:0;min-height:36px;padding:8px 12px;margin:0;
+  border-radius:8px;font:650 12px/1.2 system-ui,Arial,sans-serif;cursor:pointer;
+ }
+ .ds-tour-skip{padding-left:0;border:0;background:transparent;color:#626571;text-decoration:underline}
+ .ds-tour-back{border:1px solid #d3d4dc;background:#fff;color:#333541}
+ .ds-tour-back:disabled{opacity:.36;cursor:default}
+ .ds-tour-next{border:1px solid var(--editor-accent);background:var(--editor-accent);color:#fff}
+ .ds-tour-next:hover{background:var(--editor-accent)}
+ .ds-tour-card button:focus-visible{outline:2px solid var(--editor-accent);outline-offset:2px}
+}
+@media(max-width:700px){
+ #dsOnboardingTrigger,.ds-onboarding-layer{display:none!important}
+}
+@media(prefers-reduced-motion:reduce){
+ .ds-tour-highlight{transition:none!important}
+}
+
+/* Onboarding V2 — misma tarjeta de vidrio oscuro que “¿Poco espacio?”.
+   El spotlight se define SOLO por oscurecimiento; no hay marco rosa. */
+@media(min-width:701px){
+ .ds-tour-highlight{
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+ }
+ .ds-onboarding-layer .ds-tour-card{
+  width:325px;
+  padding:17.28px!important;
+  border:1px solid rgba(255,255,255,.22)!important;
+  border-radius:11px!important;
+  background:rgba(22,23,30,.70)!important;
+  -webkit-backdrop-filter:blur(18px) saturate(125%);
+  backdrop-filter:blur(18px) saturate(125%);
+  box-shadow:0 12px 36px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.10)!important;
+  color:#f2f2f6;
+  font-family:Inter,Arial,sans-serif!important;
+ }
+ .ds-onboarding-layer .ds-tour-card h2{
+  font:700 22.31px/1.2 Inter,Arial,sans-serif!important;
+  color:#fff!important;margin-bottom:12px;
+ }
+ .ds-onboarding-layer .ds-tour-card p{
+  font:500 13.2px/1.45 Inter,Arial,sans-serif!important;
+  color:#f0eff5!important;
+ }
+ .ds-onboarding-layer .ds-tour-progress{
+  padding:6px 10px!important;
+  background:var(--editor-accent)!important;
+  color:#fff!important;
+  font:700 12px/1 Inter,Arial,sans-serif!important;
+ }
+ .ds-onboarding-layer .ds-tour-close{
+  color:#dad7df!important;
+ }
+ .ds-onboarding-layer .ds-tour-close:hover{background:rgba(255,255,255,.12)!important;color:#fff!important}
+ .ds-onboarding-layer .ds-tour-skip{color:#d2ced8!important;font-family:Inter,Arial,sans-serif!important}
+ .ds-onboarding-layer .ds-tour-back{
+  background:#32343d!important;border-color:#5b5d67!important;color:#fff!important;
+  font-family:Inter,Arial,sans-serif!important;
+ }
+ .ds-onboarding-layer .ds-tour-next{font-family:Inter,Arial,sans-serif!important}
+ .ds-onboarding-layer .ds-tour-dots span:not(.is-current){background:#777984!important}
+ .ds-onboarding-layer .ds-tour-zoom-demo[hidden]{display:none!important}
+ .ds-onboarding-layer .ds-tour-zoom-demo.preview{
+  width:100%;max-width:100%;margin:0 0 15px;
+  display:flex;flex-direction:column;align-items:stretch;
+ }
+ .ds-onboarding-layer .ds-tour-zoom-demo .browser-zoom-demo{
+  display:block;width:100%;margin:0;
+ }
+ .ds-onboarding-layer.is-whole-screen .ds-tour-highlight{display:none}
+ /* El paso de la preview revela exclusivamente sus zonas táctiles sin
+    seleccionarlas ni interferir con su comportamiento habitual. */
+ body.ds-tour-preview-step .preview #photoStage>.ds-preview-hit-button,
+ body.ds-tour-preview-step .preview #photoStage>.ds-preview-hit-button:hover,
+ body.ds-tour-preview-step .preview #photoStage>.ds-preview-hit-button:focus-visible{
+  border:2px dashed var(--editor-accent)!important;
+  border-radius:6px!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  outline:0!important;
+ }
+}
+
+/* Última tarjeta: modal centrado con backdrop completo, sin spotlight. */
+@media(min-width:701px){
+ .ds-onboarding-layer.is-whole-screen::before{
+  content:"";position:fixed;inset:0;background:rgba(9,10,14,.77);
+  pointer-events:auto;z-index:0;
+ }
+ .ds-onboarding-layer.is-whole-screen .ds-tour-highlight,
+ .ds-onboarding-layer.is-whole-screen .ds-tour-shade{display:none!important}
+ .ds-onboarding-layer.is-whole-screen .ds-tour-card{z-index:1}
+}
+
+/* Identidad visual propia de BAE DEV. */
+.ds-onboarding-layer .ds-tour-card{border-color:rgba(255,255,255,.22)}
+.ds-onboarding-layer .ds-tour-next:hover{filter:brightness(1.14)}
