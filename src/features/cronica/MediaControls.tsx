@@ -1,18 +1,6 @@
 import { useEffect, useState } from 'react';
-import { initialMedia, type BrandLogo } from './media-model';
+import { initialMedia } from './media-model';
 import { sendMediaCommand, subscribeToMedia } from './media-bridge';
-
-const logos = [
-  { id: 'none', title: 'Sin logo', text: 'Sin logo', src: null },
-  { id: 'primary', title: 'Logo primario: rojo con C blanca', text: 'Primario', src: '../cronica/logos/primario.svg' },
-  { id: 'secondary', title: 'Logo secundario: blanco con C roja', text: 'Secundario', src: '../cronica/logos/secundario.svg' },
-  { id: 'white', title: 'Logo todo blanco', text: 'Blanco', src: '../cronica/logos/blanco.svg' },
-] as const satisfies ReadonlyArray<{
-  id: BrandLogo;
-  title: string;
-  text: string;
-  src: string | null;
-}>;
 
 export function MediaControls() {
   const [media, setMedia] = useState(initialMedia);

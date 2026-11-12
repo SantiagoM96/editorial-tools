@@ -266,3 +266,16 @@ html[data-cronica-variant="blank"] .preview .cronica-text-hit {display:none!impo
 #cronica-controls-root .modern-footer-options button{display:flex;align-items:center;justify-content:center;gap:7px;min-height:40px;padding:8px 10px;border:1px solid #555963;border-radius:7px;background:#292c32;color:#f4f4f5;font:600 13px Inter,Arial,sans-serif;cursor:pointer}
 #cronica-controls-root .modern-footer-options button[aria-pressed=true]{border-color:#ed0000;box-shadow:inset 0 0 0 1px #ed0000}
 #cronica-controls-root .modern-footer-options button .material-symbols-outlined{font-size:19px}
+
+/* Hotspots contextuales equivalentes a Andy, sin superponer controles a la exportación. */
+.preview .canvas-stage .cronica-logo-hit{position:absolute;z-index:5;top:3.7%;right:4.5%;width:20%;height:16%;display:block;opacity:0;cursor:pointer;border:2px dashed #ed0000;border-radius:8px;background:transparent!important;touch-action:manipulation}
+html[data-cronica-logo-position=left] .preview .canvas-stage .cronica-logo-hit{left:4.5%;right:auto}
+html[data-cronica-logo=none] .preview .canvas-stage .cronica-logo-hit,
+html[data-cronica-variant=blank] .preview .canvas-stage .cronica-logo-hit{display:none}
+.preview .canvas-stage .cronica-logo-hit:hover,
+.preview .canvas-stage .cronica-logo-hit:focus-visible{opacity:1}
+@media(min-width:701px){
+ .preview .canvas-stage .cronica-text-hit{position:absolute;z-index:5;display:block;opacity:0;top:var(--photo-height,60%);bottom:0;left:0;right:0;width:100%;border:2px dashed #ed0000;border-radius:8px;background:transparent!important;cursor:text}
+ .preview .canvas-stage .cronica-text-hit:hover,
+ .preview .canvas-stage .cronica-text-hit:focus-visible{opacity:1;outline:0}
+}

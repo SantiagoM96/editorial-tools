@@ -50,6 +50,7 @@ export function MobilePreviewTextEditor() {
     };
     const cancel = () => { gesture = null; allowPointerClick = false; };
     const focus = (event: MouseEvent) => {
+      if (!window.matchMedia('(max-width:700px)').matches) return;
       // detail=0 corresponde a activación por teclado/tecnología asistiva.
       if (event.detail !== 0 && !allowPointerClick) return;
       allowPointerClick = false;

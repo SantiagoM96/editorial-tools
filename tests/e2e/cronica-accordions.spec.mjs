@@ -4,7 +4,7 @@ test('Crónica: paneles plegables conservan estado editorial y navegación', asy
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/cronica/', { waitUntil: 'load' });
   await page.getByRole('tab', { name: 'Formato' }).click();
-  const labels = ['Diseño de placas', 'Diseño de la placa', 'Textos'];
+  const labels = ['Diseño de placas', 'Fotografía', 'Textos'];
   for (const label of labels) {
     const control = page.getByRole('button', { name: label, exact: true });
     await expect(control).toHaveAttribute('aria-expanded', 'true');

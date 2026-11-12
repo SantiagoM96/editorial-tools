@@ -99,6 +99,8 @@ window.addEventListener('editorial:cronica:media-command',event=>{
 function render(includeHover=true){
  try{
   document.documentElement.dataset.cronicaVariant=pageVariant;
+   document.documentElement.dataset.cronicaLogoPosition=logoPosition;
+   document.documentElement.dataset.cronicaLogo=selectedLogo;
   if(pageVariant==='blank'){
    ctx.clearRect(0,0,W,H);
    ctx.fillStyle='#aeb4bc';ctx.fillRect(0,0,W,H);
