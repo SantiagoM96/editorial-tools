@@ -12,6 +12,8 @@ import { ContentEditor } from './ContentEditor';
 import { MediaControls, PhotoZoomControls } from './MediaControls';
 import './controls.css';
 import { PreviewHotspots } from './PreviewHotspots';
+import { CronicaOnboarding } from './CronicaOnboarding';
+import './onboarding.css';
 
 const mount = document.getElementById('cronica-controls-root');
 if (!mount) throw new Error('No se encontró el contenedor de controles de Crónica.');
@@ -20,6 +22,7 @@ createRoot(mount).render(
   <StrictMode>
     <VariantControls />
     <PreviewHotspots />
+    <CronicaOnboarding />
   </StrictMode>,
 );
 
