@@ -53,7 +53,7 @@ for (const env of environments) {
           errors.push('HTTP ' + response.status() + ': ' + response.url());
         }
       });
-      const url = env.path + slug + '/' + (slug === 'diarioshow' ? '?onboarding=off' : '');
+      const url = env.path + slug + '/' + (['bae', 'diarioshow'].includes(slug) ? '?onboarding=off' : '');
       const response = await page.goto(url, { waitUntil: 'load' });
       expect(response?.status()).toBe(200);
       await expect(page.locator('#art')).toBeVisible();

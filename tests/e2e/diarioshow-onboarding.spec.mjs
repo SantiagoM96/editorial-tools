@@ -1,16 +1,17 @@
 import { expect, test } from '@playwright/test';
 
-test('Diario Show: siete pasos, cierre, persistencia y reinicio accesibles', async ({ page }) => {
+test('Diario Show: recorrido actualizado, cierre, persistencia y reinicio accesibles', async ({ page }) => {
   await page.goto('/diarioshow/?onboarding=force', { waitUntil: 'load' });
   await expect(page.getByRole('dialog', { name: 'Organizá las diapositivas' })).toBeVisible();
   const expectedTitles = [
     'Organizá las diapositivas',
     'Elegí el diseño de tu placa',
     'Definí la distribución fotográfica',
-    'Agregá tus fotografías',
     'Importá y personalizá tu placa',
     'Editá los textos',
-    'Editá desde la vista previa',
+    'Abrí o cerrá todos los módulos',
+    'Configurá el logo y la firma',
+    'Editá el texto desde la vista previa',
     '¿Poco espacio?',
   ];
   for (let step = 1; step <= expectedTitles.length; step++) {

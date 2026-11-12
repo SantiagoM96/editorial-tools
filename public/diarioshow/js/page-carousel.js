@@ -2,7 +2,7 @@
    Las placas guardan sus propios estados del motor nativo; no se sustituye el canvas. */
 (()=>{
 'use strict';
-const isDS=location.pathname.includes('diarioshow-dev');
+const isDS=location.pathname.includes('diarioshow-dev')||location.pathname.includes('/diarioshow/');
 const editor=isDS?window.DiarioShowEditor:window.BAEEditor;
 const main=document.querySelector('main'),preview=main?.querySelector('.preview');
 if(!editor||!preview)return;
