@@ -197,3 +197,39 @@
 
 /* Accesibilidad: el Canvas es navegable por teclado solo con una foto cargada. */
 .preview .canvas-stage canvas:focus-visible{outline:3px solid #ed0000!important;outline-offset:4px}
+
+/* Navegación común: identidad del producto a la izquierda y Volver a la derecha.
+   En celular la marca y la descripción siguen juntas, con flecha a su derecha. */
+.header-inner .header-brand{
+ display:flex;flex-direction:column;align-items:flex-start;gap:5px;
+ min-width:0;flex:1 1 auto;
+}
+.header-inner .header-brand .header-logo-link{flex:0 0 auto;min-width:0}
+.header-inner .header-brand .header-title{min-width:0}
+@media(max-width:700px){
+ .header-inner{
+  display:flex;flex-wrap:nowrap!important;
+  align-items:center;gap:10px;
+ }
+ .header-inner .header-brand{
+  display:flex;flex-direction:column;align-items:flex-start;
+  flex:1 1 auto;min-width:0;gap:5px;
+ }
+ .header-inner .header-brand .header-title{
+  font-size:14px;line-height:1.35;
+  overflow-wrap:anywhere;
+ }
+ .header-inner .dashboard-back-link{
+  flex:0 0 40px;width:40px!important;height:40px;min-height:40px;
+  margin:0 0 0 auto!important;padding:0!important;
+  align-self:center;justify-content:center;
+ }
+ .header-inner .dashboard-back-link .back-link-text{display:none}
+ .header-inner .dashboard-back-link .material-icons{font-size:22px}
+}
+@media(max-width:440px){
+ .header-inner .dashboard-back-link{
+  flex:0 0 40px;width:40px!important;
+  margin-left:auto!important;
+ }
+}
