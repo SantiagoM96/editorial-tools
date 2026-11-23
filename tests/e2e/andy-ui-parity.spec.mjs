@@ -17,7 +17,9 @@ async function layout(page, url) {
   await page.waitForTimeout(650);
   await expect(page.locator('#art')).toBeVisible();
   return page.evaluate(() => {
-    const selectors = ['header .site-container', 'main', 'aside.editor-panel', '.preview', '.editor-slide-nav', '#art'];
+    // Editorial Tools tiene su propio encabezado. Comparamos el editor desde el inicio de main.
+    const selectors = ['main', 'aside.editor-panel', '.preview', '.editor-slide-nav', '#art'];
+    const editorTop = document.querySelector('main').getBoundingClientRect().top;
     const measure = selector => {
       const element = document.querySelector(selector);
       if (!element) return null;
@@ -25,7 +27,7 @@ async function layout(page, url) {
       const css = getComputedStyle(element);
       const round = n => Math.round(n * 10) / 10;
       return {
-        x: round(box.x), y: round(box.y), width: round(box.width), height: round(box.height),
+        x: round(box.x), y: round(box.y - editorTop), width: round(box.width), height: round(box.height),
         fontSize: css.fontSize, padding: css.padding, gap: css.gap,
         backgroundColor: css.backgroundColor, borderRadius: css.borderRadius,
       };
